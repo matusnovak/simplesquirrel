@@ -9,6 +9,7 @@
 #include <sqstdio.h>
 #include <forward_list>
 #include <cstdarg>
+#include <iostream>
 
 namespace SquirrelBind {
 	SqVM::SqVM(size_t stackSize, SqLibs::Flag flags):SqTable() {
@@ -30,7 +31,7 @@ namespace SquirrelBind {
 
 	void SqVM::destroy() {
 	    if (vm != nullptr) {
-			/////////classMap.clear();
+			classMap.clear();
 			sq_resetobject(&obj);
             sq_close(vm);
         }
@@ -46,7 +47,7 @@ namespace SquirrelBind {
 		SqObject::swap(other);
 		swap(runtimeException, other.runtimeException);
         swap(compileException, other.compileException);
-		//////swap(classMap, other.classMap);
+		swap(classMap, other.classMap);
 		if(vm != nullptr) {
 			sq_setforeignptr(vm, this);
 		}
@@ -217,5 +218,9 @@ namespace SquirrelBind {
             line,
             column
         ));
+    }
+
+	void SqVM::pushArgs() {
+
     }
 }

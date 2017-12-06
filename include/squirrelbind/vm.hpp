@@ -6,6 +6,8 @@
 #include "table.hpp"
 #include "script.hpp"
 #include "args.hpp"
+#include "class.hpp"
+#include "instance.hpp"
 
 #include <memory>
 
@@ -83,7 +85,7 @@ namespace SquirrelBind {
 
 		/**
 		* @brief Calls a global function
-		* @param func The instance of a class
+		* @param func The instance of a function
 		* @param args Any number of arguments
 		* @throws RuntimeException
 		*/
@@ -103,8 +105,43 @@ namespace SquirrelBind {
 
 			return callAndReturn(params, top);
         }
+		/**
+		* @brief Creates a new instance of class and call constructor with given arguments
+		* @param cls The object of a class
+		* @param args Any number of arguments
+		* @throws RuntimeException
+		*/
+		template<class... Args>
+		SqInstance newInstance(const SqClass& cls, Args&&... args) const {
+			SqInstance inst = newInstanceNoCtor(cls);
+			SqFunction ctor = cls.findFunc("constructor");
+			callFunc(ctor, inst, std::forward<Args>(args)...);
+			return inst;
+		}
+		/**
+		* @brief Creates a new instance of class without calling a constructor
+		* @param cls The object of a class
+		* @throws RuntimeException
+		*/
+		SqInstance newInstanceNoCtor(const SqClass& cls) const {
+			SqInstance inst(vm);
+
+			sq_pushobject(vm, cls.get());
+			sq_createinstance(vm, -1);
+			sq_remove(vm, -2);
+			sq_getstackobj(vm, -1, &inst.get());
+			sq_addref(vm, &inst.get());
+			sq_pop(vm, 1);
+
+			return inst;
+		}
 
 		void debugStack() const;
+
+		template<class T>
+		HSQOBJECT& getClassObjectOrCreate() {
+	        return classMap[typeid(T).hash_code()];
+        }
 
 		SqVM& operator = (const SqVM& other) = delete;
 
@@ -112,10 +149,9 @@ namespace SquirrelBind {
 	private:
 		std::unique_ptr<SqCompileException> compileException;
         std::unique_ptr<SqRuntimeException> runtimeException;
+		ClassMap classMap;
 
-		void pushArgs() const {
-
-        }
+		static void pushArgs();
 
         template <class First, class... Rest> 
         void pushArgs(First&& first, Rest&&... rest) const {
@@ -133,6 +169,14 @@ namespace SquirrelBind {
 
 		static void defaultCompilerErrorFunc(HSQUIRRELVM vm, const SQChar* desc, const SQChar* source, SQInteger line, SQInteger column);
 	};
+
+	namespace detail {
+		template<class T>
+		inline HSQOBJECT& detail::getClassObjectOrCreate(HSQUIRRELVM vm) {
+			SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
+			return machine->getClassObjectOrCreate<T>();
+		}
+	}
 }
 
 #endif

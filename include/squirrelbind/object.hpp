@@ -23,12 +23,15 @@
 
 #include <string>
 #include <squirrel.h>
+#include <unordered_map>
 
 namespace SquirrelBind {
 	class SqFunction;
 	class SqTable;
 	class SqClass;
 	class SqInstance;
+
+	typedef std::unordered_map<size_t, HSQOBJECT> ClassMap;
 
 	enum class SqType {
 		NULLPTR = OT_NULL,
@@ -52,6 +55,11 @@ namespace SquirrelBind {
 	};
 
 	const char* sqTypeToStr(SqType type);
+
+	namespace detail {
+		template<class T>
+		static HSQOBJECT& getClassObjectOrCreate(HSQUIRRELVM vm);
+	}
 
 	class SqObject {
 	public:
