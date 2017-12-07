@@ -5,22 +5,42 @@
 #include "object.hpp"
 
 namespace SquirrelBind {
-	class SqFunction: public SqObject {
-	public:
-		SqFunction(HSQUIRRELVM vm);
-
-		SqFunction(const SqObject& object);
-
-		SqFunction(const SqFunction& other);
-
-		SqFunction(SqFunction&& other) NOEXCEPT;
-
-		unsigned int getNumOfParams() const;
-
-		SqFunction& operator = (const SqFunction& other);
-
-		SqFunction& operator = (SqFunction&& other) NOEXCEPT;
-	};
+    /**
+    * @brief Squirrel function
+    */
+    class SqFunction: public SqObject {
+    public:
+        /**
+        * @brief Constructs empty function object
+        */
+        explicit SqFunction(HSQUIRRELVM vm);
+        /**
+        * @brief Converts SqObject to SqFunction
+        * @throws SqTypeException if the SqObject is not type of a function
+        */
+        explicit SqFunction(const SqObject& object);
+        /**
+        * @brief Copy constructor
+        */
+        explicit SqFunction(const SqFunction& other);
+        /**
+        * @brief Move constructor
+        */
+        SqFunction(SqFunction&& other) NOEXCEPT;
+        /**
+        * @brief Returns the number of parameters needed by the function
+        * @note This ignores the "this" pointer
+        */
+        unsigned int getNumOfParams() const;
+        /**
+        * @brief Copy assingment operator
+        */
+        SqFunction& operator = (const SqFunction& other);
+        /**
+        * @brief Move assingment operator
+        */
+        SqFunction& operator = (SqFunction&& other) NOEXCEPT;
+    };
 }
 
 #endif

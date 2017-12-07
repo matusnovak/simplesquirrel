@@ -13,7 +13,7 @@ include_directories(${INCLUDE_DIRECTORIES})
 link_directories(${CMAKE_LIBRARY_PATH})
 
 AUX_SOURCE_DIRECTORY(${CMAKE_SOURCE_DIR}/source SOURCES) 
-FILE(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/*.hpp)
+FILE(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/squirrelbind/*.hpp)
 
 message(STATUS ${SOURCES})
   

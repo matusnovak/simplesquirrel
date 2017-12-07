@@ -5,20 +5,37 @@
 #include "object.hpp"
 
 namespace SquirrelBind {
-	class SqInstance: public SqObject {
-	public:
-		SqInstance(HSQUIRRELVM vm);
-
-		SqInstance(const SqObject& object);
-
-		SqInstance(const SqInstance& other);
-
-		SqInstance(SqInstance&& other) NOEXCEPT;
-
-		SqInstance& operator = (const SqInstance& other);
-
-		SqInstance& operator = (SqInstance&& other) NOEXCEPT;
-	};
+    /**
+    * @brief Squirrel intance of class object
+    */
+    class SqInstance: public SqObject {
+    public:
+        /**
+        * @brief Constructs empty instance
+        */
+        explicit SqInstance(HSQUIRRELVM vm);
+        /**
+        * @brief Converts SqObject to SqInstance
+        * @throws SqTypeException if the SqObject is not type of an instance
+        */
+        explicit SqInstance(const SqObject& object);
+        /**
+        * @brief Copy constructor
+        */
+        explicit SqInstance(const SqInstance& other);
+        /**
+        * @brief Move constructor
+        */
+        SqInstance(SqInstance&& other) NOEXCEPT;
+        /**
+        * @brief Copy assingment operator
+        */ 
+        SqInstance& operator = (const SqInstance& other);
+        /**
+        * @brief Move assingment operator
+        */
+        SqInstance& operator = (SqInstance&& other) NOEXCEPT;
+    };
 }
 
 #endif

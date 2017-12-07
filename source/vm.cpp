@@ -9,12 +9,13 @@
 #include <sqstdio.h>
 #include <forward_list>
 #include <cstdarg>
+#include <cstring>
 #include <iostream>
 
 namespace SquirrelBind {
-	SqVM::SqVM(size_t stackSize, SqLibs::Flag flags):SqTable() {
-		vm = sq_open(stackSize);
-		sq_resetobject(&obj);
+    SqVM::SqVM(size_t stackSize, SqLibs::Flag flags):SqTable() {
+        vm = sq_open(stackSize);
+        sq_resetobject(&obj);
         sq_setforeignptr(vm, this);
 
         registerStdlib(flags);
@@ -27,41 +28,39 @@ namespace SquirrelBind {
         sq_getstackobj(vm,-1,&obj);
         sq_addref(vm, &obj);
         sq_pop(vm, 1);
-	}
+    }
 
-	void SqVM::destroy() {
-	    if (vm != nullptr) {
-			classMap.clear();
-			sq_resetobject(&obj);
+    void SqVM::destroy() {
+        if (vm != nullptr) {
+            sq_resetobject(&obj);
             sq_close(vm);
         }
         vm = nullptr;
     }
 
-	SqVM::~SqVM() {
-		destroy();
-	}
+    SqVM::~SqVM() {
+        destroy();
+    }
 
-	void SqVM::swap(SqVM& other) NOEXCEPT {
-		using std::swap;
-		SqObject::swap(other);
-		swap(runtimeException, other.runtimeException);
+    void SqVM::swap(SqVM& other) NOEXCEPT {
+        using std::swap;
+        SqObject::swap(other);
+        swap(runtimeException, other.runtimeException);
         swap(compileException, other.compileException);
-		swap(classMap, other.classMap);
-		if(vm != nullptr) {
-			sq_setforeignptr(vm, this);
-		}
-		if(other.vm != nullptr) {
-			sq_setforeignptr(other.vm, this);
-		}
-	}
-		
-	SqVM::SqVM(SqVM&& other) NOEXCEPT :SqTable() {
-		swap(other);
-	}
+        if(vm != nullptr) {
+            sq_setforeignptr(vm, this);
+        }
+        if(other.vm != nullptr) {
+            sq_setforeignptr(other.vm, this);
+        }
+    }
+        
+    SqVM::SqVM(SqVM&& other) NOEXCEPT :SqTable() {
+        swap(other);
+    }
 
-	void SqVM::registerStdlib(SqLibs::Flag flags) {
-		if (flags == 0)return;
+    void SqVM::registerStdlib(SqLibs::Flag flags) {
+        if (flags == 0)return;
         sq_pushroottable(vm);
         if(flags & SqLibs::IO)
             sqstd_register_iolib(vm);
@@ -76,25 +75,25 @@ namespace SquirrelBind {
         sq_pop(vm, 1);
     }
 
-	void SqVM::setPrintFunc(SqPrintFunc printFunc, SqErrorFunc errorFunc) {
+    void SqVM::setPrintFunc(SqPrintFunc printFunc, SqErrorFunc errorFunc) {
         sq_setprintfunc(vm, printFunc, errorFunc);
     }
 
-	void SqVM::setRuntimeErrorFunc(SqRuntimeErrorFunc runtimeErrorFunc) {
-	    sq_newclosure(vm, runtimeErrorFunc, 0);
+    void SqVM::setRuntimeErrorFunc(SqRuntimeErrorFunc runtimeErrorFunc) {
+        sq_newclosure(vm, runtimeErrorFunc, 0);
         sq_seterrorhandler(vm);
     }
 
-	void SqVM::setCompileErrorFunc(SqCompileErrorFunc compileErrorFunc) {
+    void SqVM::setCompileErrorFunc(SqCompileErrorFunc compileErrorFunc) {
         sq_setcompilererrorhandler(vm, compileErrorFunc);
     }
 
-	SQInteger SqVM::getTop() const {
+    SQInteger SqVM::getTop() const {
         return sq_gettop(vm);
     }
 
-	SqScript SqVM::compileSource(const char* source, const char* name) {
-		SqScript script(vm);
+    SqScript SqVM::compileSource(const char* source, const char* name) {
+        SqScript script(vm);
         if(SQ_FAILED(sq_compilebuffer(vm, source, strlen(source), name, true))){
             throw *compileException;
         }
@@ -103,10 +102,10 @@ namespace SquirrelBind {
         sq_addref(vm, &script.get());
         sq_pop(vm, 1);
         return script;
-	}
+    }
 
-	SqScript SqVM::compileFile(const char* path) {
-		SqScript script(vm);
+    SqScript SqVM::compileFile(const char* path) {
+        SqScript script(vm);
         if (SQ_FAILED(sqstd_loadfile(vm, path, true))) {
             throw *compileException;
         }
@@ -115,7 +114,7 @@ namespace SquirrelBind {
         sq_addref(vm, &script.get());
         sq_pop(vm, 1);
         return script;
-	}
+    }
 
     void SqVM::run(const SqScript& script) const {
         if(!script.isEmpty()) {
@@ -133,43 +132,43 @@ namespace SquirrelBind {
         }
     }
 
-	SqVM& SqVM::operator = (SqVM&& other) NOEXCEPT {
-		if(this != &other) {
-			swap(other);
-		}
-		return *this;
-	}
+    SqVM& SqVM::operator = (SqVM&& other) NOEXCEPT {
+        if(this != &other) {
+            swap(other);
+        }
+        return *this;
+    }
 
     SqObject SqVM::callAndReturn(SQUnsignedInteger nparams, SQInteger top) const {
         if(SQ_FAILED(sq_call(vm, 1 + nparams, true, true))){
             sq_settop(vm, top);
-			if (runtimeException == nullptr)
-				throw SqRuntimeException("Unknown squirrel runtime error");
+            if (runtimeException == nullptr)
+                throw SqRuntimeException("Unknown squirrel runtime error");
             throw *runtimeException;
         }
             
-		SqObject ret(vm);
-		sq_getstackobj(vm, -1, &ret.get());
-		sq_addref(vm, &ret.get());
-		sq_settop(vm, top);
-		return ret;
+        SqObject ret(vm);
+        sq_getstackobj(vm, -1, &ret.get());
+        sq_addref(vm, &ret.get());
+        sq_settop(vm, top);
+        return ret;
     }
 
-	void SqVM::debugStack() const {
-		auto top = getTop();
-		while(top >= 0) {
-			SQObjectType objectType = sq_gettype(vm, top);
-			SqType type = SqType(objectType);
-			std::cout << "stack index: " << top << " type: " << sqTypeToStr(type) << std::endl;
-			top--;
-		}
-	}
+    void SqVM::debugStack() const {
+        auto top = getTop();
+        while(top >= 0) {
+            SQObjectType objectType = sq_gettype(vm, top);
+            SqType type = SqType(objectType);
+            std::cout << "stack index: " << top << " type: " << sqTypeToStr(type) << std::endl;
+            top--;
+        }
+    }
 
-	void SqVM::defaultPrintFunc(HSQUIRRELVM vm, const SQChar *s, ...){
+    void SqVM::defaultPrintFunc(HSQUIRRELVM vm, const SQChar *s, ...){
         va_list vl;
         va_start(vl, s);
         vprintf(s, vl);
-		printf("\n");
+        printf("\n");
         va_end(vl);
     }
 
@@ -177,7 +176,7 @@ namespace SquirrelBind {
         va_list vl;
         va_start(vl, s);
         fprintf(stderr, s, vl);
-		fprintf(stderr, "\n");
+        fprintf(stderr, "\n");
         va_end(vl);
     }
 
@@ -220,7 +219,7 @@ namespace SquirrelBind {
         ));
     }
 
-	void SqVM::pushArgs() {
+    void SqVM::pushArgs() {
 
     }
 }

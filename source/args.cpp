@@ -4,6 +4,6 @@
 #include <squirrel.h>
 
 namespace SquirrelBind {
-	namespace detail {
-	}
+    namespace detail {
+    }
 }

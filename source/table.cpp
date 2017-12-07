@@ -7,39 +7,43 @@
 #include <forward_list>
 
 namespace SquirrelBind {
-	SqTable::SqTable():SqObject() {
-			
-	}
+    SqTable::SqTable():SqObject() {
+            
+    }
 
-	SqTable::SqTable(HSQUIRRELVM vm):SqObject(vm) {
-			
-	}
+	SqTable::SqTable(const SqObject& object):SqObject(object) {
+        if (object.getType() != SqType::TABLE) throw SqTypeException("Object is not a table", object.getTypeStr(), "TABLE");
+    }
 
-	SqTable::SqTable(const SqTable& other):SqObject(other) {
-			
-	}
+    SqTable::SqTable(HSQUIRRELVM vm):SqObject(vm) {
+            
+    }
 
-	SqTable::SqTable(SqTable&& other) NOEXCEPT :SqObject(std::forward<SqTable>(other)) {
-			
-	}
+    SqTable::SqTable(const SqTable& other):SqObject(other) {
+            
+    }
 
-	SqFunction SqTable::findFunc(const char* name) const {
-		SqObject object = SqObject::find(name);
-		return SqFunction(object);
-	}
+    SqTable::SqTable(SqTable&& other) NOEXCEPT :SqObject(std::forward<SqTable>(other)) {
+            
+    }
 
-	SqClass SqTable::findClass(const char* name) const {
-		SqObject object = SqObject::find(name);
-		return SqClass(object);
-	}
+    SqFunction SqTable::findFunc(const char* name) const {
+        SqObject object = SqObject::find(name);
+        return SqFunction(object);
+    }
 
-	SqTable& SqTable::operator = (const SqTable& other){
-		SqObject::operator = (other);
-		return *this;
-	}
+    SqClass SqTable::findClass(const char* name) const {
+        SqObject object = SqObject::find(name);
+        return SqClass(object);
+    }
 
-	SqTable& SqTable::operator = (SqTable&& other) NOEXCEPT {
-		SqObject::operator = (std::forward<SqTable>(other));
-		return *this;
-	}
+    SqTable& SqTable::operator = (const SqTable& other){
+        SqObject::operator = (other);
+        return *this;
+    }
+
+    SqTable& SqTable::operator = (SqTable&& other) NOEXCEPT {
+        SqObject::operator = (std::forward<SqTable>(other));
+        return *this;
+    }
 }

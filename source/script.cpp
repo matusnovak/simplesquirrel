@@ -4,24 +4,20 @@
 #include <forward_list>
 
 namespace SquirrelBind {
-	SqScript::SqScript(HSQUIRRELVM vm) :SqObject(vm) {
+    SqScript::SqScript(HSQUIRRELVM vm) :SqObject(vm) {
 
-	}
+    }
 
-	SqScript::~SqScript() {
+    void SqScript::swap(SqScript& other) NOEXCEPT {
+        SqObject::swap(other);
+    }
 
-	}
+    SqScript::SqScript(SqScript&& other) NOEXCEPT :SqObject(std::forward<SqObject>(other)) {
 
-	void SqScript::swap(SqScript& other) NOEXCEPT {
-		SqObject::swap(other);
-	}
+    }
 
-	SqScript::SqScript(SqScript&& other) NOEXCEPT :SqObject(std::forward<SqObject>(other)) {
-
-	}
-
-	SqScript& SqScript::operator = (SqScript&& other) NOEXCEPT {
-		SqObject::operator = (std::forward<SqScript>(other));
-		return *this;
-	}
+    SqScript& SqScript::operator = (SqScript&& other) NOEXCEPT {
+        SqObject::operator = (std::forward<SqScript>(other));
+        return *this;
+    }
 }

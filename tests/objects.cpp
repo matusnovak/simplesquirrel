@@ -7,63 +7,63 @@
 using namespace SquirrelBind;
 
 TEST_CASE("Test object properties"){
-	SqObject object;
+    SqObject object;
 
-	REQUIRE(object.isEmpty() == true);
+    REQUIRE(object.isEmpty() == true);
 }
 
 TEST_CASE("Find object") {
-	static const std::string source = STRINGIFY(
-		class Foo {\n
-			bar = "Hello World!";\n
-		};\n
-		\n
-		test <- "String";
-		local foo = Foo();\n
-		print("Message: " + foo.bar);\n
-	);
+    static const std::string source = STRINGIFY(
+        class Foo {\n
+            bar = "Hello World!";\n
+        };\n
+        \n
+        test <- "String";
+        local foo = Foo();\n
+        print("Message: " + foo.bar);\n
+    );
 
-	SqVM vm(1024, SqLibs::ALL);
+    SqVM vm(1024, SqLibs::ALL);
 
-	REQUIRE(vm.getType() == SqType::TABLE);
+    REQUIRE(vm.getType() == SqType::TABLE);
 
-	SqScript script = vm.compileSource(source.c_str());
-	REQUIRE(script.isEmpty() == false);
-	vm.run(script);
+    SqScript script = vm.compileSource(source.c_str());
+    REQUIRE(script.isEmpty() == false);
+    vm.run(script);
 
-	auto top = vm.getTop();
+    auto top = vm.getTop();
 
-	SqObject found = vm.find("Foo");
+    SqObject found = vm.find("Foo");
 
-	REQUIRE(top == vm.getTop());
-	REQUIRE(found.isEmpty() == false);
+    REQUIRE(top == vm.getTop());
+    REQUIRE(found.isEmpty() == false);
 
-	SqType type = found.getType();
+    SqType type = found.getType();
 
-	REQUIRE(top == vm.getTop());
-	REQUIRE(type == SqType::CLASS);
+    REQUIRE(top == vm.getTop());
+    REQUIRE(type == SqType::CLASS);
 }
 
 TEST_CASE("Find class and method") {
-	static const std::string source = STRINGIFY(
-		class Foo {
-			bar = "Hello World!";
+    static const std::string source = STRINGIFY(
+        class Foo {
+            bar = "Hello World!";
 
-			function baz(a, b) {
-				return a + b;
-			}
-		};
-	);
+            function baz(a, b) {
+                return a + b;
+            }
+        };
+    );
 
-	SqVM vm(1024);
-	SqScript script = vm.compileSource(source.c_str());
-	vm.run(script);
+    SqVM vm(1024);
+    SqScript script = vm.compileSource(source.c_str());
+    vm.run(script);
 
-	SqClass cls = vm.findClass("Foo");
+    SqClass cls = vm.findClass("Foo");
 
-	REQUIRE(cls.isEmpty() == false);
+    REQUIRE(cls.isEmpty() == false);
 
-	SqFunction baz = cls.findFunc("baz");
+    SqFunction baz = cls.findFunc("baz");
 
-	REQUIRE(baz.isEmpty() == false);
+    REQUIRE(baz.isEmpty() == false);
 }
