@@ -27,14 +27,26 @@ namespace SquirrelBind {
     class SqNotFoundException: public SqException {
     public:
         SqNotFoundException(const char* msg):SqException(msg) {
-            
+            std::stringstream ss;
+            ss << "Not found: " << msg;
+            message = ss.str();
         }
+
+        virtual const char* what() const throw() override {
+            return message.c_str();
+        }
+    private:
+        std::string message;
     };
     /**
     * @brief Compile exception thrown during compilation
     */
     class SqCompileException: public SqException {
     public:
+        SqCompileException(const char* msg):SqException(msg) { 
+            message = std::string(msg);
+        }
+
         SqCompileException(const char* msg, const char* source, int line, int column):SqException(msg) { 
             std::stringstream ss;
             ss << "Compile error at " << source << ":" << line << ":" << column << " " << msg;

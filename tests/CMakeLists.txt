@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 
 # Find libraries
-find_library(SQUIRREL_LIBRARIES NAMES squirrel)
-find_library(SQSTDLIB_LIBRARIES NAMES sqstdlib)
+find_library(SQUIRREL_LIBRARIES NAMES squirrel_static squirrel)
+find_library(SQSTDLIB_LIBRARIES NAMES sqstdlib_static sqstdlib)
 
 # Squirrel libraries
 set(INCLUDE_DIRECTORIES "${INCLUDE_DIRECTORIES}" CACHE STRING "Additional include directories for examples and tests")

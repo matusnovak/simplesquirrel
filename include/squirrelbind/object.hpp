@@ -33,11 +33,12 @@ namespace SquirrelBind {
     class SqClass;
     class SqInstance;
     class SqTable;
+    class SqArray;
 
-	namespace detail {
-		template <typename T> inline typename std::enable_if<!std::is_pointer<T>::value, T>::type
-			pop(HSQUIRRELVM vm, SQInteger index);
-	}
+    namespace detail {
+        template <typename T> inline typename std::enable_if<!std::is_pointer<T>::value, T>::type
+            pop(HSQUIRRELVM vm, SQInteger index);
+    }
 
     /**
     * @brief Raw Squirrel object
@@ -73,11 +74,11 @@ namespace SquirrelBind {
         /**
         * @brief Returns raw Squirrel object reference
         */
-        const HSQOBJECT& get() const;
+        const HSQOBJECT& getRaw() const;
         /**
         * @brief Returns raw Squirrel object reference
         */
-        HSQOBJECT& get();
+        HSQOBJECT& getRaw();
         /**
         * @brief Finds object within this object
         */
@@ -96,20 +97,29 @@ namespace SquirrelBind {
         */
         const HSQUIRRELVM& getHandle() const;
         /**
+        * @brief Returns the typetag associated with this object
+        * @note The typetag is equal to hash value of typeid(T)
+        */
+        size_t getTypeTag() const;
+        /**
+        * @brief Returns true if the object is nullptr
+        */
+        bool isNull() const;
+        /**
         * @brief Returns the integer value of this object
         * @throws SqTypeException if this object is not an integer
         */
 #ifdef _SQ64
         int64_t toInt() const;
 #else
-		int32_t toInt() const;
+        int32_t toInt() const;
 #endif
         /**
         * @brief Returns the float value of this object
         * @throws SqTypeException if this object is not a float
         */
 #ifdef SQUSEDOUBLE
-		double toFloat() const;
+        double toFloat() const;
 #else
         float toFloat() const;
 #endif
@@ -120,7 +130,7 @@ namespace SquirrelBind {
 #ifdef SQUNICODE
         std::wstring toString() const;
 #else
-		std::string toString() const;
+        std::string toString() const;
 #endif
         /**
         * @brief Returns the boolean value of this object
@@ -147,13 +157,27 @@ namespace SquirrelBind {
         * @throws SqTypeException if this object is not a table
         */
         SqTable toTable() const;
-		template<typename T>
-		T to() const {
-			sq_pushobject(vm, obj);
-			auto ret = detail::pop<T>(vm, -1);
-			sq_pop(vm, 1);
-			return ret;
-		}
+        /**
+        * @brief Returns the SqArray value of this object
+        * @throws SqTypeException if this object is not an array
+        */
+        SqArray toArray() const;
+        /**
+        * @brief Returns an arbitary value of this object
+        * @throws SqTypeException if this object is not an type of T
+        */
+        template<typename T>
+        T to() const {
+            sq_pushobject(vm, obj);
+            try {
+                auto ret = detail::pop<T>(vm, -1);
+                sq_pop(vm, 1);
+                return ret;
+            } catch (...) {
+                sq_pop(vm, 1);
+                std::rethrow_exception(std::current_exception());
+            }
+        }
         /**
         * @brief Copy assingment operator
         */

@@ -8,7 +8,44 @@
 #include <typeinfo>
 
 namespace SquirrelBind {
+    class SqArray;
+    class SqEnum;
+    class SqVM;
+    /**
+    * @brief
+    */
+    template<class T>
+    class SqClassWrapper {
+    public:
+        static void sqExposeClass(SqVM& vm) {
+            SqObject exposedClass = T::expose(vm);
+            classObj = exposedClass.getRaw();
+        }
+        static HSQOBJECT& sqGetClass() {
+            return classObj;
+        }
+    private:
+        static HSQOBJECT classObj;
+    };
+
+    template<class T>
+    HSQOBJECT SqClassWrapper<T>::classObj;
+
     namespace detail {
+        template<class T>
+        static SQInteger classDestructor(SQUserPointer ptr, SQInteger size) {
+            T* p = static_cast<T*>(ptr);
+            delete p;
+            return 0;
+        }
+
+        template<class T>
+        static SQInteger classPtrDestructor(SQUserPointer ptr, SQInteger size) {
+            T** p = static_cast<T**>(ptr);
+            delete *p;
+            return 0;
+        }
+
         inline void checkType(HSQUIRRELVM vm, SQInteger index, SQObjectType expected){
             auto type = sq_gettype(vm, index);
             if (type != expected) throw SqTypeException("bad cast", sqTypeToStr(SqType(expected)), sqTypeToStr(SqType(type)));
@@ -16,36 +53,72 @@ namespace SquirrelBind {
 
         template<typename T>
         inline T popValue(HSQUIRRELVM vm, SQInteger index){
-            throw SqTypeException("Cannot pop value, type not supported!", "UNSUPPROTED", typeid(T).name());
+            SQObjectType type = sq_gettype(vm, index);
+            SQUserPointer ptr;
+            SQUserPointer typetag;
+            if(type == OT_USERDATA) {
+                sq_getuserdata(vm, index, &ptr, &typetag);
+
+                if(reinterpret_cast<size_t>(typetag) != typeid(T).hash_code()) {
+                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                }
+
+                T** p = reinterpret_cast<T**>(ptr);
+                return T(**p);
+            } 
+            else if(type == OT_INSTANCE) {
+                sq_getinstanceup(vm, index, &ptr, &typetag);
+                sq_gettypetag(vm, index, &typetag);
+
+                if(reinterpret_cast<size_t>(typetag) != typeid(T*).hash_code()) {
+                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                }
+
+                T* p = reinterpret_cast<T*>(ptr);
+                return T(*p);
+            }
+            else {
+                throw SqTypeException("bad cast", "INSTANCE", sqTypeToStr(SqType(type)));
+            }
         }
 
-		template<typename T>
-		inline T popPointer(HSQUIRRELVM vm, SQInteger index) {
-	        checkType(vm, index, OT_INSTANCE);
-			SQUserPointer val;
-			sq_gettypetag(vm, index, &val);
-			if(reinterpret_cast<size_t>(val) != typeid(T).hash_code()) {
-				throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
-			}
-			if (SQ_FAILED(sq_getinstanceup(vm, index, &val, nullptr))) {
-				throw SqTypeException("Could not get instance from squirrel stack");
-			}
-			return reinterpret_cast<T>(val);
+        template<typename T>
+        inline T popPointer(HSQUIRRELVM vm, SQInteger index) {
+            auto type = sq_gettype(vm, index);
+            if(type == OT_USERPOINTER) {
+                SQUserPointer val;
+                if (SQ_FAILED(sq_getuserpointer(vm, index, &val))) {
+                    throw SqTypeException("Could not get instance from squirrel stack");
+                }
+                return reinterpret_cast<T>(val);
+            }
+            else {
+                if (type != OT_INSTANCE) throw SqTypeException("bad cast", sqTypeToStr(SqType(OT_INSTANCE)), sqTypeToStr(SqType(type)));
+                SQUserPointer val;
+                sq_gettypetag(vm, index, &val);
+                if (reinterpret_cast<size_t>(val) != typeid(T).hash_code()) {
+                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                }
+                if (SQ_FAILED(sq_getinstanceup(vm, index, &val, nullptr))) {
+                    throw SqTypeException("Could not get instance from squirrel stack");
+                }
+                return reinterpret_cast<T>(val);
+            }
         }
 
-		template<>
+        template<>
         inline char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw char from squirrel stack");
             return static_cast<char>(val);
         }
 
-		template<>
+        template<>
         inline signed char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get signed char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw signed char from squirrel stack");
             return static_cast<signed char>(val);
         }
 
@@ -53,7 +126,7 @@ namespace SquirrelBind {
         inline short popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get short from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw short from squirrel stack");
             return static_cast<short>(val);
         }
 
@@ -61,7 +134,7 @@ namespace SquirrelBind {
         inline int popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get int from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw int from squirrel stack");
             return static_cast<int>(val);
         }
 
@@ -69,15 +142,15 @@ namespace SquirrelBind {
         inline long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw long from squirrel stack");
             return static_cast<long>(val);
         }
 
-		template<>
+        template<>
         inline unsigned char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw unsigned char from squirrel stack");
             return static_cast<unsigned char>(val);
         }
 
@@ -85,7 +158,7 @@ namespace SquirrelBind {
         inline unsigned short popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned short from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw unsigned short from squirrel stack");
             return static_cast<unsigned short>(val);
         }
 
@@ -93,7 +166,7 @@ namespace SquirrelBind {
         inline unsigned int popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned int from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw unsigned int from squirrel stack");
             return static_cast<unsigned int>(val);
         }
 
@@ -101,34 +174,34 @@ namespace SquirrelBind {
         inline unsigned long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw unsigned long from squirrel stack");
             return static_cast<unsigned long>(val);
         }
 
 #ifdef _SQ64
-		template<>
+        template<>
         inline long long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get long long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw long long from squirrel stack");
             return static_cast<long long>(val);
         }
 
-		template<>
+        template<>
         inline unsigned long long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned long long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not getRaw unsigned long long from squirrel stack");
             return static_cast<unsigned long long>(val);
         }
 #endif
 
 #ifdef SQUSEDOUBLE
-		template<>
+        template<>
         inline double popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQFloat val;
-            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not get double from squirrel stack");
+            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not getRaw double from squirrel stack");
             return static_cast<double>(val);
         }
 #endif
@@ -137,7 +210,7 @@ namespace SquirrelBind {
         inline float popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_FLOAT);
             SQFloat val;
-            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not get float from squirrel stack");
+            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not getRaw float from squirrel stack");
             return static_cast<float>(val);
         }
 
@@ -145,24 +218,24 @@ namespace SquirrelBind {
         inline bool popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_BOOL);
             SQBool val;
-            if (SQ_FAILED(sq_getbool(vm, index, &val))) throw SqTypeException("Could not get bool from squirrel stack");
+            if (SQ_FAILED(sq_getbool(vm, index, &val))) throw SqTypeException("Could not getRaw bool from squirrel stack");
             return static_cast<bool>(val);
         }
 
 #ifdef SQUNICODE
-		template<>
+        template<>
         inline std::wstring popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_STRING);
             const SQChar* val;
-            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not get string from squirrel stack");
+            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not getRaw string from squirrel stack");
             return std::wstring(val == nullptr ? L"" : val);
         }
 #else
-		template<>
+        template<>
         inline std::string popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_STRING);
             const SQChar* val;
-            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not get string from squirrel stack");
+            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not getRaw string from squirrel stack");
             return std::string(val == nullptr ? "" : val);
         }
 #endif
@@ -177,182 +250,202 @@ namespace SquirrelBind {
             return popPointer<T>(vm, index);
         }
 
-        /*template<typename T, typename std::enable_if<!std::is_pointer<T>::value>* = 0>
-        T pop(HSQUIRRELVM vm, SQInteger index);
+        template<typename T, typename std::enable_if<std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+        inline void pushByCopy(HSQUIRRELVM vm, const T& value) {
+            sq_pushobject(vm, T::sqGetClass());
+            sq_createinstance(vm, -1);
+            sq_remove(vm, -2);
 
-        template<typename T, typename std::enable_if<!std::is_pointer<T>::value>* = 0>
-        T pop(HSQUIRRELVM vm, SQInteger index){
-            return T();
+            sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(new T(value)));
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
+            sq_setreleasehook(vm, -1, classDestructor<T>);
         }
 
-        template<typename std::enable_if<!std::is_pointer<int>::value>* = 0>
-        int pop(HSQUIRRELVM vm, SQInteger index){
-            checkType(vm, index, OT_INTEGER);
-            SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get int from squirrel stack");
-            return static_cast<int>(val);
+        template<typename T, typename std::enable_if<!std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+        inline void pushByCopy(HSQUIRRELVM vm, const T& value) {
+            T** data = reinterpret_cast<T**>(sq_newuserdata(vm, sizeof(T*)));
+            *data = new T(value);
+            sq_setreleasehook(vm, -1, classPtrDestructor<T>);
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T).hash_code()));
         }
 
-        template<typename std::enable_if<!std::is_pointer<float>::value>* = 0>
-        float pop(HSQUIRRELVM vm, SQInteger index){
-            checkType(vm, index, OT_FLOAT);
-            SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get int from squirrel stack");
-            return static_cast<float>(val);
-        }
-
-        template<class T, typename std::enable_if<std::is_pointer<T>::value>* = 0>
-        T pop(HSQUIRRELVM vm, SQInteger index){
-            return nullptr;
-        }*/
-
-		template<typename T>
-		struct pushByCopy {
-			static void f(HSQUIRRELVM vm, const T& value) {
-				throw SqTypeException("Cannot push value, type not supported!", "UNKNOWN", typeid(T).name());
-			}
-        };
-
-		template<typename T>
+        template<typename T>
         inline void pushValue(HSQUIRRELVM vm, const T& value){
-			pushByCopy<T>::f(vm, value);
+            pushByCopy<T>(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const int& value) {
-	        sq_pushinteger(vm, value);
+        void pushRaw(HSQUIRRELVM vm, const SqObject& value);
+        void pushRaw(HSQUIRRELVM vm, const SqClass& value);
+        void pushRaw(HSQUIRRELVM vm, const SqInstance& value);
+        void pushRaw(HSQUIRRELVM vm, const SqTable& value);
+        void pushRaw(HSQUIRRELVM vm, const SqFunction& value);
+        void pushRaw(HSQUIRRELVM vm, const SqEnum& value);
+        void pushRaw(HSQUIRRELVM vm, const SqArray& value);
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const std::nullptr_t& value){
+            (void)value;
+            sq_pushnull(vm);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const short& value) {
-	        sq_pushinteger(vm, value);
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const HSQOBJECT& value){
+            sq_pushobject(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const long& value) {
-	        sq_pushinteger(vm, value);
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqObject& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const char& value) {
-	        sq_pushinteger(vm, value);
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqClass& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const signed char& value) {
-	        sq_pushinteger(vm, value);
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqInstance& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const unsigned int& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const int*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqTable& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const unsigned short& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const short*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqFunction& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const unsigned long& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const long*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqEnum& value){
+            pushRaw(vm, value);
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const unsigned char& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const char*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const SqArray& value){
+            pushRaw(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const bool& value) {
+            sq_pushbool(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const int& value) {
+            sq_pushinteger(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const short& value) {
+            sq_pushinteger(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const long& value) {
+            sq_pushinteger(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const char& value) {
+            sq_pushinteger(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const signed char& value) {
+            sq_pushinteger(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const unsigned int& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const int*>(&value));
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const unsigned short& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const short*>(&value));
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const unsigned long& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const long*>(&value));
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const unsigned char& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const char*>(&value));
         }
 
 #ifdef _SQ64
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const unsigned long long& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const long long*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const unsigned long long& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const long long*>(&value));
         }
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const long long& value) {
-	        sq_pushinteger(vm, *reinterpret_cast<const long long*>(&value));
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const long long& value) {
+            sq_pushinteger(vm, *reinterpret_cast<const long long*>(&value));
         }
 #endif
 
 #ifdef SQUSEDOUBLE
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const double& value) {
-	        sq_pushfloat(vm, value);
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const double& value) {
+            sq_pushfloat(vm, value);
         }
 #endif
 
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const float& value) {
-	        sq_pushfloat(vm, value);
-        }
-
-#ifdef SQUNICODE
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const std::wstring& value) {
-			sq_pushstring(vm, value.c_str(), value.size());
-        }
-#else
-		template<>
-		inline void pushValue(HSQUIRRELVM vm, const std::string& value) {
-			sq_pushstring(vm, value.c_str(), value.size());
-        }
-#endif
-
-		template <typename T, typename std::enable_if<!std::is_pointer<T>::value, T>::type* = nullptr>
-        inline void push(HSQUIRRELVM vm, T value) { 
-            pushValue<T>(vm, value); 
-        }
-
-        template <typename T, typename std::enable_if<std::is_pointer<T>::value, T>::type* = nullptr>
-        inline void push(HSQUIRRELVM vm, T value) { 
-			sq_pushnull(vm);
-        }
-
-        /*template<class T>
-        struct push {
-            static void f(HSQUIRRELVM vm, T value);
-        };
-        
-        template<class T>
-        inline void push<T>::f(HSQUIRRELVM vm, T value) {
-            throw SqTypeException("Can't push this type to VM", "NOT_IMPLEMENTED_TYPE", typeid(T).name());
-        }
-
         template<>
-        inline void push<int>::f(HSQUIRRELVM vm, int value) {
-            sq_pushinteger(vm, value);
-        }
-
-        template<>
-        inline void push<float>::f(HSQUIRRELVM vm, float value) {
+        inline void pushValue(HSQUIRRELVM vm, const float& value) {
             sq_pushfloat(vm, value);
         }
 
+#ifdef SQUNICODE
         template<>
-        inline void push<short>::f(HSQUIRRELVM vm, short value) {
-            sq_pushinteger(vm, value);
+        inline void pushValue(HSQUIRRELVM vm, const std::wstring& value) {
+            sq_pushstring(vm, value.c_str(), value.size());
+        }
+#else
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const std::string& value) {
+            sq_pushstring(vm, value.c_str(), value.size());
+        }
+#endif
+        template<typename T, typename std::enable_if<std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+        inline void pushByPtr(HSQUIRRELVM vm, T* value) {
+            if(value == nullptr) {
+                sq_pushnull(vm);
+            }
+            else {
+                sq_pushobject(vm, T::sqGetClass());
+                sq_createinstance(vm, -1);
+                sq_remove(vm, -2);
+                sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(value));
+                sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
+            }
         }
 
-        template<>
-        inline void push<char>::f(HSQUIRRELVM vm, char value) {
-            sq_pushinteger(vm, value);
+        template<typename T, typename std::enable_if<!std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+        inline void pushByPtr(HSQUIRRELVM vm, T* value) {
+            if(value == nullptr) {
+                sq_pushnull(vm);
+            }
+            else {
+                sq_pushuserpointer(vm, value);
+            }
         }
 
-        template<>
-        inline void push<long>::f(HSQUIRRELVM vm, long value) {
-            sq_pushinteger(vm, value);
+        template <typename T, typename std::enable_if<!std::is_pointer<T>::value, T>::type* = nullptr>
+        inline void push(HSQUIRRELVM vm, const T& value) { 
+            pushValue<typename std::remove_pointer<typename std::remove_cv<T>::type>::type>(vm, value); 
         }
 
-        template<>
-        inline void push<long long>::f(HSQUIRRELVM vm, long long value) { // TODO
-            sq_pushinteger(vm, static_cast<SQInteger>(value));
+        template <typename T, typename std::enable_if<std::is_pointer<T>::value, T>::type* = nullptr>
+        inline void push(HSQUIRRELVM vm, const T& value) { 
+            pushByPtr<typename std::remove_pointer<typename std::remove_cv<T>::type>::type>(vm, value);
         }
-
-        template<>
-        inline void push<bool>::f(HSQUIRRELVM vm, bool value) {
-            sq_pushbool(vm, value);
-        }*/
     }
 }
 

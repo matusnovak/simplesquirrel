@@ -9,7 +9,7 @@ namespace SquirrelBind {
     }
 
     SqFunction::SqFunction(const SqObject& object):SqObject(object) {
-        if (object.getType() != SqType::CLOSURE) throw SqTypeException("Object is not a function", object.getTypeStr(), "CLOSURE");
+        if (object.getType() != SqType::CLOSURE && object.getType() != SqType::NATIVECLOSURE) throw SqTypeException("bad cast", "CLOSURE", object.getTypeStr());
     }
 
     SqFunction::SqFunction(const SqFunction& other):SqObject(other) {
@@ -28,7 +28,7 @@ namespace SquirrelBind {
             sq_pop(vm, 1);
             throw SqTypeException("Get function info failed");
         }
-
+        sq_pop(vm, 1);
         return nparams -1;
     }
 

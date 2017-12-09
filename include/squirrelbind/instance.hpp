@@ -5,6 +5,7 @@
 #include "object.hpp"
 
 namespace SquirrelBind {
+    class SqClass;
     /**
     * @brief Squirrel intance of class object
     */
@@ -13,7 +14,7 @@ namespace SquirrelBind {
         /**
         * @brief Constructs empty instance
         */
-        explicit SqInstance(HSQUIRRELVM vm);
+        SqInstance(HSQUIRRELVM vm);
         /**
         * @brief Converts SqObject to SqInstance
         * @throws SqTypeException if the SqObject is not type of an instance
@@ -22,11 +23,16 @@ namespace SquirrelBind {
         /**
         * @brief Copy constructor
         */
-        explicit SqInstance(const SqInstance& other);
+        SqInstance(const SqInstance& other);
         /**
         * @brief Move constructor
         */
         SqInstance(SqInstance&& other) NOEXCEPT;
+        /**
+        * @brief Returns the class associated with this instance
+        * @throws SqTypeException if something went wrong
+        */
+        SqClass getClass();
         /**
         * @brief Copy assingment operator
         */ 

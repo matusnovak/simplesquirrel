@@ -10,6 +10,7 @@ if(MSVC)
 endif(MSVC)
 
 include_directories(${INCLUDE_DIRECTORIES})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_LIBRARY_PATH})
 
 AUX_SOURCE_DIRECTORY(${CMAKE_SOURCE_DIR}/source SOURCES) 
@@ -31,4 +32,5 @@ if(BUILD_TESTS)
     # Enable testing (done by catch.hpp)
     enable_testing()
     add_subdirectory(tests)
+    add_subdirectory(examples)
 endif()

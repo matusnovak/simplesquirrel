@@ -8,6 +8,8 @@
 #include "args.hpp"
 #include "class.hpp"
 #include "instance.hpp"
+#include "function.hpp"
+#include "array.hpp"
 
 #include <memory>
 
@@ -94,26 +96,28 @@ namespace SquirrelBind {
         * @brief Compiles a script from a memory
         * @details The script can be associated with a name as a second parameter.
         * This name is used during runtime error information.
-        * @throws CompileException
+        * @throws SqCompileException
         */
         SqScript compileSource(const char* source, const char* name = "buffer");
         /**
         * @brief Compiles a script from a source file
-        * @throws CompileException
+        * @throws SqCompileException
         */
         SqScript compileFile(const char* path);
         /**
         * @brief Runs a script
         * @details When the script runs for the first time, the contens such as
         * class definitions are assigned to the root table (global table).
-        * @throws RuntimeException
+        * @throws SqRuntimeException
         */
         void run(const SqScript& script) const;
         /**
         * @brief Calls a global function
         * @param func The instance of a function
         * @param args Any number of arguments
-        * @throws RuntimeException
+        * @throws SqRuntimeException if an exception is thrown or number of arguments
+        * do not match
+        * @throws SqTypeException if casting from Squirrel objects to C++ objects failed
         */
         template<class... Args>
         SqObject callFunc(const SqFunction& func, const SqObject& env, Args&&... args) const {
@@ -124,8 +128,8 @@ namespace SquirrelBind {
             }
 
             auto top = sq_gettop(vm);
-            sq_pushobject(vm, func.get());
-            sq_pushobject(vm, env.get());
+            sq_pushobject(vm, func.getRaw());
+            sq_pushobject(vm, env.getRaw());
 
             pushArgs(std::forward<Args>(args)...);
 
@@ -135,7 +139,7 @@ namespace SquirrelBind {
         * @brief Creates a new instance of class and call constructor with given arguments
         * @param cls The object of a class
         * @param args Any number of arguments
-        * @throws RuntimeException
+        * @throws SqRuntimeException
         */
         template<class... Args>
         SqInstance newInstance(const SqClass& cls, Args&&... args) const {
@@ -147,19 +151,36 @@ namespace SquirrelBind {
         /**
         * @brief Creates a new instance of class without calling a constructor
         * @param cls The object of a class
-        * @throws RuntimeException
+        * @throws SqRuntimeException
         */
         SqInstance newInstanceNoCtor(const SqClass& cls) const {
             SqInstance inst(vm);
-
-            sq_pushobject(vm, cls.get());
+            sq_pushobject(vm, cls.getRaw());
             sq_createinstance(vm, -1);
             sq_remove(vm, -2);
-            sq_getstackobj(vm, -1, &inst.get());
-            sq_addref(vm, &inst.get());
+            sq_getstackobj(vm, -1, &inst.getRaw());
+            sq_addref(vm, &inst.getRaw());
             sq_pop(vm, 1);
-
             return inst;
+        }
+        /**
+        * @brief Creates a new empty table
+        */
+        SqTable newTable() const {
+            return SqTable(vm);
+        }
+        /**
+        * @brief Creates a new empty array
+        */
+        SqArray newArray() const {
+            return SqArray(vm);
+        }
+        /**
+        * @brief Creates a new array
+        */
+        template<class T>
+        SqArray newArray(const std::vector<T>& vector) const {
+            return SqArray(vm, vector);
         }
         /**
         * @brief Exposes a derived class of SqClassWrapper to this VM
@@ -167,6 +188,21 @@ namespace SquirrelBind {
         template<class T>
         void expose(){
             T::sqExposeClass(*this);
+        }
+        /**
+         * @brief Adds a new enum to this table
+         */
+        SqEnum addEnum(const char* name);
+        /**
+         * @brief Adds a new constant key-value pair to this table
+         */
+        template<typename T>
+        inline void setConst(const char* name, const T& value) {
+            sq_pushconsttable(vm);
+            sq_pushstring(vm, name, strlen(name));
+            detail::push<T>(vm, value);
+            sq_newslot(vm, -3, false);
+            sq_pop(vm,1); // pop table
         }
         /**
         * @brief Prints stack objects

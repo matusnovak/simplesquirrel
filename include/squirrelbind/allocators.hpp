@@ -23,13 +23,6 @@ namespace SquirrelBind {
             return new T();
         }
 
-        template<class T>
-        static SQInteger classDestructor(SQUserPointer ptr, SQInteger size) {
-            T *p = static_cast<T*>(ptr);
-            delete p;
-            return 0;
-        }
-
         template<class T, class... Args>
         static SQInteger classAllocator(HSQUIRRELVM vm) {
             static const std::size_t nparams = sizeof...(Args);

@@ -22,7 +22,7 @@ namespace SquirrelBind {
         /**
         * @brief Copy constructor
         */
-        explicit SqFunction(const SqFunction& other);
+        SqFunction(const SqFunction& other);
         /**
         * @brief Move constructor
         */

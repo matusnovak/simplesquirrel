@@ -5,6 +5,8 @@
 #include "exceptions.hpp"
 #include "object.hpp"
 #include "function.hpp"
+#include "enum.hpp"
+#include "array.hpp"
 #include "table.hpp"
 #include "instance.hpp"
 #include "script.hpp"

@@ -1,5 +1,5 @@
 #include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/function.hpp"
+#include "../include/squirrelbind/enum.hpp"
 #include "../include/squirrelbind/vm.hpp"
 #include <squirrel.h>
 #include <sqstdstring.h>
@@ -95,11 +95,12 @@ namespace SquirrelBind {
     SqScript SqVM::compileSource(const char* source, const char* name) {
         SqScript script(vm);
         if(SQ_FAILED(sq_compilebuffer(vm, source, strlen(source), name, true))){
+            if (!compileException)throw SqCompileException("Source cannot be compiled!");
             throw *compileException;
         }
 
-        sq_getstackobj(vm,-1,&script.get());
-        sq_addref(vm, &script.get());
+        sq_getstackobj(vm,-1,&script.getRaw());
+        sq_addref(vm, &script.getRaw());
         sq_pop(vm, 1);
         return script;
     }
@@ -107,11 +108,12 @@ namespace SquirrelBind {
     SqScript SqVM::compileFile(const char* path) {
         SqScript script(vm);
         if (SQ_FAILED(sqstd_loadfile(vm, path, true))) {
+            if (!compileException)throw SqCompileException("File not found or cannot be read!");
             throw *compileException;
         }
 
-        sq_getstackobj(vm, -1, &script.get());
-        sq_addref(vm, &script.get());
+        sq_getstackobj(vm, -1, &script.getRaw());
+        sq_addref(vm, &script.getRaw());
         sq_pop(vm, 1);
         return script;
     }
@@ -119,7 +121,7 @@ namespace SquirrelBind {
     void SqVM::run(const SqScript& script) const {
         if(!script.isEmpty()) {
             SQInteger top = sq_gettop(vm);
-            sq_pushobject(vm, script.get());
+            sq_pushobject(vm, script.getRaw());
             sq_pushroottable(vm);
             SQRESULT result = sq_call(vm, 1, false, true);
             sq_settop(vm, top);
@@ -130,6 +132,16 @@ namespace SquirrelBind {
         else {
             throw SqRuntimeException("Empty script object");
         }
+    }
+
+    SqEnum SqVM::addEnum(const char* name) {
+        SqEnum enm(vm);
+        sq_pushconsttable(vm);
+        sq_pushstring(vm, name, strlen(name));
+        detail::push<SqObject>(vm, enm);
+        sq_newslot(vm, -3, false);
+        sq_pop(vm,1); // pop table
+        return std::move(enm);
     }
 
     SqVM& SqVM::operator = (SqVM&& other) NOEXCEPT {
@@ -148,8 +160,8 @@ namespace SquirrelBind {
         }
             
         SqObject ret(vm);
-        sq_getstackobj(vm, -1, &ret.get());
-        sq_addref(vm, &ret.get());
+        sq_getstackobj(vm, -1, &ret.getRaw());
+        sq_addref(vm, &ret.getRaw());
         sq_settop(vm, top);
         return ret;
     }
