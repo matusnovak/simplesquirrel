@@ -7,12 +7,14 @@ API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind
 
 * MIT licensed
 * 32 and 64 bit support
+* C++11
 * Supports multiple virtual machines
 * Supports lambdas
 * Very easy object manipulation
 * Supports binding C++ classes without multiple runtime maps as done with Sqrat
 * Strict type checking on C++ side
 * wchar\_t support, a.k.a Squirrel Unicode (experimental!) - I highly recommend using UTF8 as chars and not UNICODE as wchar\_t
+* Works with Visual Studio 2015, Visual Studio 2017, MinGW-w64, Linux GCC, and OSX Clang 
 * Allows the following:
   * Binding C++ function and calling it from Squirrel
   * Looking up Squirrel function and calling it from C++
@@ -343,7 +345,7 @@ int main(){
     "    return a + b;\n"
     "}\n";
 
-    SqScript script = vm.compileSource(source);
+    SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
     // Now the mySquirrelFunc is ready for us, let's
@@ -441,11 +443,42 @@ int main(){
     "print(\"Foo now has: \" + foo.msg);\n"
     "\n";
 
-    SqScript script = vm.compileSource(source);
+    SqScript script = vm.compileSource(source.c_str());
     vm.expose<Foo>(); // Bind the class to this VM
     vm.run(script);
 
     return 0;
+}
+```
+
+## Class const method ambiguity
+
+Sometimes, it is possible that your class has for example two methods:
+
+```cpp
+class Foo: public SqClassWrapper<Foo> {
+    ...
+    const std::string& getMessage() const;
+    std::string& getMessage();
+
+    static SqClass expose(SqVM& vm);
+};
+```
+
+One gets to be used when you have constant reference (or pointer) and the second one
+when you have non-constant reference. Binding these methods to Squirrel class can
+cause compiler ambiguity error. You can solve the problem by explicitly defining the
+template when binding those functions, for example:
+
+```
+SqClass Foo::expose(SqVM& vm) {
+    SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(.....)>());
+
+    // Explicitly define return type to "const std::string&" in order
+    // for the compiler to know which overloaded method to use.
+    cls.addFunc<const std::string&>("getMessage", &Foo::getMessage);
+
+    return cls;
 }
 ```
 
@@ -478,7 +511,7 @@ int main(){
     "    value = null;\n"
     "}\n";
 
-    SqScript script = vm.compileSource(source);
+    SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
     // Find class

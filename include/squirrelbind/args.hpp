@@ -435,7 +435,7 @@ namespace SquirrelBind {
                 sq_pushnull(vm);
             }
             else {
-                sq_pushuserpointer(vm, value);
+                sq_pushuserpointer(vm, (SQUserPointer)(value));
             }
         }
 

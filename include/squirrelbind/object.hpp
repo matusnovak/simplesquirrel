@@ -108,6 +108,10 @@ namespace SquirrelBind {
         */
         bool isNull() const;
         /**
+        * @brief Releases the object and resets it to empty
+        */
+        void reset();
+        /**
         * @brief Returns the integer value of this object
         * @throws SqTypeException if this object is not an integer
         */

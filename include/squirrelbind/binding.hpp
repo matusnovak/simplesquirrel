@@ -121,6 +121,25 @@ namespace SquirrelBind {
             return clsObj;
         }
 
+		template<typename T>
+        static SqObject addAbstractClass(HSQUIRRELVM vm, const char* name) {
+            SqObject clsObj(vm);
+
+            sq_pushstring(vm, name, strlen(name));
+            sq_newclass(vm, false);
+
+            HSQOBJECT& obj = T::sqGetClass();
+            sq_getstackobj(vm, -1, &obj);
+
+            sq_getstackobj(vm, -1, &clsObj.getRaw());
+            sq_addref(vm, &clsObj.getRaw());
+
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
+            sq_newslot(vm, -3, SQFalse); // Add the class
+
+            return clsObj;
+        }
+
         template<int offet, typename R, typename... Args>
         struct func {
             static SQInteger global(HSQUIRRELVM vm) {
