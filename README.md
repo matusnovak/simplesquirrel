@@ -1,6 +1,8 @@
 # SquirrelBind
 Yet another simple binding in C++11 for [Squirrel scripting language](http://www.squirrel-lang.org/)
 
+API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind/docs/SquirrelBind.html>
+
 ## Features
 
 * MIT licensed

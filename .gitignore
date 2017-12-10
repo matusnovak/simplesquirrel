@@ -37,3 +37,4 @@ node_modules/
 install/
 _book
 .vscode
+.publish
