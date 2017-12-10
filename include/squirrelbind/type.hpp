@@ -4,6 +4,16 @@
 
 #include <squirrel.h>
 
+#ifdef DLL_CONFIG
+    #ifdef SQUIRREL_BIND_EXPORTS
+		#define SQBIND_API __declspec(dllexport)
+    #else
+		#define SQBIND_API __declspec(dllimport)
+    #endif
+#else
+    #define SQBIND_API
+#endif
+
 namespace SquirrelBind {
     enum class SqType {
         NULLPTR = OT_NULL,
@@ -26,7 +36,7 @@ namespace SquirrelBind {
         OUTER = OT_OUTER
     };
 
-    extern const char* sqTypeToStr(SqType type);
+    SQBIND_API const char* sqTypeToStr(SqType type);
 }
 
 #endif

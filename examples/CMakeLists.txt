@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-# Find libraries
-find_library(SQUIRREL_LIBRARIES NAMES squirrel_static squirrel)
-find_library(SQSTDLIB_LIBRARIES NAMES sqstdlib_static sqstdlib)
-
-# Squirrel libraries
-set(INCLUDE_DIRECTORIES "${INCLUDE_DIRECTORIES}" CACHE STRING "Additional include directories for examples and tests")
-set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH}" CACHE STRING "Additional library directories for examples and tests")
-
 # Add executables
 add_executable(ExampleArrays example_arrays.cpp)
 add_executable(ExampleClasses example_classes.cpp)
@@ -27,7 +19,7 @@ endforeach(file)
 foreach(example ${EXAMPLES})
     include_directories(${example} ${INCLUDE_DIRECTORIES})
     link_directories(${example} ${CMAKE_BUILD_DIR})
-    target_link_libraries(${example} squirrelbind)
+    target_link_libraries(${example} squirrelbind_static)
     target_link_libraries(${example} ${SQUIRREL_LIBRARIES})
     target_link_libraries(${example} ${SQSTDLIB_LIBRARIES})
     add_test(NAME ${example} COMMAND ${example})

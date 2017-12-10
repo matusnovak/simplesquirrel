@@ -9,7 +9,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel intance of class object
     */
-    class SqInstance: public SqObject {
+    class SQBIND_API SqInstance: public SqObject {
     public:
         /**
         * @brief Constructs empty instance

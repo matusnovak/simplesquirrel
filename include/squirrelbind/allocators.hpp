@@ -7,6 +7,7 @@
 #include <functional>
 
 namespace SquirrelBind {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<class Ret>
         struct FuncPtr {
@@ -49,6 +50,7 @@ namespace SquirrelBind {
             return 0;
         }
     }
+#endif
 }
 
 #endif

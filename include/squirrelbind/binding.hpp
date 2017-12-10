@@ -7,6 +7,7 @@
 #include <cstring>
 
 namespace SquirrelBind {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         // function_traits and make_function credits by @tinlyx https://stackoverflow.com/a/21665705
 
@@ -167,7 +168,6 @@ namespace SquirrelBind {
             paramPacker<void, Args...>(params);
 
             sq_newclosure(vm, &detail::func<1, R, Args...>::global, 1);
-            std::cout << "params for: " << name << " = " << params << std::endl;
             sq_setparamscheck(vm, nparams + 1, params);
             if(SQ_FAILED(sq_newslot(vm, -3, SQFalse))) {
                 throw SqTypeException("Failed to bind function");
@@ -185,13 +185,13 @@ namespace SquirrelBind {
             paramPacker<Args...>(params);
 
             sq_newclosure(vm, &detail::func<0, R, Args...>::global, 1);
-            std::cout << "params for: " << name << " = " << params << std::endl;
             sq_setparamscheck(vm, nparams, params);
             if(SQ_FAILED(sq_newslot(vm, -3, isStatic))) {
                 throw SqTypeException("Failed to bind member function");
             }
         }
     }
+#endif
 }
 
 #endif

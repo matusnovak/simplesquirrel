@@ -35,15 +35,17 @@ namespace SquirrelBind {
     class SqTable;
     class SqArray;
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template <typename T> inline typename std::enable_if<!std::is_pointer<T>::value, T>::type
             pop(HSQUIRRELVM vm, SQInteger index);
     }
+#endif
 
     /**
     * @brief Raw Squirrel object
     */
-    class SqObject {
+    class SQBIND_API SqObject {
     public:
         /**
         * @brief Creates an empty object with null VM

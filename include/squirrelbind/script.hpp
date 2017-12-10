@@ -6,7 +6,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel script object
     */
-    class SqScript: public SqObject {
+    class SQBIND_API SqScript: public SqObject {
     public:
         /**
         * @brief Creates empty script object

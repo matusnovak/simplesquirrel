@@ -1,5 +1,6 @@
 #define CATCH_CONFIG_MAIN 
 #include <catch/catch.hpp>
+#define SQUIRREL_STATIC
 #include "../include/squirrelbind/squirrelbind.hpp"
 
 #define STRINGIFY(x) #x

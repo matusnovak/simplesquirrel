@@ -9,7 +9,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel class object
     */
-    class SqClass: public SqObject {
+    class SQBIND_API SqClass: public SqObject {
     public:
         /**
         * @brief Constructor helper class

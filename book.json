@@ -1,0 +1,8 @@
+{
+    "plugins": ["page-toc", "highlight"],
+    "pluginsConfig": {
+        "page-toc": {
+            "selector": ".markdown-section h1, .markdown-section h2"
+        }
+    }
+}

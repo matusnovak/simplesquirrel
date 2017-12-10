@@ -13,6 +13,11 @@
 
 #include <memory>
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable: 4251 )
+#endif
+
 namespace SquirrelBind {
     typedef void(*SqPrintFunc)(HSQUIRRELVM, const SQChar*, ...);
     typedef void(*SqErrorFunc)(HSQUIRRELVM, const SQChar*, ...);
@@ -34,7 +39,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel Virtual Machine object
     */
-    class SqVM: public SqTable {
+    class SQBIND_API SqVM: public SqTable {
     public:
         /**
         * @brief Creates a VM with a fixed stack size
@@ -238,14 +243,10 @@ namespace SquirrelBind {
 
         static void defaultCompilerErrorFunc(HSQUIRRELVM vm, const SQChar* desc, const SQChar* source, SQInteger line, SQInteger column);
     };
-
-    /*namespace detail {
-        template<class T>
-        inline HSQOBJECT& detail::getClassObjectOrCreate(HSQUIRRELVM vm) {
-            SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
-            return machine->getClassObjectOrCreate<T>();
-        }
-    }*/
 }
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 #endif

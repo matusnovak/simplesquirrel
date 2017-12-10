@@ -32,3 +32,8 @@
 *.app
 
 build/
+doxygen-output/
+node_modules/
+install/
+_book
+.vscode

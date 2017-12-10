@@ -31,6 +31,7 @@ namespace SquirrelBind {
     template<class T>
     HSQOBJECT SqClassWrapper<T>::classObj;
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<class T>
         static SQInteger classDestructor(SQUserPointer ptr, SQInteger size) {
@@ -274,13 +275,13 @@ namespace SquirrelBind {
             pushByCopy<T>(vm, value);
         }
 
-        void pushRaw(HSQUIRRELVM vm, const SqObject& value);
-        void pushRaw(HSQUIRRELVM vm, const SqClass& value);
-        void pushRaw(HSQUIRRELVM vm, const SqInstance& value);
-        void pushRaw(HSQUIRRELVM vm, const SqTable& value);
-        void pushRaw(HSQUIRRELVM vm, const SqFunction& value);
-        void pushRaw(HSQUIRRELVM vm, const SqEnum& value);
-        void pushRaw(HSQUIRRELVM vm, const SqArray& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqObject& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqClass& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqInstance& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqTable& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqFunction& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqEnum& value);
+        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqArray& value);
 
         template<>
         inline void pushValue(HSQUIRRELVM vm, const std::nullptr_t& value){
@@ -447,6 +448,7 @@ namespace SquirrelBind {
             pushByPtr<typename std::remove_pointer<typename std::remove_cv<T>::type>::type>(vm, value);
         }
     }
+#endif
 }
 
 #endif

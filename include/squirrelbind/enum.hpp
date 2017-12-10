@@ -8,7 +8,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel table object
     */
-    class SqEnum: public SqObject {
+    class SQBIND_API SqEnum: public SqObject {
     public:
         /**
         * @brief Creates empty table with null VM

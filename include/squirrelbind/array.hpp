@@ -10,7 +10,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel intance of array object
     */
-    class SqArray: public SqObject {
+    class SQBIND_API SqArray: public SqObject {
     public:
         /**
         * @brief Constructs empty array

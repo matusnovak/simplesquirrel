@@ -8,7 +8,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel function
     */
-    class SqFunction: public SqObject {
+    class SQBIND_API SqFunction: public SqObject {
     public:
         /**
         * @brief Constructs empty function object

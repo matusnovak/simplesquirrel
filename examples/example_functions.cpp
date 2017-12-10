@@ -1,3 +1,4 @@
+#define SQUIRREL_STATIC
 #include <squirrelbind/squirrelbind.hpp>
 #include <iomanip>
 
