@@ -4,7 +4,7 @@
 
 #include <squirrel.h>
 
-#ifdef DLL_CONFIG
+#if defined(DLL_CONFIG) && defined(_MSC_VER)
     #ifdef SQUIRREL_BIND_EXPORTS
 		#define SQBIND_API __declspec(dllexport)
     #else

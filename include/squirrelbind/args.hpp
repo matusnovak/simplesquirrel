@@ -6,6 +6,7 @@
 #include <squirrel.h>
 #include <iostream>
 #include <typeinfo>
+#include <vector>
 
 namespace SquirrelBind {
     class SqArray;

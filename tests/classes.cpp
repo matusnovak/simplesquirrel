@@ -511,7 +511,7 @@ static void testTypeClass(T value) {
 }
 
 template<>
-static void testTypeClass(std::string value) {
+void testTypeClass(std::string value) {
     class Foo;
 
     static Foo* ptr;

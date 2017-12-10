@@ -188,10 +188,10 @@ static void testType(T value, const std::string& type) {
 
 #ifdef SQUNICODE
 template<>
-static void testType(std::wstring value, const std::string& type) {
+void testType(std::wstring value, const std::string& type) {
 #else
 template<>
-static void testType(std::string value, const std::string& type) {
+void testType(std::string value, const std::string& type) {
 #endif
     static const std::string source = STRINGIFY(
         local result = null;

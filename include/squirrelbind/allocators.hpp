@@ -50,6 +50,19 @@ namespace SquirrelBind {
             return 0;
         }
     }
+
+    template<typename T>
+    inline T SqObject::to() const {
+        sq_pushobject(vm, obj);
+        try {
+            auto ret = detail::pop<T>(vm, -1);
+            sq_pop(vm, 1);
+            return ret;
+        } catch (...) {
+            sq_pop(vm, 1);
+            std::rethrow_exception(std::current_exception());
+        }
+    }
 #endif
 }
 

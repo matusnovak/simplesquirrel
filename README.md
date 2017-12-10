@@ -27,6 +27,82 @@ API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind
   * Derivate Squirrel class
   * **Thread safety**
 
+## Install Squirrel
+
+First, download and build Squirrel library using cmake. Use the command line instructions below.
+By default the `CMAKE_INSTALL_PREFIX` will point to `C:/Program Files/squirrel` on Windows or
+`/home/username/squirrel` on Linux.
+
+**Linux:**
+
+```bash
+git clone https://github.com/albertodemichelis/squirrel.git
+cd squirrel
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_C_FLAGS="-fPIC"
+
+# Build and install into the install prefix folder
+sudo make install
+
+# Copy header files (This is missing from cmake instructions in squirrel library)
+sudo cp -rfv ../include* /usr/local/include
+find . -name "/usr/local/include/sq*.h" -exec chmod 644 {} \;
+```
+
+**Windows:**
+
+```bash
+git clone https://github.com/albertodemichelis/squirrel.git
+cd squirrel
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
+make install
+```
+
+## Install Squirrel Bind
+
+To compile and install Squirrel Bind use the command line instructions below. I highly recommend
+using the GUI tool `cmake-gui` and set it up from there using your favourite IDE as generator.
+
+**Linux:**
+
+```bash
+git clone https://github.com/matusnovak/squirrel_bind.git
+cd squirrel_bind
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+sudo make install
+```
+
+**Windows:**
+
+```bash
+git clone https://github.com/matusnovak/squirrel_bind.git
+cd squirrel_bind
+mkdir build
+cd build
+cmake .. -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
+```
+
+If you get errors that `SQSTDLIB_LIBRARIES` and `SQUIRREL_LIBRARIES` was not found, you need to
+point it to the right direction when running cmake command. Either **open GUI version of cmake** and set
+the `SQSTDLIB_LIBRARIES` and `SQUIRREL_LIBRARIES` so it points to the correct `squirrel.lib` and 
+`sqstdlib.lib`. Don't forget to set `INCLUDE_DIRECTORIES` to Squirrel include directory! (the directory
+that contains `squirrel.h` file)
+
+If you prefer command line, use the following command:
+
+```
+cmake .. -G "Visual Studio 15 2017" \
+    -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want \
+    -DINCLUDE_DIRECTORIES=C:/Users/username/Documents/squirrel/include \
+    -DSQUIRREL_LIBRARIES=C:/Users/username/Documents/squirrel/build/squirrel/MinSizeRel/squirrel_static.lib \
+    -DSQSTDLIB_LIBRARIES=C:/Users/username/Documents/squirrel/build/sqstdlib/MinSizeRel/sqstdlib_static.lib \
+```
+
 ## Create Squirrel VM
 
 Creating VM is done via its constructor. The VM will be destroyed

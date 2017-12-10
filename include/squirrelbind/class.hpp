@@ -3,6 +3,7 @@
 #define SQUIRREL_BIND_CLASS_HEADER_H
 
 #include <functional>
+#include "function.hpp"
 #include "binding.hpp"
 
 namespace SquirrelBind {
