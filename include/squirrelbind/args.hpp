@@ -12,28 +12,12 @@ namespace SquirrelBind {
     class SqArray;
     class SqEnum;
     class SqVM;
-    /**
-    * @brief
-    */
-    template<class T>
-    class SqClassWrapper {
-    public:
-        static void sqExposeClass(SqVM& vm) {
-            SqObject exposedClass = T::expose(vm);
-            classObj = exposedClass.getRaw();
-        }
-        static HSQOBJECT& sqGetClass() {
-            return classObj;
-        }
-    private:
-        static HSQOBJECT classObj;
-    };
-
-    template<class T>
-    HSQOBJECT SqClassWrapper<T>::classObj;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
+		SQBIND_API void addClassObj(HSQUIRRELVM vm, size_t hashCode, const HSQOBJECT& obj);
+		SQBIND_API const HSQOBJECT& getClassObj(HSQUIRRELVM vm, size_t hashCode);
+
         template<class T>
         static SQInteger classDestructor(SQUserPointer ptr, SQInteger size) {
             T* p = static_cast<T*>(ptr);
@@ -252,23 +236,24 @@ namespace SquirrelBind {
             return popPointer<T>(vm, index);
         }
 
-        template<typename T, typename std::enable_if<std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+		template<typename T>
         inline void pushByCopy(HSQUIRRELVM vm, const T& value) {
-            sq_pushobject(vm, T::sqGetClass());
-            sq_createinstance(vm, -1);
-            sq_remove(vm, -2);
+			static const auto hashCode = typeid(T*).hash_code();
+			try {
+				sq_pushobject(vm, getClassObj(vm, hashCode));
+				sq_createinstance(vm, -1);
+				sq_remove(vm, -2);
 
-            sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(new T(value)));
-            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
-            sq_setreleasehook(vm, -1, classDestructor<T>);
-        }
-
-        template<typename T, typename std::enable_if<!std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
-        inline void pushByCopy(HSQUIRRELVM vm, const T& value) {
-            T** data = reinterpret_cast<T**>(sq_newuserdata(vm, sizeof(T*)));
-            *data = new T(value);
-            sq_setreleasehook(vm, -1, classPtrDestructor<T>);
-            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T).hash_code()));
+				sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(new T(value)));
+				sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(hashCode));
+				sq_setreleasehook(vm, -1, classDestructor<T>);
+			} catch (std::out_of_range& e) {
+				(void)e;
+				T** data = reinterpret_cast<T**>(sq_newuserdata(vm, sizeof(T*)));
+				*data = new T(value);
+				sq_setreleasehook(vm, -1, classPtrDestructor<T>);
+				sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T).hash_code()));
+			}
         }
 
         template<typename T>
@@ -415,28 +400,26 @@ namespace SquirrelBind {
             sq_pushstring(vm, value.c_str(), value.size());
         }
 #endif
-        template<typename T, typename std::enable_if<std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
-        inline void pushByPtr(HSQUIRRELVM vm, T* value) {
-            if(value == nullptr) {
-                sq_pushnull(vm);
-            }
-            else {
-                sq_pushobject(vm, T::sqGetClass());
-                sq_createinstance(vm, -1);
-                sq_remove(vm, -2);
-                sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(value));
-                sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
-            }
-        }
 
-        template<typename T, typename std::enable_if<!std::is_base_of<SqClassWrapper<T>, T>::value>::type* = nullptr>
+		template<typename T>
         inline void pushByPtr(HSQUIRRELVM vm, T* value) {
-            if(value == nullptr) {
-                sq_pushnull(vm);
-            }
-            else {
-                sq_pushuserpointer(vm, (SQUserPointer)(value));
-            }
+			static const auto hashCode = typeid(T*).hash_code();
+			if (value == nullptr) {
+				sq_pushnull(vm);
+			}
+			else {
+				try {
+					sq_pushobject(vm, getClassObj(vm, hashCode));
+					sq_createinstance(vm, -1);
+					sq_remove(vm, -2);
+					sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(value));
+					sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(hashCode));
+				}
+				catch (std::out_of_range& e) {
+					(void)e;
+					sq_pushuserpointer(vm, (SQUserPointer)(value));
+				}
+			}
         }
 
         template <typename T, typename std::enable_if<!std::is_pointer<T>::value, T>::type* = nullptr>

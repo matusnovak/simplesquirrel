@@ -116,7 +116,7 @@ TEST_CASE("Register class") {
 
     static Foo* ptr;
 
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(int val):val(val) {
             ptr = this;
@@ -176,7 +176,7 @@ TEST_CASE("Register class") {
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
 
     SqFunction bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
@@ -211,7 +211,7 @@ TEST_CASE("Register class with std::string type") {
 
     static Foo* ptr;
 
-    class Foo : public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& val) :val(val) {
             ptr = this;
@@ -229,14 +229,12 @@ TEST_CASE("Register class with std::string type") {
             this->val = "Potato";
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("setVal", &Foo::setVal);
             cls.addFunc("doStuff", &Foo::doStuff);
             cls.addFunc("getVal", &Foo::getVal);
-
-            return cls;
         }
 
         std::string val;
@@ -271,7 +269,7 @@ TEST_CASE("Register class with std::string type") {
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
 
     SqFunction bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
@@ -306,7 +304,7 @@ TEST_CASE("Register class with std::string type using lambdas") {
 
     static Foo* ptr;
 
-    class Foo : public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& val) :val(val) {
             ptr = this;
@@ -324,7 +322,7 @@ TEST_CASE("Register class with std::string type using lambdas") {
             this->val = "Potato";
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("setVal", [](Foo* ptr, std::string value) -> void {
@@ -336,8 +334,6 @@ TEST_CASE("Register class with std::string type using lambdas") {
             cls.addFunc("getVal", [](Foo* ptr) -> const std::string& {
                 return ptr->getVal();
             });
-
-            return cls;
         }
 
         std::string val;
@@ -372,7 +368,7 @@ TEST_CASE("Register class with std::string type using lambdas") {
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
 
     SqFunction bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
@@ -408,7 +404,7 @@ static void testTypeClass(T value) {
 
     static Foo* ptr;
     
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const T& value):value(value) {
             ptr = this;
@@ -438,7 +434,7 @@ static void testTypeClass(T value) {
             this->value = value;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(T)>());
 
             cls.addFunc("getValueRefConst", &Foo::getValueRefConst);
@@ -447,8 +443,6 @@ static void testTypeClass(T value) {
 
             cls.addFunc("setValueRefConst", &Foo::setValueRefConst);
             cls.addFunc("setValue", &Foo::setValue);
-
-            return cls;
         }
 
         T value;
@@ -481,7 +475,7 @@ static void testTypeClass(T value) {
     SqVM vm(1024);
     SqScript script = vm.compileSource(source.c_str());
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
     vm.run(script);
 
     SqFunction get = vm.findFunc("get");
@@ -516,7 +510,7 @@ void testTypeClass(std::string value) {
 
     static Foo* ptr;
     
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& value):value(value) {
             ptr = this;
@@ -546,7 +540,7 @@ void testTypeClass(std::string value) {
             this->value = value;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValueRefConst", &Foo::getValueRefConst);
@@ -555,8 +549,6 @@ void testTypeClass(std::string value) {
 
             cls.addFunc("setValueRefConst", &Foo::setValueRefConst);
             cls.addFunc("setValue", &Foo::setValue);
-
-            return cls;
         }
 
         std::string value;
@@ -589,7 +581,7 @@ void testTypeClass(std::string value) {
     SqVM vm(1024);
     SqScript script = vm.compileSource(source.c_str());
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
     vm.run(script);
 
     SqFunction get = vm.findFunc("get");
@@ -693,7 +685,7 @@ TEST_CASE("Register class with member variables") {
 
     static std::unique_ptr<Foo> cpy;
 
-    class Foo : public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(int x, int y, std::string s):varX(x),varY(y),varS(s) {
             cpy.reset(new Foo(*this));
@@ -703,14 +695,12 @@ TEST_CASE("Register class with member variables") {
         int varY;
         std::string varS;
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(int, int, std::string)>());
 
             cls.addVar("varX", &Foo::varX);
             cls.addVar("varY", &Foo::varY);
             cls.addVar("varS", &Foo::varS);
-
-            return cls;
         }
     };
 
@@ -732,7 +722,7 @@ TEST_CASE("Register class with member variables") {
     );
 
     SqVM vm(1024, SqLibs::ALL);
-    vm.expose<Foo>();
+	Foo::expose(vm);
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
@@ -752,7 +742,7 @@ TEST_CASE("Register class with member variables") {
 }
 
 TEST_CASE("Register class and push as pointer") {
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& msg):msg(msg) {
             
@@ -766,13 +756,11 @@ TEST_CASE("Register class and push as pointer") {
             this->msg = msg;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("getMsg", &Foo::getMsg);
             cls.addFunc("setMsg", &Foo::setMsg);
-
-            return cls;
         }
 
         std::string msg;
@@ -799,7 +787,7 @@ TEST_CASE("Register class and push as pointer") {
     );
 
     SqVM vm(1024, SqLibs::ALL);
-    vm.expose<Foo>();
+	Foo::expose(vm);
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
@@ -889,7 +877,7 @@ TEST_CASE("Register class and extend it") {
     static Foo* fooPtr;
     static std::string fooMsg;
 
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& msg):msg(msg) {
             fooPtr = this;
@@ -904,13 +892,11 @@ TEST_CASE("Register class and extend it") {
             this->msg = msg;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("getMsg", &Foo::getMsg);
             cls.addFunc("setMsg", &Foo::setMsg);
-
-            return cls;
         }
 
         std::string msg;
@@ -941,7 +927,7 @@ TEST_CASE("Register class and extend it") {
     );
 
     SqVM vm(1024, SqLibs::ALL);
-    vm.expose<Foo>();
+	Foo::expose(vm);
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 

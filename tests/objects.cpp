@@ -181,7 +181,7 @@ TEST_CASE("Test stack manipulation") {
     REQUIRE_THROWS(table.get<std::string>("one"));
     REQUIRE(top == vm.getTop());
 
-    struct Car: public SqClassWrapper<Car> {
+    struct Car {
         std::string manufacturer;
         int year;
         std::string color;
@@ -207,7 +207,7 @@ TEST_CASE("Test stack manipulation") {
         }
     };
 
-    vm.expose<Car>();
+	Car::expose(vm);
     REQUIRE(top == vm.getTop());
 
     SqClass carClass = vm.findClass("Car");

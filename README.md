@@ -11,7 +11,7 @@ API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind
 * Supports multiple virtual machines
 * Supports lambdas
 * Very easy object manipulation
-* Supports binding C++ classes without multiple runtime maps as done with Sqrat
+* Supports binding of C++ classes to multiple instances of Squirrel VM
 * Strict type checking on C++ side
 * wchar\_t support, a.k.a Squirrel Unicode (experimental!) - I highly recommend using UTF8 as chars and not UNICODE as wchar\_t
 * Works with Visual Studio 2015, Visual Studio 2017, MinGW-w64, Linux GCC, and OSX Clang 
@@ -20,7 +20,7 @@ API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind
   * Looking up Squirrel function and calling it from C++
   * Looking up Squirrel classes and creating instances on C++ side
   * Binding C++ classes including methods and member variables
-  * Passing any C++ pointer as either instance or userpointer (depends if your C++ type has SqClassWrapper defined)
+  * Passing any C++ pointer as either instance or userpointer (depends if your C++ has been exposed to VM)
   * Creating enumerations
   * Creating and passing tables
   * Creating and passing arrays
@@ -197,10 +197,10 @@ Here are the C++ types and their Squirrel equivalents:
 | SqTable | table | `toTable()` |
 | SqArray | array | `toArray()` |
 | void* | userpointer | `to<void*>()` |
-| any pointer to class **not** inheriting from `SqClassWrapper<T>` | userpointer | `to<Class_Type*>()` |
-| any reference (or copy) to class **not** inheriting from `SqClassWrapper<T>` | userdata | `to<Class_Type>()` |
-| pointer to class inheriting from `SqClassWrapper<T>` | instance | `to<Class_Type*>()` |
-| reference or copy to class inheriting from `SqClassWrapper<T>` | instance | `to<Class_Type>()` |
+| any pointer to class **not added to VM via addClass** | userpointer | `to<Class_Type*>()` |
+| any reference (or copy) to class **not added to VM via addClass** | userdata | `to<Class_Type>()` |
+| pointer to class | instance | `to<Class_Type*>()` |
+| reference or copy to class | instance | `to<Class_Type>()` |
 
 Some types are divided into 32-bit and 64-bit groups. This is due to the fact how Squirrel handles integers.
 On 64-bit compiler, the integer is stored as `long long`, on 32-bit compiler, it is stored as `long`. Therefore
@@ -379,9 +379,8 @@ int main(){
 
 ## Bind C++ class
 
-Binding of classes is done via inheriting `SqClassWrapper<typename T>` and your custom static 
-method `static SqClass expose(SqVM& vm) { ... }`. You have to inherit the `SqClassWrapper` 
-as otherwise any of your classes will be passed around in squirrel as user data and not instance. 
+Binding of classes is done via `SqVM::addClass(...)`. You have to expose your class to VM. Otherwise 
+any of your classes will be passed around in squirrel as user data and not as an instance. 
 
 You don't need to expose your class if you do not wish to use it in Squirrel as an instance. Any
 classes or any types that are not integers, strings, booleans, will be automatically converted into 
@@ -393,7 +392,7 @@ to use `std::unique_ptr` as userdata because it does not allow a copy.
 #include <squirrelbind/squirrelbind.hpp>
 using namespace SquirrelBind;
 
-class Foo: public SqClassWrapper<Foo> {
+class Foo {
 public:
     Foo(const std::string& msg):msg(msg) {
     }
@@ -406,7 +405,7 @@ public:
         this->msg = msg;
     }
 
-    static SqClass expose(SqVM& vm) {
+    static void expose(SqVM& vm) {
         SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
         // You can also use lambdas (or std::function) to define constructor
@@ -420,7 +419,6 @@ public:
         cls.addFunc("setMsg", &Foo::setMsg);
 
         cls.addVar("msg", &Foo::msg);
-        return cls;
     }
 
     // For the purpose of this example we will treat msg as public
@@ -444,7 +442,7 @@ int main(){
     "\n";
 
     SqScript script = vm.compileSource(source.c_str());
-    vm.expose<Foo>(); // Bind the class to this VM
+    Foo::expose(vm); // Bind the class to this VM
     vm.run(script);
 
     return 0;
@@ -456,7 +454,7 @@ int main(){
 Sometimes, it is possible that your class has for example two methods:
 
 ```cpp
-class Foo: public SqClassWrapper<Foo> {
+class Foo {
     ...
     const std::string& getMessage() const;
     std::string& getMessage();
@@ -471,14 +469,12 @@ cause compiler ambiguity error. You can solve the problem by explicitly defining
 template when binding those functions, for example:
 
 ```
-SqClass Foo::expose(SqVM& vm) {
+static void Foo::expose(SqVM& vm) {
     SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(.....)>());
 
     // Explicitly define return type to "const std::string&" in order
     // for the compiler to know which overloaded method to use.
     cls.addFunc<const std::string&>("getMessage", &Foo::getMessage);
-
-    return cls;
 }
 ```
 
