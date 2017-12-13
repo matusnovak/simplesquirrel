@@ -412,7 +412,7 @@ namespace SquirrelBind {
 					sq_pushobject(vm, getClassObj(vm, hashCode));
 					sq_createinstance(vm, -1);
 					sq_remove(vm, -2);
-					sq_setinstanceup(vm, -1, reinterpret_cast<SQUserPointer>(value));
+					sq_setinstanceup(vm, -1, (SQUserPointer)(value));
 					sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(hashCode));
 				}
 				catch (std::out_of_range& e) {
