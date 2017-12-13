@@ -410,22 +410,25 @@
                                 
                                 <h1 id="squirrelbind">SquirrelBind</h1>
 <p>Yet another simple binding in C++11 for <a href="http://www.squirrel-lang.org/" target="_blank">Squirrel scripting language</a></p>
+<p>API Documentation can be found here: <a href="https://matusnovak.github.io/squirrel_bind/docs/SquirrelBind.html" target="_blank">https://matusnovak.github.io/squirrel_bind/docs/SquirrelBind.html</a></p>
 <h2 id="features">Features</h2>
 <ul>
 <li>MIT licensed</li>
 <li>32 and 64 bit support</li>
+<li>C++11</li>
 <li>Supports multiple virtual machines</li>
 <li>Supports lambdas</li>
 <li>Very easy object manipulation</li>
-<li>Supports binding C++ classes without multiple runtime maps as done with Sqrat</li>
+<li>Supports binding of C++ classes to multiple instances of Squirrel VM</li>
 <li>Strict type checking on C++ side</li>
 <li>wchar_t support, a.k.a Squirrel Unicode (experimental!) - I highly recommend using UTF8 as chars and not UNICODE as wchar_t</li>
+<li>Works with Visual Studio 2015, Visual Studio 2017, MinGW-w64, Linux GCC, and OSX Clang </li>
 <li>Allows the following:<ul>
 <li>Binding C++ function and calling it from Squirrel</li>
 <li>Looking up Squirrel function and calling it from C++</li>
 <li>Looking up Squirrel classes and creating instances on C++ side</li>
 <li>Binding C++ classes including methods and member variables</li>
-<li>Passing any C++ pointer as either instance or userpointer (depends if your C++ type has SqClassWrapper defined)</li>
+<li>Passing any C++ pointer as either instance or userpointer (depends if your C++ has been exposed to VM)</li>
 <li>Creating enumerations</li>
 <li>Creating and passing tables</li>
 <li>Creating and passing arrays</li>
@@ -438,7 +441,62 @@
 </ul>
 </li>
 </ul>
-<h2 id="create-squirrel-vm">Create Squirrel VM</h2>
+<h2 id="install-squirrel">Install Squirrel</h2>
+<p>First, download and build Squirrel library using cmake. Use the command line instructions below.
+By default the <code>CMAKE_INSTALL_PREFIX</code> will point to <code>C:/Program Files/squirrel</code> on Windows or
+<code>/home/username/squirrel</code> on Linux.</p>
+<p><strong>Linux:</strong></p>
+<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/albertodemichelis/squirrel.git
+<span class="hljs-built_in">cd</span> squirrel
+mkdir build
+<span class="hljs-built_in">cd</span> build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/<span class="hljs-built_in">local</span> -DCMAKE_C_FLAGS=<span class="hljs-string">&quot;-fPIC&quot;</span>
+
+<span class="hljs-comment"># Build and install into the install prefix folder</span>
+sudo make install
+
+<span class="hljs-comment"># Copy header files (This is missing from cmake instructions in squirrel library)</span>
+sudo cp -rfv ../include* /usr/<span class="hljs-built_in">local</span>/include
+find . -name <span class="hljs-string">&quot;/usr/local/include/sq*.h&quot;</span> -exec chmod 644 {} \;
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/albertodemichelis/squirrel.git
+<span class="hljs-built_in">cd</span> squirrel
+mkdir build
+<span class="hljs-built_in">cd</span> build
+cmake .. -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
+make install
+</code></pre>
+<h2 id="install-squirrel-bind">Install Squirrel Bind</h2>
+<p>To compile and install Squirrel Bind use the command line instructions below. I highly recommend
+using the GUI tool <code>cmake-gui</code> and set it up from there using your favourite IDE as generator.</p>
+<p><strong>Linux:</strong></p>
+<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/matusnovak/squirrel_bind.git
+<span class="hljs-built_in">cd</span> squirrel_bind
+mkdir build
+<span class="hljs-built_in">cd</span> build
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/<span class="hljs-built_in">local</span>
+sudo make install
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/matusnovak/squirrel_bind.git
+<span class="hljs-built_in">cd</span> squirrel_bind
+mkdir build
+<span class="hljs-built_in">cd</span> build
+cmake .. -G <span class="hljs-string">&quot;Visual Studio 15 2017&quot;</span> -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
+</code></pre>
+<p>If you get errors that <code>SQSTDLIB_LIBRARIES</code> and <code>SQUIRREL_LIBRARIES</code> was not found, you need to
+point it to the right direction when running cmake command. Either <strong>open GUI version of cmake</strong> and set
+the <code>SQSTDLIB_LIBRARIES</code> and <code>SQUIRREL_LIBRARIES</code> so it points to the correct <code>squirrel.lib</code> and 
+<code>sqstdlib.lib</code>. Don&apos;t forget to set <code>INCLUDE_DIRECTORIES</code> to Squirrel include directory! (the directory
+that contains <code>squirrel.h</code> file)</p>
+<p>If you prefer command line, use the following command:</p>
+<pre><code>cmake .. -G &quot;Visual Studio 15 2017&quot; \
+    -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want \
+    -DINCLUDE_DIRECTORIES=C:/Users/username/Documents/squirrel/include \
+    -DSQUIRREL_LIBRARIES=C:/Users/username/Documents/squirrel/build/squirrel/MinSizeRel/squirrel_static.lib \
+    -DSQSTDLIB_LIBRARIES=C:/Users/username/Documents/squirrel/build/sqstdlib/MinSizeRel/sqstdlib_static.lib \
+</code></pre><h2 id="create-squirrel-vm">Create Squirrel VM</h2>
 <p>Creating VM is done via its constructor. The VM will be destroyed
 once it falls out of scope. Or, if you have created it via <code>new</code> operator,
 it will be destroyed, and all of its resources, once you call <code>delete</code>.</p>
@@ -630,22 +688,22 @@ call from SqObject to string. Do not use const char* as those two types are diff
 <td><code>to&lt;void*&gt;()</code></td>
 </tr>
 <tr>
-<td>any pointer to class <strong>not</strong> inheriting from <code>SqClassWrapper&lt;T&gt;</code></td>
+<td>any pointer to class <strong>not added to VM via addClass</strong></td>
 <td>userpointer</td>
 <td><code>to&lt;Class_Type*&gt;()</code></td>
 </tr>
 <tr>
-<td>any reference (or copy) to class <strong>not</strong> inheriting from <code>SqClassWrapper&lt;T&gt;</code></td>
+<td>any reference (or copy) to class <strong>not added to VM via addClass</strong></td>
 <td>userdata</td>
 <td><code>to&lt;Class_Type&gt;()</code></td>
 </tr>
 <tr>
-<td>pointer to class inheriting from <code>SqClassWrapper&lt;T&gt;</code></td>
+<td>pointer to class</td>
 <td>instance</td>
 <td><code>to&lt;Class_Type*&gt;()</code></td>
 </tr>
 <tr>
-<td>reference or copy to class inheriting from <code>SqClassWrapper&lt;T&gt;</code></td>
+<td>reference or copy to class</td>
 <td>instance</td>
 <td><code>to&lt;Class_Type&gt;()</code></td>
 </tr>
@@ -773,7 +831,7 @@ are evaulated at run time.</p>
     <span class="hljs-string">&quot;    return a + b;\n&quot;</span>
     <span class="hljs-string">&quot;}\n&quot;</span>;
 
-    SqScript script = vm.compileSource(source);
+    SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
     <span class="hljs-comment">// Now the mySquirrelFunc is ready for us, let&apos;s</span>
@@ -805,9 +863,8 @@ are evaulated at run time.</p>
 }
 </code></pre>
 <h2 id="bind-c-class">Bind C++ class</h2>
-<p>Binding of classes is done via inheriting <code>SqClassWrapper&lt;typename T&gt;</code> and your custom static 
-method <code>static SqClass expose(SqVM&amp; vm) { ... }</code>. You have to inherit the <code>SqClassWrapper</code> 
-as otherwise any of your classes will be passed around in squirrel as user data and not instance. </p>
+<p>Binding of classes is done via <code>SqVM::addClass(...)</code>. You have to expose your class to VM. Otherwise 
+any of your classes will be passed around in squirrel as user data and not as an instance. </p>
 <p>You don&apos;t need to expose your class if you do not wish to use it in Squirrel as an instance. Any
 classes or any types that are not integers, strings, booleans, will be automatically converted into 
 Squirrel user data. User data can be moved around, pushed to Squirrel or returned from. User data 
@@ -816,7 +873,7 @@ to use <code>std::unique_ptr</code> as userdata because it does not allow a copy
 <pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;squirrelbind/squirrelbind.hpp&gt;</span></span>
 <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> SquirrelBind;
 
-<span class="hljs-keyword">class</span> Foo: <span class="hljs-keyword">public</span> SqClassWrapper&lt;Foo&gt; {
+<span class="hljs-keyword">class</span> Foo {
 <span class="hljs-keyword">public</span>:
     Foo(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; msg):msg(msg) {
     }
@@ -829,7 +886,7 @@ to use <code>std::unique_ptr</code> as userdata because it does not allow a copy
         <span class="hljs-keyword">this</span>-&gt;msg = msg;
     }
 
-    <span class="hljs-function"><span class="hljs-keyword">static</span> SqClass <span class="hljs-title">expose</span><span class="hljs-params">(SqVM&amp; vm)</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">expose</span><span class="hljs-params">(SqVM&amp; vm)</span> </span>{
         SqClass cls = vm.addClass(<span class="hljs-string">&quot;Foo&quot;</span>, SqClass::Ctor&lt;Foo(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>)&gt;());
 
         <span class="hljs-comment">// You can also use lambdas (or std::function) to define constructor</span>
@@ -843,7 +900,6 @@ to use <code>std::unique_ptr</code> as userdata because it does not allow a copy
         cls.addFunc(<span class="hljs-string">&quot;setMsg&quot;</span>, &amp;Foo::setMsg);
 
         cls.addVar(<span class="hljs-string">&quot;msg&quot;</span>, &amp;Foo::msg);
-        <span class="hljs-keyword">return</span> cls;
     }
 
     <span class="hljs-comment">// For the purpose of this example we will treat msg as public</span>
@@ -866,14 +922,35 @@ to use <code>std::unique_ptr</code> as userdata because it does not allow a copy
     <span class="hljs-string">&quot;print(\&quot;Foo now has: \&quot; + foo.msg);\n&quot;</span>
     <span class="hljs-string">&quot;\n&quot;</span>;
 
-    SqScript script = vm.compileSource(source);
-    vm.expose&lt;Foo&gt;(); <span class="hljs-comment">// Bind the class to this VM</span>
+    SqScript script = vm.compileSource(source.c_str());
+    Foo::expose(vm); <span class="hljs-comment">// Bind the class to this VM</span>
     vm.run(script);
 
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
-<h2 id="find-squirrel-class-and-create-instance">Find Squirrel class and create instance</h2>
+<h2 id="class-const-method-ambiguity">Class const method ambiguity</h2>
+<p>Sometimes, it is possible that your class has for example two methods:</p>
+<pre><code class="lang-cpp"><span class="hljs-keyword">class</span> Foo {
+    ...
+    <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span>&amp; <span class="hljs-title">getMessage</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;
+    <span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span>&amp; <span class="hljs-title">getMessage</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">static</span> SqClass <span class="hljs-title">expose</span><span class="hljs-params">(SqVM&amp; vm)</span></span>;
+};
+</code></pre>
+<p>One gets to be used when you have constant reference (or pointer) and the second one
+when you have non-constant reference. Binding these methods to Squirrel class can
+cause compiler ambiguity error. You can solve the problem by explicitly defining the
+template when binding those functions, for example:</p>
+<pre><code>static void Foo::expose(SqVM&amp; vm) {
+    SqClass cls = vm.addClass(&quot;Foo&quot;, SqClass::Ctor&lt;Foo(.....)&gt;());
+
+    // Explicitly define return type to &quot;const std::string&amp;&quot; in order
+    // for the compiler to know which overloaded method to use.
+    cls.addFunc&lt;const std::string&amp;&gt;(&quot;getMessage&quot;, &amp;Foo::getMessage);
+}
+</code></pre><h2 id="find-squirrel-class-and-create-instance">Find Squirrel class and create instance</h2>
 <p>Finding classes and creating instances is easy as the following code below. 
 It is self explanatory.</p>
 <pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;squirrelbind/squirrelbind.hpp&gt;</span></span>
@@ -899,7 +976,7 @@ It is self explanatory.</p>
     <span class="hljs-string">&quot;    value = null;\n&quot;</span>
     <span class="hljs-string">&quot;}\n&quot;</span>;
 
-    SqScript script = vm.compileSource(source);
+    SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
     <span class="hljs-comment">// Find class</span>
@@ -1045,7 +1122,7 @@ It is self explanatory.</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"SquirrelBind","level":"1.2","depth":1,"path":"docs/SquirrelBind.md","ref":"docs/SquirrelBind.md","articles":[{"title":"SqClass","level":"1.2.1","depth":2,"path":"docs/SquirrelBind_SqClass.md","ref":"docs/SquirrelBind_SqClass.md","articles":[{"title":"Ctor","level":"1.2.1.1","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor.md","ref":"docs/SquirrelBind_SqClass_Ctor.md","articles":[]},{"title":"Ctor< T(Args...)>","level":"1.2.1.2","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","ref":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","articles":[]}]},{"title":"SqArray","level":"1.2.2","depth":2,"path":"docs/SquirrelBind_SqArray.md","ref":"docs/SquirrelBind_SqArray.md","articles":[]},{"title":"SqClassWrapper","level":"1.2.3","depth":2,"path":"docs/SquirrelBind_SqClassWrapper.md","ref":"docs/SquirrelBind_SqClassWrapper.md","articles":[]},{"title":"SqCompileException","level":"1.2.4","depth":2,"path":"docs/SquirrelBind_SqCompileException.md","ref":"docs/SquirrelBind_SqCompileException.md","articles":[]},{"title":"SqEnum","level":"1.2.5","depth":2,"path":"docs/SquirrelBind_SqEnum.md","ref":"docs/SquirrelBind_SqEnum.md","articles":[]},{"title":"SqException","level":"1.2.6","depth":2,"path":"docs/SquirrelBind_SqException.md","ref":"docs/SquirrelBind_SqException.md","articles":[]},{"title":"SqFunction","level":"1.2.7","depth":2,"path":"docs/SquirrelBind_SqFunction.md","ref":"docs/SquirrelBind_SqFunction.md","articles":[]},{"title":"SqInstance","level":"1.2.8","depth":2,"path":"docs/SquirrelBind_SqInstance.md","ref":"docs/SquirrelBind_SqInstance.md","articles":[]},{"title":"SqLibs","level":"1.2.9","depth":2,"path":"docs/SquirrelBind_SqLibs.md","ref":"docs/SquirrelBind_SqLibs.md","articles":[]},{"title":"SqNotFoundException","level":"1.2.10","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},{"title":"SqObject","level":"1.2.11","depth":2,"path":"docs/SquirrelBind_SqObject.md","ref":"docs/SquirrelBind_SqObject.md","articles":[]},{"title":"SqRuntimeException","level":"1.2.12","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},{"title":"SqScript","level":"1.2.13","depth":2,"path":"docs/SquirrelBind_SqScript.md","ref":"docs/SquirrelBind_SqScript.md","articles":[]},{"title":"SqTable","level":"1.2.14","depth":2,"path":"docs/SquirrelBind_SqTable.md","ref":"docs/SquirrelBind_SqTable.md","articles":[]},{"title":"SqTypeException","level":"1.2.15","depth":2,"path":"docs/SquirrelBind_SqTypeException.md","ref":"docs/SquirrelBind_SqTypeException.md","articles":[]},{"title":"SqVM","level":"1.2.16","depth":2,"path":"docs/SquirrelBind_SqVM.md","ref":"docs/SquirrelBind_SqVM.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-12-10T16:11:20.012Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-10T16:20:34.280Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"SquirrelBind","level":"1.2","depth":1,"path":"docs/SquirrelBind.md","ref":"docs/SquirrelBind.md","articles":[{"title":"SqClass","level":"1.2.1","depth":2,"path":"docs/SquirrelBind_SqClass.md","ref":"docs/SquirrelBind_SqClass.md","articles":[{"title":"Ctor","level":"1.2.1.1","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor.md","ref":"docs/SquirrelBind_SqClass_Ctor.md","articles":[]},{"title":"Ctor< T(Args...)>","level":"1.2.1.2","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","ref":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","articles":[]}]},{"title":"SqArray","level":"1.2.2","depth":2,"path":"docs/SquirrelBind_SqArray.md","ref":"docs/SquirrelBind_SqArray.md","articles":[]},{"title":"SqClassWrapper","level":"1.2.3","depth":2,"path":"docs/SquirrelBind_SqClassWrapper.md","ref":"docs/SquirrelBind_SqClassWrapper.md","articles":[]},{"title":"SqCompileException","level":"1.2.4","depth":2,"path":"docs/SquirrelBind_SqCompileException.md","ref":"docs/SquirrelBind_SqCompileException.md","articles":[]},{"title":"SqEnum","level":"1.2.5","depth":2,"path":"docs/SquirrelBind_SqEnum.md","ref":"docs/SquirrelBind_SqEnum.md","articles":[]},{"title":"SqException","level":"1.2.6","depth":2,"path":"docs/SquirrelBind_SqException.md","ref":"docs/SquirrelBind_SqException.md","articles":[]},{"title":"SqFunction","level":"1.2.7","depth":2,"path":"docs/SquirrelBind_SqFunction.md","ref":"docs/SquirrelBind_SqFunction.md","articles":[]},{"title":"SqInstance","level":"1.2.8","depth":2,"path":"docs/SquirrelBind_SqInstance.md","ref":"docs/SquirrelBind_SqInstance.md","articles":[]},{"title":"SqLibs","level":"1.2.9","depth":2,"path":"docs/SquirrelBind_SqLibs.md","ref":"docs/SquirrelBind_SqLibs.md","articles":[]},{"title":"SqNotFoundException","level":"1.2.10","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},{"title":"SqObject","level":"1.2.11","depth":2,"path":"docs/SquirrelBind_SqObject.md","ref":"docs/SquirrelBind_SqObject.md","articles":[]},{"title":"SqRuntimeException","level":"1.2.12","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},{"title":"SqScript","level":"1.2.13","depth":2,"path":"docs/SquirrelBind_SqScript.md","ref":"docs/SquirrelBind_SqScript.md","articles":[]},{"title":"SqTable","level":"1.2.14","depth":2,"path":"docs/SquirrelBind_SqTable.md","ref":"docs/SquirrelBind_SqTable.md","articles":[]},{"title":"SqTypeException","level":"1.2.15","depth":2,"path":"docs/SquirrelBind_SqTypeException.md","ref":"docs/SquirrelBind_SqTypeException.md","articles":[]},{"title":"SqVM","level":"1.2.16","depth":2,"path":"docs/SquirrelBind_SqVM.md","ref":"docs/SquirrelBind_SqVM.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-12-13T00:03:08.460Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-13T00:09:57.806Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

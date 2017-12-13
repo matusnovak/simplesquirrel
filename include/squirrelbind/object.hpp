@@ -108,6 +108,10 @@ namespace SquirrelBind {
         */
         bool isNull() const;
         /**
+        * @brief Releases the object and resets it to empty
+        */
+        void reset();
+        /**
         * @brief Returns the integer value of this object
         * @throws SqTypeException if this object is not an integer
         */
@@ -169,17 +173,7 @@ namespace SquirrelBind {
         * @throws SqTypeException if this object is not an type of T
         */
         template<typename T>
-        T to() const {
-            sq_pushobject(vm, obj);
-            try {
-                auto ret = detail::pop<T>(vm, -1);
-                sq_pop(vm, 1);
-                return ret;
-            } catch (...) {
-                sq_pop(vm, 1);
-                std::rethrow_exception(std::current_exception());
-            }
-        }
+        T to() const;
         /**
         * @brief Copy assingment operator
         */

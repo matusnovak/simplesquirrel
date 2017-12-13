@@ -5,6 +5,7 @@
 #include "object.hpp"
 #include "args.hpp"
 #include <squirrel.h>
+#include <vector>
 
 namespace SquirrelBind {
     /**

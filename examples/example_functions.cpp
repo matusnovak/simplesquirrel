@@ -11,11 +11,16 @@ std::string appendString(const std::string& str) {
 
 // Another random global function
 std::string getLocalTime() {
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
-    return oss.str();
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer,sizeof(buffer),"%d-%m-%Y %I:%M:%S",timeinfo);
+    std::string str(buffer);
+    return str;
 }
 
 int main() {

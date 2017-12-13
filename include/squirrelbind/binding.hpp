@@ -91,21 +91,22 @@ namespace SquirrelBind {
 
         template<typename T, typename... Args>
         static SqObject addClass(HSQUIRRELVM vm, const char* name, const std::function<T*(Args...)>& allocator) {
-            static const std::size_t nparams = sizeof...(Args);
+            static const auto hashCode = typeid(T*).hash_code();
+        	static const std::size_t nparams = sizeof...(Args);
 
             SqObject clsObj(vm);
             
             sq_pushstring(vm, name, strlen(name));
             sq_newclass(vm, false);
 
-            HSQOBJECT& obj = T::sqGetClass();
+            HSQOBJECT obj;
             sq_getstackobj(vm, -1, &obj);
-            //sq_addref(vm, &obj);
+			addClassObj(vm, hashCode, obj);
 
             sq_getstackobj(vm, -1, &clsObj.getRaw());
             sq_addref(vm, &clsObj.getRaw());
 
-            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(hashCode));
 
             sq_pushstring(vm, "constructor", -1);
             bindUserData<T*>(vm, allocator);
@@ -116,6 +117,27 @@ namespace SquirrelBind {
             sq_setparamscheck(vm, nparams + 1, params);
             sq_newslot(vm, -3, false); // Add the constructor method
 
+            sq_newslot(vm, -3, SQFalse); // Add the class
+
+            return clsObj;
+        }
+
+		template<typename T>
+        static SqObject addAbstractClass(HSQUIRRELVM vm, const char* name) {
+			static const auto hashCode = typeid(T*).hash_code();
+            SqObject clsObj(vm);
+
+            sq_pushstring(vm, name, strlen(name));
+            sq_newclass(vm, false);
+
+            HSQOBJECT obj;
+            sq_getstackobj(vm, -1, &obj);
+			addClassObj(vm, hashCode, obj);
+
+            sq_getstackobj(vm, -1, &clsObj.getRaw());
+            sq_addref(vm, &clsObj.getRaw());
+
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(hashCode));
             sq_newslot(vm, -3, SQFalse); // Add the class
 
             return clsObj;

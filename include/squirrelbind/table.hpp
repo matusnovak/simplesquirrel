@@ -77,6 +77,17 @@ namespace SquirrelBind {
             return addClass(name, detail::make_function(lambda));
         }
         /**
+        * @brief Adds a new abstract class type to this table
+        * @returns SqClass object references the added class
+        */
+		template<typename T>
+        SqClass addAbstractClass(const char* name) {
+	        sq_pushobject(vm, obj);
+            SqClass cls(detail::addAbstractClass<T>(vm, name));
+            sq_pop(vm, 1);
+            return cls;
+        }
+        /**
         * @brief Adds a new function type to this table
         * @returns SqFunction object references the added function
         */

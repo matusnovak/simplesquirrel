@@ -188,13 +188,6 @@ namespace SquirrelBind {
             return SqArray(vm, vector);
         }
         /**
-        * @brief Exposes a derived class of SqClassWrapper to this VM
-        */
-        template<class T>
-        void expose(){
-            T::sqExposeClass(*this);
-        }
-        /**
          * @brief Adds a new enum to this table
          */
         SqEnum addEnum(const char* name);
@@ -213,6 +206,14 @@ namespace SquirrelBind {
         * @brief Prints stack objects
         */
         void debugStack() const;
+		/**
+        * @brief Add registered class object into the table of known classes
+        */
+		void addClassObj(size_t hashCode, const HSQOBJECT& obj);
+		/**
+        * @brief Get registered class object from hash code
+        */
+		const HSQOBJECT& getClassObj(size_t hashCode);
         /**
         * @brief Copy assingment operator
         */
@@ -224,6 +225,7 @@ namespace SquirrelBind {
     private:
         std::unique_ptr<SqCompileException> compileException;
         std::unique_ptr<SqRuntimeException> runtimeException;
+		std::unordered_map<size_t, HSQOBJECT> classMap;
 
         static void pushArgs();
 

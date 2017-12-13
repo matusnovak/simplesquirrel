@@ -188,10 +188,10 @@ static void testType(T value, const std::string& type) {
 
 #ifdef SQUNICODE
 template<>
-static void testType(std::wstring value, const std::string& type) {
+void testType(std::wstring value, const std::string& type) {
 #else
 template<>
-static void testType(std::string value, const std::string& type) {
+void testType(std::string value, const std::string& type) {
 #endif
     static const std::string source = STRINGIFY(
         local result = null;
@@ -368,7 +368,7 @@ TEST_CASE("Pass class object as user data") {
 }
 
 TEST_CASE("Pass class object as copy instance") {
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& value):value(value) {
         }
@@ -385,13 +385,11 @@ TEST_CASE("Pass class object as copy instance") {
             this->value = value;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValue", &Foo::getValue);
             cls.addFunc("setValue", &Foo::setValue);
-
-            return cls;
         }
 
         std::string value;
@@ -414,7 +412,7 @@ TEST_CASE("Pass class object as copy instance") {
     SqScript script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    vm.expose<Foo>();
+	Foo::expose(vm);
 
     SqFunction funcGet = vm.findFunc("get");
     SqFunction funcSet = vm.findFunc("set");
@@ -475,7 +473,7 @@ TEST_CASE("Return userdata") {
 }
 
 TEST_CASE("Return instance") {
-    class Foo: public SqClassWrapper<Foo> {
+    class Foo {
     public:
         Foo(const std::string& value):value(value) {
         }
@@ -492,13 +490,11 @@ TEST_CASE("Return instance") {
             this->value = value;
         }
 
-        static SqClass expose(SqVM& vm) {
+        static void expose(SqVM& vm) {
             SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValue", &Foo::getValue);
             cls.addFunc("setValue", &Foo::setValue);
-
-            return cls;
         }
 
         std::string value;
@@ -517,7 +513,7 @@ TEST_CASE("Return instance") {
     );
 
     SqVM vm(1024);
-    vm.expose<Foo>();
+	Foo::expose(vm);
     vm.addFunc("foo", []() -> Foo {
         return Foo("Banana");
     });

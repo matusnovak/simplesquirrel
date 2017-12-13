@@ -31,6 +31,7 @@ namespace SquirrelBind {
     }
 
     void SqVM::destroy() {
+		classMap.clear();
         if (vm != nullptr) {
             sq_resetobject(&obj);
             sq_close(vm);
@@ -47,6 +48,8 @@ namespace SquirrelBind {
         SqObject::swap(other);
         swap(runtimeException, other.runtimeException);
         swap(compileException, other.compileException);
+		swap(classMap, other.classMap);
+
         if(vm != nullptr) {
             sq_setforeignptr(vm, this);
         }
@@ -233,5 +236,25 @@ namespace SquirrelBind {
 
     void SqVM::pushArgs() {
 
+    }
+
+	void SqVM::addClassObj(size_t hashCode, const HSQOBJECT& obj) {
+		classMap[hashCode] = obj;
+	}
+
+	const HSQOBJECT& SqVM::getClassObj(size_t hashCode) {
+		return classMap.at(hashCode);
+	}
+
+	namespace detail {
+	    void addClassObj(HSQUIRRELVM vm, size_t hashCode, const HSQOBJECT& obj) {
+		    SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
+			machine->addClassObj(hashCode, obj);
+	    }
+
+		const HSQOBJECT& getClassObj(HSQUIRRELVM vm, size_t hashCode) {
+		    SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
+			return machine->getClassObj(hashCode);
+	    }
     }
 }

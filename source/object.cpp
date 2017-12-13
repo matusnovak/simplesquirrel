@@ -50,6 +50,13 @@ namespace SquirrelBind {
         }
     }
 
+    void SqObject::reset() {
+        if (vm != nullptr && !sq_isnull(obj)) {
+            sq_release(vm, &obj);
+        }
+        sq_resetobject(&obj);
+    }
+
     void SqObject::swap(SqObject& other) NOEXCEPT {
         using std::swap;
         swap(obj, other.obj);

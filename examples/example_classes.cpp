@@ -5,7 +5,7 @@
 
 using namespace SquirrelBind;
 
-class CppClass: public SqClassWrapper<CppClass> {
+class CppClass {
 public:
     CppClass(const std::string& message, int integer):message(message),integer(integer) {
         
@@ -59,7 +59,7 @@ int main() {
         SqScript script = vm.compileFile("example_classes.nut");
 
         // Expose the class
-        vm.expose<CppClass>();
+		CppClass::expose(vm);
 
         // Run the script
         vm.run(script);
