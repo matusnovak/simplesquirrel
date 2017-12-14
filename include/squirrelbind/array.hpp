@@ -188,6 +188,18 @@ namespace SquirrelBind {
         */
         SqArray& operator = (SqArray&& other) NOEXCEPT;
     };
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    namespace detail {
+        template<>
+        inline SqArray popValue(HSQUIRRELVM vm, SQInteger index){
+            checkType(vm, index, OT_ARRAY);
+            SqArray val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqArray from squirrel stack");
+            sq_addref(vm, &val.getRaw());
+            return val;
+        }
+    }
+#endif
 }
 
 #endif

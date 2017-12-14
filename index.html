@@ -176,20 +176,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.3" data-path="docs/SquirrelBind_SqClassWrapper.html">
-            
-                <a href="docs/SquirrelBind_SqClassWrapper.html">
-            
-                    
-                    SqClassWrapper
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.4" data-path="docs/SquirrelBind_SqCompileException.html">
+        <li class="chapter " data-level="1.2.3" data-path="docs/SquirrelBind_SqCompileException.html">
             
                 <a href="docs/SquirrelBind_SqCompileException.html">
             
@@ -202,7 +189,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.5" data-path="docs/SquirrelBind_SqEnum.html">
+        <li class="chapter " data-level="1.2.4" data-path="docs/SquirrelBind_SqEnum.html">
             
                 <a href="docs/SquirrelBind_SqEnum.html">
             
@@ -215,7 +202,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.6" data-path="docs/SquirrelBind_SqException.html">
+        <li class="chapter " data-level="1.2.5" data-path="docs/SquirrelBind_SqException.html">
             
                 <a href="docs/SquirrelBind_SqException.html">
             
@@ -228,7 +215,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.7" data-path="docs/SquirrelBind_SqFunction.html">
+        <li class="chapter " data-level="1.2.6" data-path="docs/SquirrelBind_SqFunction.html">
             
                 <a href="docs/SquirrelBind_SqFunction.html">
             
@@ -241,7 +228,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.8" data-path="docs/SquirrelBind_SqInstance.html">
+        <li class="chapter " data-level="1.2.7" data-path="docs/SquirrelBind_SqInstance.html">
             
                 <a href="docs/SquirrelBind_SqInstance.html">
             
@@ -254,7 +241,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.9" data-path="docs/SquirrelBind_SqLibs.html">
+        <li class="chapter " data-level="1.2.8" data-path="docs/SquirrelBind_SqLibs.html">
             
                 <a href="docs/SquirrelBind_SqLibs.html">
             
@@ -267,7 +254,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.10" data-path="docs/SquirrelBind_SqNotFoundException.html">
+        <li class="chapter " data-level="1.2.9" data-path="docs/SquirrelBind_SqNotFoundException.html">
             
                 <a href="docs/SquirrelBind_SqNotFoundException.html">
             
@@ -280,7 +267,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.11" data-path="docs/SquirrelBind_SqObject.html">
+        <li class="chapter " data-level="1.2.10" data-path="docs/SquirrelBind_SqObject.html">
             
                 <a href="docs/SquirrelBind_SqObject.html">
             
@@ -293,7 +280,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.12" data-path="docs/SquirrelBind_SqRuntimeException.html">
+        <li class="chapter " data-level="1.2.11" data-path="docs/SquirrelBind_SqRuntimeException.html">
             
                 <a href="docs/SquirrelBind_SqRuntimeException.html">
             
@@ -306,7 +293,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.13" data-path="docs/SquirrelBind_SqScript.html">
+        <li class="chapter " data-level="1.2.12" data-path="docs/SquirrelBind_SqScript.html">
             
                 <a href="docs/SquirrelBind_SqScript.html">
             
@@ -319,7 +306,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.14" data-path="docs/SquirrelBind_SqTable.html">
+        <li class="chapter " data-level="1.2.13" data-path="docs/SquirrelBind_SqTable.html">
             
                 <a href="docs/SquirrelBind_SqTable.html">
             
@@ -332,7 +319,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.15" data-path="docs/SquirrelBind_SqTypeException.html">
+        <li class="chapter " data-level="1.2.14" data-path="docs/SquirrelBind_SqTypeException.html">
             
                 <a href="docs/SquirrelBind_SqTypeException.html">
             
@@ -345,12 +332,25 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.16" data-path="docs/SquirrelBind_SqVM.html">
+        <li class="chapter " data-level="1.2.15" data-path="docs/SquirrelBind_SqVM.html">
             
                 <a href="docs/SquirrelBind_SqVM.html">
             
                     
                     SqVM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.16" data-path="docs/SquirrelBind_SqWeakRef.html">
+            
+                <a href="docs/SquirrelBind_SqWeakRef.html">
+            
+                    
+                    SqWeakRef
             
                 </a>
             
@@ -1083,6 +1083,53 @@ It is self explanatory.</p>
     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
+<h2 id="weak-references-and-callbacks">Weak references and callbacks</h2>
+<p>There is a problem when you want to register a callback into C++ side. For example,
+you have a GUI widget that has onClick method. But, the onClick method accepts <code>std::function</code>
+and not Squirrel objects. So, you will probably try to do the following:</p>
+<pre><code class="lang-cpp"><span class="hljs-comment">// This will cause undefined behavior! Most likely SEGFAULT! See another example below...</span>
+fooClass.addFunc(<span class="hljs-string">&quot;setOnClickCallback&quot;</span>, [](Foo* self, SqFunction func, SqInstance inst) -&gt; <span class="hljs-keyword">void</span> {
+    <span class="hljs-comment">// Using SqInstance here is OK!</span>
+    doSomethingElse(inst);
+
+    self.setOnClick([=](SomeEventData data) {
+        <span class="hljs-comment">// Using SqInstance in here nested lambda with [=] capture is bad!</span>
+        vm.callFunc(func, inst, data);
+    });
+});
+
+<span class="hljs-comment">// On program exit...</span>
+SEGFAULT
+</code></pre>
+<p>And then inside of Squirrel:</p>
+<pre><code>class Bar extends Foo {
+    ...
+}
+
+local bar = Bar(...);
+baz.setOnClickCallback(function(data){
+    print(&quot;I got some data!&quot;);
+}, bar);
+</code></pre><p>Why is this bad? Because the inner lambda captures the instance, it will cause to extend the
+life of Foo object inside of Squirrel. When you try to destroy your VM, it will most likely cause
+to crash program. Squirrel tracks objects by reference so that when reference counter goes to zero,
+the object is deleted. With the example above the SqInstance object will live inside of the lambda
+capture, extending the life of the instance. The reference counter will always be +1. This problem
+only happens when you use lambda capture inside of lambda as above. 
+<strong>How to solve this? Use weak reference!</strong> </p>
+<pre><code class="lang-cpp"><span class="hljs-comment">// This will NOT cause any problems</span>
+fooClass.addFunc(<span class="hljs-string">&quot;setOnClickCallback&quot;</span>, [](Foo* self, SqFunction func, SqWeakRef ref) -&gt; <span class="hljs-keyword">void</span> {
+    self.setOnClick([=](SomeEventData data) {
+        vm.callFunc(func, ref, data);
+    });
+});
+
+<span class="hljs-comment">// On program exit...</span>
+<span class="hljs-comment">// All ok... No SEGFAULT</span>
+</code></pre>
+<p>With the weak reference, the life of the instance won&apos;t be extended. The weak reference does
+not increament the reference counter at all. It does not matter for how long the lambda captured
+variable (the <code>ref</code> parameter) will live, it won&apos;t affect us at all. </p>
 
                                 
                                 </section>
@@ -1122,7 +1169,7 @@ It is self explanatory.</p>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"SquirrelBind","level":"1.2","depth":1,"path":"docs/SquirrelBind.md","ref":"docs/SquirrelBind.md","articles":[{"title":"SqClass","level":"1.2.1","depth":2,"path":"docs/SquirrelBind_SqClass.md","ref":"docs/SquirrelBind_SqClass.md","articles":[{"title":"Ctor","level":"1.2.1.1","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor.md","ref":"docs/SquirrelBind_SqClass_Ctor.md","articles":[]},{"title":"Ctor< T(Args...)>","level":"1.2.1.2","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","ref":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","articles":[]}]},{"title":"SqArray","level":"1.2.2","depth":2,"path":"docs/SquirrelBind_SqArray.md","ref":"docs/SquirrelBind_SqArray.md","articles":[]},{"title":"SqClassWrapper","level":"1.2.3","depth":2,"path":"docs/SquirrelBind_SqClassWrapper.md","ref":"docs/SquirrelBind_SqClassWrapper.md","articles":[]},{"title":"SqCompileException","level":"1.2.4","depth":2,"path":"docs/SquirrelBind_SqCompileException.md","ref":"docs/SquirrelBind_SqCompileException.md","articles":[]},{"title":"SqEnum","level":"1.2.5","depth":2,"path":"docs/SquirrelBind_SqEnum.md","ref":"docs/SquirrelBind_SqEnum.md","articles":[]},{"title":"SqException","level":"1.2.6","depth":2,"path":"docs/SquirrelBind_SqException.md","ref":"docs/SquirrelBind_SqException.md","articles":[]},{"title":"SqFunction","level":"1.2.7","depth":2,"path":"docs/SquirrelBind_SqFunction.md","ref":"docs/SquirrelBind_SqFunction.md","articles":[]},{"title":"SqInstance","level":"1.2.8","depth":2,"path":"docs/SquirrelBind_SqInstance.md","ref":"docs/SquirrelBind_SqInstance.md","articles":[]},{"title":"SqLibs","level":"1.2.9","depth":2,"path":"docs/SquirrelBind_SqLibs.md","ref":"docs/SquirrelBind_SqLibs.md","articles":[]},{"title":"SqNotFoundException","level":"1.2.10","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},{"title":"SqObject","level":"1.2.11","depth":2,"path":"docs/SquirrelBind_SqObject.md","ref":"docs/SquirrelBind_SqObject.md","articles":[]},{"title":"SqRuntimeException","level":"1.2.12","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},{"title":"SqScript","level":"1.2.13","depth":2,"path":"docs/SquirrelBind_SqScript.md","ref":"docs/SquirrelBind_SqScript.md","articles":[]},{"title":"SqTable","level":"1.2.14","depth":2,"path":"docs/SquirrelBind_SqTable.md","ref":"docs/SquirrelBind_SqTable.md","articles":[]},{"title":"SqTypeException","level":"1.2.15","depth":2,"path":"docs/SquirrelBind_SqTypeException.md","ref":"docs/SquirrelBind_SqTypeException.md","articles":[]},{"title":"SqVM","level":"1.2.16","depth":2,"path":"docs/SquirrelBind_SqVM.md","ref":"docs/SquirrelBind_SqVM.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-12-13T00:03:08.460Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-13T00:09:57.806Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"SquirrelBind","level":"1.2","depth":1,"path":"docs/SquirrelBind.md","ref":"docs/SquirrelBind.md","articles":[{"title":"SqClass","level":"1.2.1","depth":2,"path":"docs/SquirrelBind_SqClass.md","ref":"docs/SquirrelBind_SqClass.md","articles":[{"title":"Ctor","level":"1.2.1.1","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor.md","ref":"docs/SquirrelBind_SqClass_Ctor.md","articles":[]},{"title":"Ctor< T(Args...)>","level":"1.2.1.2","depth":3,"path":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","ref":"docs/SquirrelBind_SqClass_Ctor__T_Args_____.md","articles":[]}]},{"title":"SqArray","level":"1.2.2","depth":2,"path":"docs/SquirrelBind_SqArray.md","ref":"docs/SquirrelBind_SqArray.md","articles":[]},{"title":"SqCompileException","level":"1.2.3","depth":2,"path":"docs/SquirrelBind_SqCompileException.md","ref":"docs/SquirrelBind_SqCompileException.md","articles":[]},{"title":"SqEnum","level":"1.2.4","depth":2,"path":"docs/SquirrelBind_SqEnum.md","ref":"docs/SquirrelBind_SqEnum.md","articles":[]},{"title":"SqException","level":"1.2.5","depth":2,"path":"docs/SquirrelBind_SqException.md","ref":"docs/SquirrelBind_SqException.md","articles":[]},{"title":"SqFunction","level":"1.2.6","depth":2,"path":"docs/SquirrelBind_SqFunction.md","ref":"docs/SquirrelBind_SqFunction.md","articles":[]},{"title":"SqInstance","level":"1.2.7","depth":2,"path":"docs/SquirrelBind_SqInstance.md","ref":"docs/SquirrelBind_SqInstance.md","articles":[]},{"title":"SqLibs","level":"1.2.8","depth":2,"path":"docs/SquirrelBind_SqLibs.md","ref":"docs/SquirrelBind_SqLibs.md","articles":[]},{"title":"SqNotFoundException","level":"1.2.9","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},{"title":"SqObject","level":"1.2.10","depth":2,"path":"docs/SquirrelBind_SqObject.md","ref":"docs/SquirrelBind_SqObject.md","articles":[]},{"title":"SqRuntimeException","level":"1.2.11","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},{"title":"SqScript","level":"1.2.12","depth":2,"path":"docs/SquirrelBind_SqScript.md","ref":"docs/SquirrelBind_SqScript.md","articles":[]},{"title":"SqTable","level":"1.2.13","depth":2,"path":"docs/SquirrelBind_SqTable.md","ref":"docs/SquirrelBind_SqTable.md","articles":[]},{"title":"SqTypeException","level":"1.2.14","depth":2,"path":"docs/SquirrelBind_SqTypeException.md","ref":"docs/SquirrelBind_SqTypeException.md","articles":[]},{"title":"SqVM","level":"1.2.15","depth":2,"path":"docs/SquirrelBind_SqVM.md","ref":"docs/SquirrelBind_SqVM.md","articles":[]},{"title":"SqWeakRef","level":"1.2.16","depth":2,"path":"docs/SquirrelBind_SqWeakRef.md","ref":"docs/SquirrelBind_SqWeakRef.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-12-14T23:51:46.108Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-14T23:54:15.105Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -178,20 +178,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.3" data-path="SquirrelBind_SqClassWrapper.html">
-            
-                <a href="SquirrelBind_SqClassWrapper.html">
-            
-                    
-                    SqClassWrapper
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.4" data-path="SquirrelBind_SqCompileException.html">
+        <li class="chapter " data-level="1.2.3" data-path="SquirrelBind_SqCompileException.html">
             
                 <a href="SquirrelBind_SqCompileException.html">
             
@@ -204,7 +191,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.5" data-path="SquirrelBind_SqEnum.html">
+        <li class="chapter " data-level="1.2.4" data-path="SquirrelBind_SqEnum.html">
             
                 <a href="SquirrelBind_SqEnum.html">
             
@@ -217,7 +204,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.6" data-path="SquirrelBind_SqException.html">
+        <li class="chapter " data-level="1.2.5" data-path="SquirrelBind_SqException.html">
             
                 <a href="SquirrelBind_SqException.html">
             
@@ -230,7 +217,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.7" data-path="SquirrelBind_SqFunction.html">
+        <li class="chapter " data-level="1.2.6" data-path="SquirrelBind_SqFunction.html">
             
                 <a href="SquirrelBind_SqFunction.html">
             
@@ -243,7 +230,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.8" data-path="SquirrelBind_SqInstance.html">
+        <li class="chapter " data-level="1.2.7" data-path="SquirrelBind_SqInstance.html">
             
                 <a href="SquirrelBind_SqInstance.html">
             
@@ -256,7 +243,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.9" data-path="SquirrelBind_SqLibs.html">
+        <li class="chapter " data-level="1.2.8" data-path="SquirrelBind_SqLibs.html">
             
                 <a href="SquirrelBind_SqLibs.html">
             
@@ -269,7 +256,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.10" data-path="SquirrelBind_SqNotFoundException.html">
+        <li class="chapter " data-level="1.2.9" data-path="SquirrelBind_SqNotFoundException.html">
             
                 <a href="SquirrelBind_SqNotFoundException.html">
             
@@ -282,7 +269,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2.11" data-path="SquirrelBind_SqObject.html">
+        <li class="chapter active" data-level="1.2.10" data-path="SquirrelBind_SqObject.html">
             
                 <a href="SquirrelBind_SqObject.html">
             
@@ -295,7 +282,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.12" data-path="SquirrelBind_SqRuntimeException.html">
+        <li class="chapter " data-level="1.2.11" data-path="SquirrelBind_SqRuntimeException.html">
             
                 <a href="SquirrelBind_SqRuntimeException.html">
             
@@ -308,7 +295,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.13" data-path="SquirrelBind_SqScript.html">
+        <li class="chapter " data-level="1.2.12" data-path="SquirrelBind_SqScript.html">
             
                 <a href="SquirrelBind_SqScript.html">
             
@@ -321,7 +308,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.14" data-path="SquirrelBind_SqTable.html">
+        <li class="chapter " data-level="1.2.13" data-path="SquirrelBind_SqTable.html">
             
                 <a href="SquirrelBind_SqTable.html">
             
@@ -334,7 +321,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.15" data-path="SquirrelBind_SqTypeException.html">
+        <li class="chapter " data-level="1.2.14" data-path="SquirrelBind_SqTypeException.html">
             
                 <a href="SquirrelBind_SqTypeException.html">
             
@@ -347,12 +334,25 @@
             
         </li>
     
-        <li class="chapter " data-level="1.2.16" data-path="SquirrelBind_SqVM.html">
+        <li class="chapter " data-level="1.2.15" data-path="SquirrelBind_SqVM.html">
             
                 <a href="SquirrelBind_SqVM.html">
             
                     
                     SqVM
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2.16" data-path="SquirrelBind_SqWeakRef.html">
+            
+                <a href="SquirrelBind_SqWeakRef.html">
+            
+                    
+                    SqWeakRef
             
                 </a>
             
@@ -431,6 +431,10 @@
 <td style="text-align:right">HSQOBJECT</td>
 <td style="text-align:left"><a href="#822514a2">obj</a></td>
 </tr>
+<tr>
+<td style="text-align:right">bool</td>
+<td style="text-align:left"><a href="#d431d6b9">weak</a></td>
+</tr>
 </tbody>
 </table>
 <h2 id="public-functions">Public Functions</h2>
@@ -503,6 +507,10 @@
 <td style="text-align:left"><a href="#300c2f7f">isNull</a> () const  <em>Returns true if the object is nullptr.</em></td>
 </tr>
 <tr>
+<td style="text-align:right">void</td>
+<td style="text-align:left"><a href="#acc34624">reset</a> ()  <em>Releases the object and resets it to empty.</em></td>
+</tr>
+<tr>
 <td style="text-align:right">int32_t</td>
 <td style="text-align:left"><a href="#d2994b5e">toInt</a> () const  <em>Returns the integer value of this object.</em></td>
 </tr>
@@ -543,6 +551,10 @@
 <td style="text-align:left"><a href="#7848c8fa">to</a> () const  <em>Returns an arbitary value of this object.</em></td>
 </tr>
 <tr>
+<td style="text-align:right">T</td>
+<td style="text-align:left"><a href="#6c6f6ffd">toPtrUnsafe</a> () const  <em>Unsafe cast this object into any pointer of type T.</em></td>
+</tr>
+<tr>
 <td style="text-align:right"><a href="SquirrelBind_SqObject.html">SqObject</a> &amp;</td>
 <td style="text-align:left"><a href="#3fa644e5">operator=</a> (const <a href="SquirrelBind_SqObject.html">SqObject</a> &amp; <em>other</em>)  <em>Copy assingment operator.</em></td>
 </tr>
@@ -558,6 +570,9 @@
 </code></pre>
 <h3 id="variable-obj"><em>variable</em> <a id="822514a2" href="#822514a2">obj</a></h3>
 <pre><code class="lang-cpp">HSQOBJECT obj
+</code></pre>
+<h3 id="variable-weak"><em>variable</em> <a id="d431d6b9" href="#d431d6b9">weak</a></h3>
+<pre><code class="lang-cpp"><span class="hljs-keyword">bool</span> weak
 </code></pre>
 <h2 id="public-functions-documentation">Public Functions Documentation</h2>
 <h3 id="function-sqobject"><em>function</em> <a id="25339110" href="#25339110">SqObject</a></h3>
@@ -631,6 +646,10 @@
 <pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">isNull</span> <span class="hljs-params">()</span> <span class="hljs-keyword">const</span>
 </span></code></pre>
 <p>Returns true if the object is nullptr. </p>
+<h3 id="function-reset"><em>function</em> <a id="acc34624" href="#acc34624">reset</a></h3>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">reset</span> <span class="hljs-params">()</span>
+</span></code></pre>
+<p>Releases the object and resets it to empty. </p>
 <h3 id="function-toint"><em>function</em> <a id="d2994b5e" href="#d2994b5e">toInt</a></h3>
 <pre><code class="lang-cpp"><span class="hljs-keyword">int32_t</span> toInt () <span class="hljs-keyword">const</span>
 </code></pre>
@@ -704,12 +723,20 @@
 <li><em><a href="SquirrelBind_SqTypeException.html">SqTypeException</a>:</em> if this object is not an array </li>
 </ul>
 <h3 id="function-to"><em>function</em> <a id="7848c8fa" href="#7848c8fa">to</a></h3>
-<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">inline</span> T <span class="hljs-title">to</span> <span class="hljs-params">()</span> <span class="hljs-keyword">const</span>
+<pre><code class="lang-cpp"><span class="hljs-function">T <span class="hljs-title">to</span> <span class="hljs-params">()</span> <span class="hljs-keyword">const</span>
 </span></code></pre>
 <p>Returns an arbitary value of this object. </p>
 <p><strong>Exceptions:</strong></p>
 <ul>
 <li><em><a href="SquirrelBind_SqTypeException.html">SqTypeException</a>:</em> if this object is not an type of T </li>
+</ul>
+<h3 id="function-toptrunsafe"><em>function</em> <a id="6c6f6ffd" href="#6c6f6ffd">toPtrUnsafe</a></h3>
+<pre><code class="lang-cpp"><span class="hljs-function"><span class="hljs-keyword">inline</span> T <span class="hljs-title">toPtrUnsafe</span> <span class="hljs-params">()</span> <span class="hljs-keyword">const</span>
+</span></code></pre>
+<p>Unsafe cast this object into any pointer of type T. </p>
+<p><strong>Exceptions:</strong></p>
+<ul>
+<li><em><a href="SquirrelBind_SqTypeException.html">SqTypeException</a>:</em> if this object is not an instance </li>
 </ul>
 <h3 id="function-operator"><em>function</em> <a id="3fa644e5" href="#3fa644e5">operator=</a></h3>
 <pre><code class="lang-cpp">SqObject &amp; <span class="hljs-keyword">operator</span>= (
@@ -766,7 +793,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"SqObject","level":"1.2.11","depth":2,"next":{"title":"SqRuntimeException","level":"1.2.12","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},"previous":{"title":"SqNotFoundException","level":"1.2.10","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/SquirrelBind_SqObject.md","mtime":"2017-12-10T16:10:13.489Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-13T00:09:57.806Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"SqObject","level":"1.2.10","depth":2,"next":{"title":"SqRuntimeException","level":"1.2.11","depth":2,"path":"docs/SquirrelBind_SqRuntimeException.md","ref":"docs/SquirrelBind_SqRuntimeException.md","articles":[]},"previous":{"title":"SqNotFoundException","level":"1.2.9","depth":2,"path":"docs/SquirrelBind_SqNotFoundException.md","ref":"docs/SquirrelBind_SqNotFoundException.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/SquirrelBind_SqObject.md","mtime":"2017-12-14T23:54:07.595Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-12-14T23:54:15.105Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

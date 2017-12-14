@@ -8,7 +8,6 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
     * struct **[Ctor](/docs/SquirrelBind_SqClass_Ctor.md)** _Constructor helper class._
     * struct **[Ctor< T(Args...)>](/docs/SquirrelBind_SqClass_Ctor__T_Args_____.md)** 
   * class **[SqArray](/docs/SquirrelBind_SqArray.md)** _Squirrel intance of array object._
-  * class **[SqClassWrapper](/docs/SquirrelBind_SqClassWrapper.md)** 
   * class **[SqCompileException](/docs/SquirrelBind_SqCompileException.md)** _Compile exception thrown during compilation._
   * class **[SqEnum](/docs/SquirrelBind_SqEnum.md)** _Squirrel table object._
   * class **[SqException](/docs/SquirrelBind_SqException.md)** _Raw exception._
@@ -22,3 +21,4 @@ Here are the classes, structs, unions and interfaces with brief descriptions:
   * class **[SqTable](/docs/SquirrelBind_SqTable.md)** _Squirrel table object._
   * class **[SqTypeException](/docs/SquirrelBind_SqTypeException.md)** _Type exception thrown if casting between squirrel and C++ objects failed._
   * class **[SqVM](/docs/SquirrelBind_SqVM.md)** _Squirrel Virtual Machine object._
+  * class **[SqWeakRef](/docs/SquirrelBind_SqWeakRef.md)** _Weak reference class that does not extend the life of the instance._

@@ -12,7 +12,6 @@ The documentation for this namespace was generated from: `include/squirrelbind/a
 |:-----|
 | class [SquirrelBind::SqArray](SquirrelBind_SqArray.html) <span style="opacity:0.8;">Squirrel intance of array object. </span> |
 | class [SquirrelBind::SqClass](SquirrelBind_SqClass.html) <span style="opacity:0.8;">Squirrel class object. </span> |
-| class [SquirrelBind::SqClassWrapper](SquirrelBind_SqClassWrapper.html) |
 | class [SquirrelBind::SqCompileException](SquirrelBind_SqCompileException.html) <span style="opacity:0.8;">Compile exception thrown during compilation. </span> |
 | class [SquirrelBind::SqEnum](SquirrelBind_SqEnum.html) <span style="opacity:0.8;">Squirrel table object. </span> |
 | class [SquirrelBind::SqException](SquirrelBind_SqException.html) <span style="opacity:0.8;">Raw exception. </span> |
@@ -26,6 +25,7 @@ The documentation for this namespace was generated from: `include/squirrelbind/a
 | class [SquirrelBind::SqTable](SquirrelBind_SqTable.html) <span style="opacity:0.8;">Squirrel table object. </span> |
 | class [SquirrelBind::SqTypeException](SquirrelBind_SqTypeException.html) <span style="opacity:0.8;">Type exception thrown if casting between squirrel and C++ objects failed. </span> |
 | class [SquirrelBind::SqVM](SquirrelBind_SqVM.html) <span style="opacity:0.8;">Squirrel Virtual Machine object. </span> |
+| class [SquirrelBind::SqWeakRef](SquirrelBind_SqWeakRef.html) <span style="opacity:0.8;">Weak reference class that does not extend the life of the instance. </span> |
 
 
 ## Enums

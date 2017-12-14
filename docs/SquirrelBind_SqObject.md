@@ -15,6 +15,7 @@ The documentation for this class was generated from: `include/squirrelbind/objec
 | -------: | :------- |
 |  HSQUIRRELVM | [vm](#ad2f8037) |
 |  HSQOBJECT | [obj](#822514a2) |
+|  bool | [weak](#d431d6b9) |
 
 
 ## Public Functions
@@ -36,6 +37,7 @@ The documentation for this class was generated from: `include/squirrelbind/objec
 |  const HSQUIRRELVM & | [getHandle](#d9628eef) () const  _Returns the Squirrel virtual machine handle associated with this instance._ |
 |  size_t | [getTypeTag](#52d6649d) () const  _Returns the typetag associated with this object._ |
 |  bool | [isNull](#300c2f7f) () const  _Returns true if the object is nullptr._ |
+|  void | [reset](#acc34624) ()  _Releases the object and resets it to empty._ |
 |  int32_t | [toInt](#d2994b5e) () const  _Returns the integer value of this object._ |
 |  float | [toFloat](#24919b29) () const  _Returns the float value of this object._ |
 |  std::string | [toString](#3f158a8a) () const  _Returns the string value of this object._ |
@@ -46,6 +48,7 @@ The documentation for this class was generated from: `include/squirrelbind/objec
 |  [SqTable](SquirrelBind_SqTable.html) | [toTable](#1eef510c) () const  _Returns the SqTable value of this object._ |
 |  [SqArray](SquirrelBind_SqArray.html) | [toArray](#dab33dbb) () const  _Returns the SqArray value of this object._ |
 |  T | [to](#7848c8fa) () const  _Returns an arbitary value of this object._ |
+|  T | [toPtrUnsafe](#6c6f6ffd) () const  _Unsafe cast this object into any pointer of type T._ |
 |  [SqObject](SquirrelBind_SqObject.html) & | [operator=](#3fa644e5) (const [SqObject](SquirrelBind_SqObject.html) & _other_)  _Copy assingment operator._ |
 |  [SqObject](SquirrelBind_SqObject.html) & | [operator=](#c9a0f0a8) ([SqObject](SquirrelBind_SqObject.html) && _other_)  _Move assingment operator._ |
 
@@ -64,6 +67,14 @@ HSQUIRRELVM vm
 
 ```cpp
 HSQOBJECT obj
+```
+
+
+
+### _variable_ <a id="d431d6b9" href="#d431d6b9">weak</a>
+
+```cpp
+bool weak
 ```
 
 
@@ -208,6 +219,14 @@ bool isNull () const
 
 Returns true if the object is nullptr. 
 
+### _function_ <a id="acc34624" href="#acc34624">reset</a>
+
+```cpp
+void reset () 
+```
+
+Releases the object and resets it to empty. 
+
 ### _function_ <a id="d2994b5e" href="#d2994b5e">toInt</a>
 
 ```cpp
@@ -319,13 +338,25 @@ Returns the [SqArray](SquirrelBind_SqArray.html) value of this object.
 ### _function_ <a id="7848c8fa" href="#7848c8fa">to</a>
 
 ```cpp
-inline T to () const 
+T to () const 
 ```
 
 Returns an arbitary value of this object. 
 
 **Exceptions:**
 * _[SqTypeException](SquirrelBind_SqTypeException.html):_ if this object is not an type of T 
+
+
+### _function_ <a id="6c6f6ffd" href="#6c6f6ffd">toPtrUnsafe</a>
+
+```cpp
+inline T toPtrUnsafe () const 
+```
+
+Unsafe cast this object into any pointer of type T. 
+
+**Exceptions:**
+* _[SqTypeException](SquirrelBind_SqTypeException.html):_ if this object is not an instance 
 
 
 ### _function_ <a id="3fa644e5" href="#3fa644e5">operator=</a>

@@ -22,9 +22,10 @@ The documentation for this class was generated from: `include/squirrelbind/table
 |   | [SqTable](#8ed096d5) ([SqTable](SquirrelBind_SqTable.html) && _other_)  _Move constructor._ |
 |  [SqFunction](SquirrelBind_SqFunction.html) | [findFunc](#60fc935b) (const char * _name_) const  _Finds a function in this table._ |
 |  [SqClass](SquirrelBind_SqClass.html) | [findClass](#bdf75573) (const char * _name_) const  _Finds a class in this table._ |
-|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#8921d33d) (const char * _name_, const std::function< T *(Args...)> & _allocator_ = std::bind(&detail::defaultClassAllocator< T >))  _Adds a new class type to this table._ |
-|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#081c7485) (const char * _name_, const [SqClass::Ctor](SquirrelBind_SqClass_Ctor.html)< T(Args...)> & _constructor_)  _Adds a new class type to this table._ |
-|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#b0c9a59f) (const char * _name_, const F & _lambda_)  _Adds a new class type to this table._ |
+|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#e60779b4) (const char * _name_, const std::function< T *(Args...)> & _allocator_ = std::bind(&detail::defaultClassAllocator< T >), bool _release_ = true)  _Adds a new class type to this table._ |
+|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#7f0af2a9) (const char * _name_, const [SqClass::Ctor](SquirrelBind_SqClass_Ctor.html)< T(Args...)> & _constructor_, bool _release_ = true)  _Adds a new class type to this table._ |
+|  [SqClass](SquirrelBind_SqClass.html) | [addClass](#610e55fd) (const char * _name_, const F & _lambda_, bool _release_ = true)  _Adds a new class type to this table._ |
+|  [SqClass](SquirrelBind_SqClass.html) | [addAbstractClass](#c213d866) (const char * _name_)  _Adds a new abstract class type to this table._ |
 |  [SqFunction](SquirrelBind_SqFunction.html) | [addFunc](#188ce7b1) (const char * _name_, const std::function< R(Args...)> & _func_)  _Adds a new function type to this table._ |
 |  [SqFunction](SquirrelBind_SqFunction.html) | [addFunc](#0bb526b4) (const char * _name_, const F & _lambda_)  _Adds a new lambda type to this table._ |
 |  void | [set](#e28aa61a) (const char * _name_, const T & _value_)  _Adds a new key-value pair to this table._ |
@@ -127,12 +128,13 @@ Finds a class in this table.
 **return:** [SqClass](SquirrelBind_SqClass.html) object references the found class 
 
 
-### _function_ <a id="8921d33d" href="#8921d33d">addClass</a>
+### _function_ <a id="e60779b4" href="#e60779b4">addClass</a>
 
 ```cpp
 inline SqClass addClass (
     const char * name,
-    const std::function< T *(Args...)> & allocator = std::bind(&detail::defaultClassAllocator< T >)
+    const std::function< T *(Args...)> & allocator = std::bind(&detail::defaultClassAllocator< T >),
+    bool release = true
 ) 
 ```
 
@@ -141,12 +143,13 @@ Adds a new class type to this table.
 **return:** [SqClass](SquirrelBind_SqClass.html) object references the added class 
 
 
-### _function_ <a id="081c7485" href="#081c7485">addClass</a>
+### _function_ <a id="7f0af2a9" href="#7f0af2a9">addClass</a>
 
 ```cpp
 inline SqClass addClass (
     const char * name,
-    const SqClass::Ctor< T(Args...)> & constructor
+    const SqClass::Ctor< T(Args...)> & constructor,
+    bool release = true
 ) 
 ```
 
@@ -155,16 +158,30 @@ Adds a new class type to this table.
 **return:** [SqClass](SquirrelBind_SqClass.html) object references the added class 
 
 
-### _function_ <a id="b0c9a59f" href="#b0c9a59f">addClass</a>
+### _function_ <a id="610e55fd" href="#610e55fd">addClass</a>
 
 ```cpp
 inline SqClass addClass (
     const char * name,
-    const F & lambda
+    const F & lambda,
+    bool release = true
 ) 
 ```
 
 Adds a new class type to this table. 
+
+**return:** [SqClass](SquirrelBind_SqClass.html) object references the added class 
+
+
+### _function_ <a id="c213d866" href="#c213d866">addAbstractClass</a>
+
+```cpp
+inline SqClass addAbstractClass (
+    const char * name
+) 
+```
+
+Adds a new abstract class type to this table. 
 
 **return:** [SqClass](SquirrelBind_SqClass.html) object references the added class 
 

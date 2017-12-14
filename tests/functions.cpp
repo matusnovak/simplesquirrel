@@ -659,3 +659,52 @@ TEST_CASE("Test passing array") {
     vm.callFunc(funcTest2, vm, vecArr);
 }
 
+TEST_CASE("Test passing instance") {
+	class GuiButton;
+	static GuiButton* buttonPtr = nullptr;
+	
+	class GuiButton {
+	public:
+		GuiButton(const std::string& label):label(label) {
+			buttonPtr = this;
+		}
+
+		const std::string& getLabel() const {
+			return label;
+		}
+
+		std::string label;
+	};
+
+	static const std::string source = STRINGIFY(
+        class Foo extends GuiButton {
+			constructor(label) {
+				base.constructor(label);
+			}
+        }
+
+		local instance = Foo("Hello");
+
+		print("Calling bar");
+		bar(instance);
+
+		print("Calling baz");
+		baz(instance);
+    );
+
+    SqVM vm(1024);
+
+	SqClass cls = vm.addClass("GuiButton", SqClass::Ctor<GuiButton(std::string)>());
+	cls.addFunc("getLabel", &GuiButton::getLabel);
+
+	vm.addFunc("bar", [&](GuiButton* button) -> void {
+		REQUIRE(button == buttonPtr);
+	});
+
+	vm.addFunc("baz", [&](SqInstance instance) -> void {
+		REQUIRE(instance.toPtrUnsafe<GuiButton*>() == buttonPtr);
+	});
+
+    SqScript script = vm.compileSource(source.c_str());
+    vm.run(script);
+}

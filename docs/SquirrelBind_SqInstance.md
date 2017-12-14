@@ -5,6 +5,8 @@ Squirrel intance of class object.
 
 **Inherits from:** [SquirrelBind::SqObject](SquirrelBind_SqObject.html)
 
+**Implemented by:** [SquirrelBind::SqWeakRef](SquirrelBind_SqWeakRef.html)
+
 The documentation for this class was generated from: `include/squirrelbind/instance.hpp`
 
 
@@ -13,6 +15,7 @@ The documentation for this class was generated from: `include/squirrelbind/insta
 
 | Type | Name |
 | -------: | :------- |
+|   | [SqInstance](#cc2be9c4) ()  _Constructs empty invalid instance._ |
 |   | [SqInstance](#6eaf701e) (HSQUIRRELVM _vm_)  _Constructs empty instance._ |
 |  explicit  | [SqInstance](#35e56723) (const [SqObject](SquirrelBind_SqObject.html) & _object_)  _Converts SqObject to SqInstance._ |
 |   | [SqInstance](#efb324d0) (const [SqInstance](SquirrelBind_SqInstance.html) & _other_)  _Copy constructor._ |
@@ -23,6 +26,14 @@ The documentation for this class was generated from: `include/squirrelbind/insta
 
 
 ## Public Functions Documentation
+
+### _function_ <a id="cc2be9c4" href="#cc2be9c4">SqInstance</a>
+
+```cpp
+ SqInstance () 
+```
+
+Constructs empty invalid instance. 
 
 ### _function_ <a id="6eaf701e" href="#6eaf701e">SqInstance</a>
 
