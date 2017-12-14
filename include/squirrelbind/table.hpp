@@ -53,9 +53,9 @@ namespace SquirrelBind {
         * @returns SqClass object references the added class
         */
         template<typename T, typename... Args>
-        SqClass addClass(const char* name, const std::function<T*(Args...)>& allocator = std::bind(&detail::defaultClassAllocator<T>)){
+        SqClass addClass(const char* name, const std::function<T*(Args...)>& allocator = std::bind(&detail::defaultClassAllocator<T>), bool release = true){
             sq_pushobject(vm, obj);
-            SqClass cls(detail::addClass(vm, name, allocator));
+            SqClass cls(detail::addClass(vm, name, allocator, release));
             sq_pop(vm, 1);
             return cls;
         }
@@ -64,25 +64,25 @@ namespace SquirrelBind {
         * @returns SqClass object references the added class
         */
         template<typename T, typename... Args>
-        SqClass addClass(const char* name, const SqClass::Ctor<T(Args...)>& constructor){
+        SqClass addClass(const char* name, const SqClass::Ctor<T(Args...)>& constructor, bool release = true){
             const std::function<T*(Args...)> func = &constructor.allocate;
-            return addClass<T>(name, func);
+            return addClass<T>(name, func, release);
         }
         /**
         * @brief Adds a new class type to this table
         * @returns SqClass object references the added class
         */
         template<typename F>
-        SqClass addClass(const char* name, const F& lambda) {
-            return addClass(name, detail::make_function(lambda));
+        SqClass addClass(const char* name, const F& lambda, bool release = true) {
+            return addClass(name, detail::make_function(lambda), release);
         }
         /**
         * @brief Adds a new abstract class type to this table
         * @returns SqClass object references the added class
         */
-		template<typename T>
+        template<typename T>
         SqClass addAbstractClass(const char* name) {
-	        sq_pushobject(vm, obj);
+            sq_pushobject(vm, obj);
             SqClass cls(detail::addAbstractClass<T>(vm, name));
             sq_pop(vm, 1);
             return cls;
@@ -136,6 +136,18 @@ namespace SquirrelBind {
         */
         SqTable& operator = (SqTable&& other) NOEXCEPT;
     };
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    namespace detail {
+        template<>
+        inline SqTable popValue(HSQUIRRELVM vm, SQInteger index){
+            checkType(vm, index, OT_TABLE);
+            SqTable val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqTable from squirrel stack");
+            sq_addref(vm, &val.getRaw());
+            return val;
+        }
+    }
+#endif
 }
 
 #endif

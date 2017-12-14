@@ -10,7 +10,7 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel class object
     */
-    class SQBIND_API SqClass: public SqObject {
+    class SQBIND_API SqClass : public SqObject {
     public:
         /**
         * @brief Constructor helper class
@@ -55,8 +55,8 @@ namespace SquirrelBind {
         /**
         * @brief Adds a new function type to this class
         * @param name Name of the function to add
-        * @param func std::function that contains "this" pointer to the class type followed 
-        * by any number of arguments with any type 
+        * @param func std::function that contains "this" pointer to the class type followed
+        * by any number of arguments with any type
         * @throws SqRuntimeException if VM is invalid
         * @returns SqFunction object references the added function
         */
@@ -77,8 +77,8 @@ namespace SquirrelBind {
         * @returns SqFunction object references the added function
         */
         template <typename Return, typename Object, typename... Args>
-        SqFunction addFunc(const char* name, Return (Object::*memfunc)(Args...), bool isStatic = false) {
-            auto func = std::function<Return (Object*, Args...)>(std::mem_fn(memfunc));
+        SqFunction addFunc(const char* name, Return(Object::*memfunc)(Args...), bool isStatic = false) {
+            auto func = std::function<Return(Object*, Args...)>(std::mem_fn(memfunc));
             return addFunc(name, func, isStatic);
         }
         /**
@@ -89,15 +89,15 @@ namespace SquirrelBind {
         * @returns SqFunction object references the added function
         */
         template <typename Return, typename Object, typename... Args>
-        SqFunction addFunc(const char* name, Return (Object::*memfunc)(Args...) const, bool isStatic = false) {
-            auto func = std::function<Return (Object*, Args...)>(std::mem_fn(memfunc));
+        SqFunction addFunc(const char* name, Return(Object::*memfunc)(Args...) const, bool isStatic = false) {
+            auto func = std::function<Return(Object*, Args...)>(std::mem_fn(memfunc));
             return addFunc(name, func, isStatic);
         }
         /**
         * @brief Adds a new function type to this class
         * @param name Name of the function to add
-        * @param lambda Lambda function that contains "this" pointer to the class type followed 
-        * by any number of arguments with any type 
+        * @param lambda Lambda function that contains "this" pointer to the class type followed
+        * by any number of arguments with any type
         * @throws SqRuntimeException if VM is invalid
         * @returns SqFunction object references the added function
         */
@@ -133,9 +133,9 @@ namespace SquirrelBind {
         static SQInteger dlgSetStub(HSQUIRRELVM vm);
 
         template<typename T, typename V>
-        void bindVar(const std::string& name, V T::* ptr, HSQOBJECT& table, SQFUNCTION stub, bool isStatic) {			
+        void bindVar(const std::string& name, V T::* ptr, HSQOBJECT& table, SQFUNCTION stub, bool isStatic) {
             auto rst = sq_gettop(vm);
-            
+
             sq_pushobject(vm, table);
             sq_pushstring(vm, name.c_str(), name.size());
 
@@ -144,7 +144,7 @@ namespace SquirrelBind {
 
             sq_newclosure(vm, stub, 1);
 
-            if(SQ_FAILED(sq_newslot(vm, -3, isStatic))) {
+            if (SQ_FAILED(sq_newslot(vm, -3, isStatic))) {
                 throw SqTypeException("Failed to bind member variable to class");
             }
 
@@ -183,6 +183,19 @@ namespace SquirrelBind {
         SqObject tableSet;
         SqObject tableGet;
     };
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    namespace detail {
+        template<>
+        inline SqClass popValue(HSQUIRRELVM vm, SQInteger index){
+            checkType(vm, index, OT_CLASS);
+            SqClass val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqClass from squirrel stack");
+            sq_addref(vm, &val.getRaw());
+            return val;
+        }
+    }
+#endif
 }
 
 #endif

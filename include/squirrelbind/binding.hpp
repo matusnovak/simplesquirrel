@@ -90,9 +90,9 @@ namespace SquirrelBind {
         }
 
         template<typename T, typename... Args>
-        static SqObject addClass(HSQUIRRELVM vm, const char* name, const std::function<T*(Args...)>& allocator) {
+        static SqObject addClass(HSQUIRRELVM vm, const char* name, const std::function<T*(Args...)>& allocator, bool release = true) {
             static const auto hashCode = typeid(T*).hash_code();
-        	static const std::size_t nparams = sizeof...(Args);
+            static const std::size_t nparams = sizeof...(Args);
 
             SqObject clsObj(vm);
             
@@ -101,7 +101,7 @@ namespace SquirrelBind {
 
             HSQOBJECT obj;
             sq_getstackobj(vm, -1, &obj);
-			addClassObj(vm, hashCode, obj);
+            addClassObj(vm, hashCode, obj);
 
             sq_getstackobj(vm, -1, &clsObj.getRaw());
             sq_addref(vm, &clsObj.getRaw());
@@ -113,7 +113,12 @@ namespace SquirrelBind {
             static char params[33];
             paramPacker<T*, Args...>(params);
 
-            sq_newclosure(vm, &detail::classAllocator<T, Args...>, 1);
+            if (release) {
+                sq_newclosure(vm, &detail::classAllocator<T, Args...>, 1);
+            } else {
+                sq_newclosure(vm, &detail::classAllocatorNoRelease<T, Args...>, 1);
+            }
+
             sq_setparamscheck(vm, nparams + 1, params);
             sq_newslot(vm, -3, false); // Add the constructor method
 
@@ -122,9 +127,9 @@ namespace SquirrelBind {
             return clsObj;
         }
 
-		template<typename T>
+        template<typename T>
         static SqObject addAbstractClass(HSQUIRRELVM vm, const char* name) {
-			static const auto hashCode = typeid(T*).hash_code();
+            static const auto hashCode = typeid(T*).hash_code();
             SqObject clsObj(vm);
 
             sq_pushstring(vm, name, strlen(name));
@@ -132,7 +137,7 @@ namespace SquirrelBind {
 
             HSQOBJECT obj;
             sq_getstackobj(vm, -1, &obj);
-			addClassObj(vm, hashCode, obj);
+            addClassObj(vm, hashCode, obj);
 
             sq_getstackobj(vm, -1, &clsObj.getRaw());
             sq_addref(vm, &clsObj.getRaw());

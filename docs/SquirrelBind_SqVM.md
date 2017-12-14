@@ -35,10 +35,11 @@ The documentation for this class was generated from: `include/squirrelbind/vm.hp
 |  [SqTable](SquirrelBind_SqTable.html) | [newTable](#d544d4a1) () const  _Creates a new empty table._ |
 |  [SqArray](SquirrelBind_SqArray.html) | [newArray](#0c1af95e) () const  _Creates a new empty array._ |
 |  [SqArray](SquirrelBind_SqArray.html) | [newArray](#dc14dfbe) (const std::vector< T > & _vector_) const  _Creates a new array._ |
-|  void | [expose](#55b70d6f) ()  _Exposes a derived class of SqClassWrapper to this VM._ |
 |  [SqEnum](SquirrelBind_SqEnum.html) | [addEnum](#ee2c8e16) (const char * _name_)  _Adds a new enum to this table._ |
 |  void | [setConst](#9b6fb87a) (const char * _name_, const T & _value_)  _Adds a new constant key-value pair to this table._ |
 |  void | [debugStack](#31f8c48f) () const  _Prints stack objects._ |
+|  void | [addClassObj](#27c0bea4) (size_t _hashCode_, const HSQOBJECT & _obj_)  _Add registered class object into the table of known classes._ |
+|  const HSQOBJECT & | [getClassObj](#1b9c1ed4) (size_t _hashCode_)  _Get registered class object from hash code._ |
 |  [SqVM](SquirrelBind_SqVM.html) & | [operator=](#6798d965) (const [SqVM](SquirrelBind_SqVM.html) & _other_) = delete  _Copy assingment operator._ |
 |  [SqVM](SquirrelBind_SqVM.html) & | [operator=](#a4d23f25) ([SqVM](SquirrelBind_SqVM.html) && _other_)  _Move assingment operator._ |
 
@@ -293,14 +294,6 @@ inline SqArray newArray (
 
 Creates a new array. 
 
-### _function_ <a id="55b70d6f" href="#55b70d6f">expose</a>
-
-```cpp
-inline void expose () 
-```
-
-Exposes a derived class of [SqClassWrapper](SquirrelBind_SqClassWrapper.html) to this VM. 
-
 ### _function_ <a id="ee2c8e16" href="#ee2c8e16">addEnum</a>
 
 ```cpp
@@ -329,6 +322,27 @@ void debugStack () const
 ```
 
 Prints stack objects. 
+
+### _function_ <a id="27c0bea4" href="#27c0bea4">addClassObj</a>
+
+```cpp
+void addClassObj (
+    size_t hashCode,
+    const HSQOBJECT & obj
+) 
+```
+
+Add registered class object into the table of known classes. 
+
+### _function_ <a id="1b9c1ed4" href="#1b9c1ed4">getClassObj</a>
+
+```cpp
+const HSQOBJECT & getClassObj (
+    size_t hashCode
+) 
+```
+
+Get registered class object from hash code. 
 
 ### _function_ <a id="6798d965" href="#6798d965">operator=</a>
 

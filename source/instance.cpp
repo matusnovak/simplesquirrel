@@ -5,6 +5,10 @@
 #include <forward_list>
 
 namespace SquirrelBind {
+    SqInstance::SqInstance():SqObject() {
+            
+    }
+
     SqInstance::SqInstance(HSQUIRRELVM vm):SqObject(vm) {
             
     }
@@ -40,6 +44,35 @@ namespace SquirrelBind {
 
     SqInstance& SqInstance::operator = (SqInstance&& other) NOEXCEPT {
         SqObject::operator = (std::forward<SqInstance>(other));
+        return *this;
+    }
+
+    SqWeakRef::SqWeakRef():SqInstance() {
+        weak = true;
+    }
+
+    SqWeakRef::SqWeakRef(HSQUIRRELVM vm):SqInstance(vm) {
+        weak = true;
+    }
+
+    SqWeakRef::SqWeakRef(const SqWeakRef& other):SqInstance(other) {
+    }
+
+    SqWeakRef::SqWeakRef(SqWeakRef&& other):SqInstance() {
+        SqInstance::swap(other);
+    }
+
+    void SqWeakRef::swap(SqWeakRef& other) {
+        SqInstance::swap(other);
+    }
+
+    SqWeakRef& SqWeakRef::operator = (const SqWeakRef& other){
+        SqInstance::operator= (other);
+        return *this;
+    }
+
+    SqWeakRef& SqWeakRef::operator = (SqWeakRef&& other){
+        SqInstance::operator= (std::forward<SqWeakRef>(other));
         return *this;
     }
 }

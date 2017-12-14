@@ -620,3 +620,62 @@ int main(){
     return 0;
 }
 ```
+
+## Weak references and callbacks
+
+There is a problem when you want to register a callback into C++ side. For example,
+you have a GUI widget that has onClick method. But, the onClick method accepts `std::function`
+and not Squirrel objects. So, you will probably try to do the following:
+
+```cpp
+// This will cause undefined behavior! Most likely SEGFAULT! See another example below...
+fooClass.addFunc("setOnClickCallback", [](Foo* self, SqFunction func, SqInstance inst) -> void {
+    // Using SqInstance here is OK!
+    doSomethingElse(inst);
+
+    self.setOnClick([=](SomeEventData data) {
+        // Using SqInstance in here nested lambda with [=] capture is bad!
+        vm.callFunc(func, inst, data);
+    });
+});
+
+// On program exit...
+SEGFAULT
+```
+
+And then inside of Squirrel:
+
+```
+class Bar extends Foo {
+    ...
+}
+
+local bar = Bar(...);
+baz.setOnClickCallback(function(data){
+    print("I got some data!");
+}, bar);
+```
+
+Why is this bad? Because the inner lambda captures the instance, it will cause to extend the
+life of Foo object inside of Squirrel. When you try to destroy your VM, it will most likely cause
+to crash program. Squirrel tracks objects by reference so that when reference counter goes to zero,
+the object is deleted. With the example above the SqInstance object will live inside of the lambda
+capture, extending the life of the instance. The reference counter will always be +1. This problem
+only happens when you use lambda capture inside of lambda as above. 
+**How to solve this? Use weak reference!** 
+
+```cpp
+// This will NOT cause any problems
+fooClass.addFunc("setOnClickCallback", [](Foo* self, SqFunction func, SqWeakRef ref) -> void {
+    self.setOnClick([=](SomeEventData data) {
+        vm.callFunc(func, ref, data);
+    });
+});
+
+// On program exit...
+// All ok... No SEGFAULT
+```
+
+With the weak reference, the life of the instance won't be extended. The weak reference does
+not increament the reference counter at all. It does not matter for how long the lambda captured
+variable (the `ref` parameter) will live, it won't affect us at all. 

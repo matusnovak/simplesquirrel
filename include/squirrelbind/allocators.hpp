@@ -43,6 +43,24 @@ namespace SquirrelBind {
             return nparams;
         }
 
+        template<class T, class... Args>
+        static SQInteger classAllocatorNoRelease(HSQUIRRELVM vm) {
+            static const std::size_t nparams = sizeof...(Args);
+            int off = nparams;
+
+            FuncPtr<T*(Args...)>* funcPtr;
+            sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
+            int index = nparams + 1;
+
+            T* p = funcPtr->ptr->operator()(detail::pop<Args>(vm, index--)...);
+            sq_setinstanceup(vm, -2 -off, p);
+
+            sq_getclass(vm, -2 -off);
+            sq_settypetag(vm, -1, reinterpret_cast<SQUserPointer>(typeid(T*).hash_code()));
+            sq_pop(vm, 1); // Pop class
+            return nparams;
+        }
+
         template<class Ret, class... Args>
         static SQInteger funcReleaseHook(SQUserPointer p, SQInteger size) {
             auto funcPtr = reinterpret_cast<FuncPtr<Ret(Args...)>*>(p);

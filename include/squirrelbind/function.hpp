@@ -3,6 +3,8 @@
 #define SQUIRREL_BIND_FUNCTION_HEADER_H
 
 #include "object.hpp"
+#include "exceptions.hpp"
+#include "args.hpp"
 
 namespace SquirrelBind {
     /**
@@ -41,6 +43,18 @@ namespace SquirrelBind {
         */
         SqFunction& operator = (SqFunction&& other) NOEXCEPT;
     };
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    namespace detail {
+        template<>
+        inline SqFunction popValue(HSQUIRRELVM vm, SQInteger index){
+            checkType(vm, index, OT_CLOSURE);
+            SqFunction val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqTable from squirrel stack");
+            sq_addref(vm, &val.getRaw());
+            return val;
+        }
+    }
+#endif
 }
 
 #endif

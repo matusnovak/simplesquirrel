@@ -175,6 +175,21 @@ namespace SquirrelBind {
         template<typename T>
         T to() const;
         /**
+        * @brief Unsafe cast this object into any pointer of type T
+        * @throws SqTypeException if this object is not an instance
+        */
+        template<typename T>
+        T toPtrUnsafe() const {
+            if (getType() != SqType::INSTANCE) {
+                throw SqTypeException("bad cast", "INSTANCE", getTypeStr());
+            }
+            sq_pushobject(vm, obj);
+            SQUserPointer val;
+            sq_getinstanceup(vm, -1, &val, nullptr);
+            sq_pop(vm, 1);
+            return reinterpret_cast<T>(val);
+        }
+        /**
         * @brief Copy assingment operator
         */
         SqObject& operator = (const SqObject& other);
@@ -186,6 +201,7 @@ namespace SquirrelBind {
     protected:
         HSQUIRRELVM vm;
         HSQOBJECT obj;
+        bool weak;
     };
 }
 

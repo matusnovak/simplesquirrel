@@ -34,37 +34,36 @@ namespace SquirrelBind {
         }
     }
 
-    SqObject::SqObject() :vm(nullptr) {
+    SqObject::SqObject() :vm(nullptr), weak(false) {
         sq_resetobject(&obj);
     }
 
-    SqObject::SqObject(HSQUIRRELVM vm) : vm(vm) {
+    SqObject::SqObject(HSQUIRRELVM vm) : vm(vm), weak(false) {
         if (vm == nullptr) throw SqRuntimeException("VM is not initialised");
         sq_resetobject(&obj);
     }
 
     SqObject::~SqObject() {
-        if (vm != nullptr && !sq_isnull(obj)) {
-            sq_release(vm, &obj);
-            sq_resetobject(&obj);
-        }
+        reset();
     }
 
     void SqObject::reset() {
-        if (vm != nullptr && !sq_isnull(obj)) {
+        if (vm != nullptr && !sq_isnull(obj) && !weak) {
             sq_release(vm, &obj);
         }
         sq_resetobject(&obj);
+        weak = false;
     }
 
     void SqObject::swap(SqObject& other) NOEXCEPT {
         using std::swap;
         swap(obj, other.obj);
         swap(vm, other.vm);
+        swap(weak, other.weak);
     }
 
-    SqObject::SqObject(const SqObject& other) :vm(other.vm), obj(other.obj) {
-        if (vm != nullptr && !other.isEmpty()) {
+    SqObject::SqObject(const SqObject& other) :vm(other.vm), obj(other.obj), weak(other.weak) {
+        if (vm != nullptr && !other.isEmpty() && !weak) {
             sq_addref(vm, &obj);
         }
     }

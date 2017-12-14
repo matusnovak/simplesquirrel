@@ -6,7 +6,6 @@
     * [Ctor](/docs/SquirrelBind_SqClass_Ctor.md)
     * [Ctor< T(Args...)>](/docs/SquirrelBind_SqClass_Ctor__T_Args_____.md)
   * [SqArray](/docs/SquirrelBind_SqArray.md)
-  * [SqClassWrapper](/docs/SquirrelBind_SqClassWrapper.md)
   * [SqCompileException](/docs/SquirrelBind_SqCompileException.md)
   * [SqEnum](/docs/SquirrelBind_SqEnum.md)
   * [SqException](/docs/SquirrelBind_SqException.md)
@@ -20,3 +19,4 @@
   * [SqTable](/docs/SquirrelBind_SqTable.md)
   * [SqTypeException](/docs/SquirrelBind_SqTypeException.md)
   * [SqVM](/docs/SquirrelBind_SqVM.md)
+  * [SqWeakRef](/docs/SquirrelBind_SqWeakRef.md)
