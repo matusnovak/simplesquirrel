@@ -6,6 +6,10 @@
 #include <forward_list>
 
 namespace SquirrelBind {
+	SqClass::SqClass() :SqObject(), tableSet(), tableGet() {
+
+    }
+
     SqClass::SqClass(HSQUIRRELVM vm) :SqObject(vm), tableSet(vm), tableGet(vm) {
 
     }

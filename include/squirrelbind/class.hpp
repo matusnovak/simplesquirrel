@@ -24,6 +24,10 @@ namespace SquirrelBind {
                 return new T(std::forward<Args>(args)...);
             }
         };
+		/**
+        * @brief Creates an empty invalid class
+        */
+		SqClass();
         /**
         * @brief Creates a new empty class
         */
