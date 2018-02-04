@@ -1,18 +1,15 @@
 #define CATCH_CONFIG_MAIN 
 #include <catch/catch.hpp>
-#define SQUIRREL_STATIC
-#include "../include/squirrelbind/squirrelbind.hpp"
+#include "../include/simplesquirrel/simplesquirrel.hpp"
 
 #define STRINGIFY(x) #x
 
-using namespace SquirrelBind;
-
 TEST_CASE("Create virtual machine"){
-    SqVM sq(1024, SqLibs::ALL);
+    ssq::VM sq(1024, ssq::Libs::ALL);
 
-    SqVM moved = std::move(sq);
+    ssq::VM moved = std::move(sq);
 
-    SqVM swapped(1024, SqLibs::ALL);
+    ssq::VM swapped(1024, ssq::Libs::ALL);
 
     std::swap(moved, swapped);
 
@@ -32,9 +29,9 @@ TEST_CASE("Compile from source") {
         print("Message: " + foo.bar);
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
 
     REQUIRE(script.isEmpty() == false);
 }
@@ -49,9 +46,9 @@ TEST_CASE("Compile from source and throw exception") {
         print("Message: " + foo.bar);
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    REQUIRE_THROWS_AS(vm.compileSource(source.c_str()), SqCompileException);
+    REQUIRE_THROWS_AS(vm.compileSource(source.c_str()), ssq::CompileException);
 }
 
 TEST_CASE("Compile from source and run") {
@@ -64,9 +61,9 @@ TEST_CASE("Compile from source and run") {
         print("Message: " + foo.bar);
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
 
     REQUIRE(script.isEmpty() == false);
 
@@ -74,13 +71,13 @@ TEST_CASE("Compile from source and run") {
 }
 
 TEST_CASE("Run empty script") {
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    SqScript script(vm.getHandle());
+    ssq::Script script(vm.getHandle());
 
     REQUIRE(script.isEmpty() == true);
 
-    REQUIRE_THROWS_AS(vm.run(script), SqRuntimeException);
+    REQUIRE_THROWS_AS(vm.run(script), ssq::RuntimeException);
 }
 
 TEST_CASE("Compile and run with exception"){
@@ -91,9 +88,9 @@ TEST_CASE("Compile and run with exception"){
         add(a, b);
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
 
-    REQUIRE_THROWS_AS(vm.run(script), SqRuntimeException);
+    REQUIRE_THROWS_AS(vm.run(script), ssq::RuntimeException);
 }

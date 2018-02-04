@@ -1,6 +1,6 @@
-#include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/enum.hpp"
-#include "../include/squirrelbind/vm.hpp"
+#include "../include/simplesquirrel/object.hpp"
+#include "../include/simplesquirrel/enum.hpp"
+#include "../include/simplesquirrel/vm.hpp"
 #include <squirrel.h>
 #include <sqstdstring.h>
 #include <sqstdsystem.h>
@@ -12,17 +12,17 @@
 #include <cstring>
 #include <iostream>
 
-namespace SquirrelBind {
-    SqVM::SqVM(size_t stackSize, SqLibs::Flag flags):SqTable() {
+namespace ssq {
+    VM::VM(size_t stackSize, Libs::Flag flags):Table() {
         vm = sq_open(stackSize);
         sq_resetobject(&obj);
         sq_setforeignptr(vm, this);
 
         registerStdlib(flags);
 
-        setPrintFunc(&SqVM::defaultPrintFunc, &SqVM::defaultErrorFunc);
-        setRuntimeErrorFunc(&SqVM::defaultRuntimeErrorFunc);
-        setCompileErrorFunc(&SqVM::defaultCompilerErrorFunc);
+        setPrintFunc(&VM::defaultPrintFunc, &VM::defaultErrorFunc);
+        setRuntimeErrorFunc(&VM::defaultRuntimeErrorFunc);
+        setCompileErrorFunc(&VM::defaultCompilerErrorFunc);
 
         sq_pushroottable(vm);
         sq_getstackobj(vm,-1,&obj);
@@ -30,7 +30,7 @@ namespace SquirrelBind {
         sq_pop(vm, 1);
     }
 
-    void SqVM::destroy() {
+    void VM::destroy() {
 		classMap.clear();
         if (vm != nullptr) {
             sq_resetobject(&obj);
@@ -39,13 +39,13 @@ namespace SquirrelBind {
         vm = nullptr;
     }
 
-    SqVM::~SqVM() {
+    VM::~VM() {
         destroy();
     }
 
-    void SqVM::swap(SqVM& other) NOEXCEPT {
+    void VM::swap(VM& other) NOEXCEPT {
         using std::swap;
-        SqObject::swap(other);
+        Object::swap(other);
         swap(runtimeException, other.runtimeException);
         swap(compileException, other.compileException);
 		swap(classMap, other.classMap);
@@ -58,47 +58,47 @@ namespace SquirrelBind {
         }
     }
         
-    SqVM::SqVM(SqVM&& other) NOEXCEPT :SqTable() {
+    VM::VM(VM&& other) NOEXCEPT :Table() {
         swap(other);
     }
 
-    void SqVM::registerStdlib(SqLibs::Flag flags) {
+    void VM::registerStdlib(Libs::Flag flags) {
         if (flags == 0)return;
         sq_pushroottable(vm);
-        if(flags & SqLibs::IO)
+        if(flags & ssq::Libs::IO)
             sqstd_register_iolib(vm);
-        if(flags & SqLibs::BLOB)
+        if(flags & ssq::Libs::BLOB)
             sqstd_register_bloblib(vm);
-        if(flags & SqLibs::MATH)
+        if(flags & ssq::Libs::MATH)
             sqstd_register_mathlib(vm);
-        if(flags & SqLibs::SYSTEM)
+        if(flags & ssq::Libs::SYSTEM)
             sqstd_register_systemlib(vm);
-        if(flags & SqLibs::STRING)
+        if(flags & ssq::Libs::STRING)
             sqstd_register_stringlib(vm);
         sq_pop(vm, 1);
     }
 
-    void SqVM::setPrintFunc(SqPrintFunc printFunc, SqErrorFunc errorFunc) {
+    void VM::setPrintFunc(SqPrintFunc printFunc, SqErrorFunc errorFunc) {
         sq_setprintfunc(vm, printFunc, errorFunc);
     }
 
-    void SqVM::setRuntimeErrorFunc(SqRuntimeErrorFunc runtimeErrorFunc) {
+    void VM::setRuntimeErrorFunc(SqRuntimeErrorFunc runtimeErrorFunc) {
         sq_newclosure(vm, runtimeErrorFunc, 0);
         sq_seterrorhandler(vm);
     }
 
-    void SqVM::setCompileErrorFunc(SqCompileErrorFunc compileErrorFunc) {
+    void VM::setCompileErrorFunc(SqCompileErrorFunc compileErrorFunc) {
         sq_setcompilererrorhandler(vm, compileErrorFunc);
     }
 
-    SQInteger SqVM::getTop() const {
+    SQInteger VM::getTop() const {
         return sq_gettop(vm);
     }
 
-    SqScript SqVM::compileSource(const char* source, const char* name) {
-        SqScript script(vm);
+    Script VM::compileSource(const char* source, const char* name) {
+        Script script(vm);
         if(SQ_FAILED(sq_compilebuffer(vm, source, strlen(source), name, true))){
-            if (!compileException)throw SqCompileException("Source cannot be compiled!");
+            if (!compileException)throw CompileException("Source cannot be compiled!");
             throw *compileException;
         }
 
@@ -108,10 +108,10 @@ namespace SquirrelBind {
         return script;
     }
 
-    SqScript SqVM::compileFile(const char* path) {
-        SqScript script(vm);
+    Script VM::compileFile(const char* path) {
+        Script script(vm);
         if (SQ_FAILED(sqstd_loadfile(vm, path, true))) {
-            if (!compileException)throw SqCompileException("File not found or cannot be read!");
+            if (!compileException)throw CompileException("File not found or cannot be read!");
             throw *compileException;
         }
 
@@ -121,7 +121,7 @@ namespace SquirrelBind {
         return script;
     }
 
-    void SqVM::run(const SqScript& script) const {
+    void VM::run(const Script& script) const {
         if(!script.isEmpty()) {
             SQInteger top = sq_gettop(vm);
             sq_pushobject(vm, script.getRaw());
@@ -133,53 +133,53 @@ namespace SquirrelBind {
             }
         }
         else {
-            throw SqRuntimeException("Empty script object");
+            throw RuntimeException("Empty script object");
         }
     }
 
-    SqEnum SqVM::addEnum(const char* name) {
-        SqEnum enm(vm);
+    Enum VM::addEnum(const char* name) {
+        Enum enm(vm);
         sq_pushconsttable(vm);
         sq_pushstring(vm, name, strlen(name));
-        detail::push<SqObject>(vm, enm);
+        detail::push<Object>(vm, enm);
         sq_newslot(vm, -3, false);
         sq_pop(vm,1); // pop table
         return std::move(enm);
     }
 
-    SqVM& SqVM::operator = (SqVM&& other) NOEXCEPT {
+    VM& VM::operator = (VM&& other) NOEXCEPT {
         if(this != &other) {
             swap(other);
         }
         return *this;
     }
 
-    SqObject SqVM::callAndReturn(SQUnsignedInteger nparams, SQInteger top) const {
+    Object VM::callAndReturn(SQUnsignedInteger nparams, SQInteger top) const {
         if(SQ_FAILED(sq_call(vm, 1 + nparams, true, true))){
             sq_settop(vm, top);
             if (runtimeException == nullptr)
-                throw SqRuntimeException("Unknown squirrel runtime error");
+                throw RuntimeException("Unknown squirrel runtime error");
             throw *runtimeException;
         }
             
-        SqObject ret(vm);
+        Object ret(vm);
         sq_getstackobj(vm, -1, &ret.getRaw());
         sq_addref(vm, &ret.getRaw());
         sq_settop(vm, top);
         return ret;
     }
 
-    void SqVM::debugStack() const {
+    void VM::debugStack() const {
         auto top = getTop();
         while(top >= 0) {
             SQObjectType objectType = sq_gettype(vm, top);
-            SqType type = SqType(objectType);
-            std::cout << "stack index: " << top << " type: " << sqTypeToStr(type) << std::endl;
+            Type type = Type(objectType);
+            std::cout << "stack index: " << top << " type: " << typeToStr(type) << std::endl;
             top--;
         }
     }
 
-    void SqVM::defaultPrintFunc(HSQUIRRELVM vm, const SQChar *s, ...){
+    void VM::defaultPrintFunc(HSQUIRRELVM vm, const SQChar *s, ...){
         va_list vl;
         va_start(vl, s);
         vprintf(s, vl);
@@ -187,7 +187,7 @@ namespace SquirrelBind {
         va_end(vl);
     }
 
-    void SqVM::defaultErrorFunc(HSQUIRRELVM vm, const SQChar *s, ...){
+    void VM::defaultErrorFunc(HSQUIRRELVM vm, const SQChar *s, ...){
         va_list vl;
         va_start(vl, s);
         fprintf(stderr, s, vl);
@@ -195,7 +195,7 @@ namespace SquirrelBind {
         va_end(vl);
     }
 
-    SQInteger SqVM::defaultRuntimeErrorFunc(HSQUIRRELVM vm) {
+    SQInteger VM::defaultRuntimeErrorFunc(HSQUIRRELVM vm) {
         SQStackInfos si;
         sq_stackinfos(vm, 1, &si);
 
@@ -209,8 +209,8 @@ namespace SquirrelBind {
             }
         }
 
-        auto ptr = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
-        ptr->runtimeException.reset(new SqRuntimeException(
+        auto ptr = reinterpret_cast<VM*>(sq_getforeignptr(vm));
+        ptr->runtimeException.reset(new RuntimeException(
             sErr,
             source,
             funcname,
@@ -219,14 +219,14 @@ namespace SquirrelBind {
         return 0;
     }
 
-    void SqVM::defaultCompilerErrorFunc(
+    void VM::defaultCompilerErrorFunc(
         HSQUIRRELVM vm,
         const SQChar* desc,
         const SQChar* source,
         SQInteger line,
         SQInteger column) {
-        auto ptr = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
-        ptr->compileException.reset(new SqCompileException(
+        auto ptr = reinterpret_cast<VM*>(sq_getforeignptr(vm));
+        ptr->compileException.reset(new CompileException(
             desc,
             source,
             line,
@@ -234,26 +234,26 @@ namespace SquirrelBind {
         ));
     }
 
-    void SqVM::pushArgs() {
+    void VM::pushArgs() {
 
     }
 
-	void SqVM::addClassObj(size_t hashCode, const HSQOBJECT& obj) {
+	void VM::addClassObj(size_t hashCode, const HSQOBJECT& obj) {
 		classMap[hashCode] = obj;
 	}
 
-	const HSQOBJECT& SqVM::getClassObj(size_t hashCode) {
+	const HSQOBJECT& VM::getClassObj(size_t hashCode) {
 		return classMap.at(hashCode);
 	}
 
 	namespace detail {
 	    void addClassObj(HSQUIRRELVM vm, size_t hashCode, const HSQOBJECT& obj) {
-		    SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
+		    VM* machine = reinterpret_cast<VM*>(sq_getforeignptr(vm));
 			machine->addClassObj(hashCode, obj);
 	    }
 
 		const HSQOBJECT& getClassObj(HSQUIRRELVM vm, size_t hashCode) {
-		    SqVM* machine = reinterpret_cast<SqVM*>(sq_getforeignptr(vm));
+		    VM* machine = reinterpret_cast<VM*>(sq_getforeignptr(vm));
 			return machine->getClassObj(hashCode);
 	    }
     }

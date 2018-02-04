@@ -3,22 +3,22 @@ Class Index
 
 Here are the classes, structs, unions and interfaces with brief descriptions:
 
-* namespace **[SquirrelBind](/docs/SquirrelBind.md)** 
-  * class **[SqClass](/docs/SquirrelBind_SqClass.md)** _Squirrel class object._
-    * struct **[Ctor](/docs/SquirrelBind_SqClass_Ctor.md)** _Constructor helper class._
-    * struct **[Ctor< T(Args...)>](/docs/SquirrelBind_SqClass_Ctor__T_Args_____.md)** 
-  * class **[SqArray](/docs/SquirrelBind_SqArray.md)** _Squirrel intance of array object._
-  * class **[SqCompileException](/docs/SquirrelBind_SqCompileException.md)** _Compile exception thrown during compilation._
-  * class **[SqEnum](/docs/SquirrelBind_SqEnum.md)** _Squirrel table object._
-  * class **[SqException](/docs/SquirrelBind_SqException.md)** _Raw exception._
-  * class **[SqFunction](/docs/SquirrelBind_SqFunction.md)** _Squirrel function._
-  * class **[SqInstance](/docs/SquirrelBind_SqInstance.md)** _Squirrel intance of class object._
-  * class **[SqLibs](/docs/SquirrelBind_SqLibs.md)** 
-  * class **[SqNotFoundException](/docs/SquirrelBind_SqNotFoundException.md)** _Not Found exception thrown if object with a given name does not exist._
-  * class **[SqObject](/docs/SquirrelBind_SqObject.md)** _Raw Squirrel object._
-  * class **[SqRuntimeException](/docs/SquirrelBind_SqRuntimeException.md)** _Runtime exception thrown if something went wrong during execution._
-  * class **[SqScript](/docs/SquirrelBind_SqScript.md)** _Squirrel script object._
-  * class **[SqTable](/docs/SquirrelBind_SqTable.md)** _Squirrel table object._
-  * class **[SqTypeException](/docs/SquirrelBind_SqTypeException.md)** _Type exception thrown if casting between squirrel and C++ objects failed._
-  * class **[SqVM](/docs/SquirrelBind_SqVM.md)** _Squirrel Virtual Machine object._
-  * class **[SqWeakRef](/docs/SquirrelBind_SqWeakRef.md)** _Weak reference class that does not extend the life of the instance._
+* namespace **[ssq](/docs/ssq.md)** 
+  * class **[Array](/docs/ssq_Array.md)** _Squirrel intance of array object._
+  * class **[Class](/docs/ssq_Class.md)** _Squirrel class object._
+    * struct **[Ctor](/docs/ssq_Class_Ctor.md)** _Constructor helper class._
+    * struct **[Ctor< T(Args...)>](/docs/ssq_Class_Ctor__T_Args_____.md)** 
+  * class **[CompileException](/docs/ssq_CompileException.md)** _Compile exception thrown during compilation._
+  * class **[Enum](/docs/ssq_Enum.md)** _Squirrel table object._
+  * class **[Exception](/docs/ssq_Exception.md)** _Raw exception._
+  * class **[Function](/docs/ssq_Function.md)** _Squirrel function._
+  * class **[Instance](/docs/ssq_Instance.md)** _Squirrel intance of class object._
+  * class **[Libs](/docs/ssq_Libs.md)** 
+  * class **[NotFoundException](/docs/ssq_NotFoundException.md)** _Not Found exception thrown if object with a given name does not exist._
+  * class **[Object](/docs/ssq_Object.md)** _Raw Squirrel object._
+  * class **[RuntimeException](/docs/ssq_RuntimeException.md)** _Runtime exception thrown if something went wrong during execution._
+  * class **[Script](/docs/ssq_Script.md)** _Squirrel script object._
+  * class **[SqWeakRef](/docs/ssq_SqWeakRef.md)** _Weak reference class that does not extend the life of the instance._
+  * class **[Table](/docs/ssq_Table.md)** _Squirrel table object._
+  * class **[TypeException](/docs/ssq_TypeException.md)** _Type exception thrown if casting between squirrel and C++ objects failed._
+  * class **[VM](/docs/ssq_VM.md)** _Squirrel Virtual Machine object._

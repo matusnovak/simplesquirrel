@@ -1,44 +1,44 @@
-#include "../include/squirrelbind/function.hpp"
-#include "../include/squirrelbind/exceptions.hpp"
+#include "../include/simplesquirrel/function.hpp"
+#include "../include/simplesquirrel/exceptions.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqFunction::SqFunction(HSQUIRRELVM vm):SqObject(vm) {
+namespace ssq {
+    Function::Function(HSQUIRRELVM vm):Object(vm) {
             
     }
 
-    SqFunction::SqFunction(const SqObject& object):SqObject(object) {
-        if (object.getType() != SqType::CLOSURE && object.getType() != SqType::NATIVECLOSURE) throw SqTypeException("bad cast", "CLOSURE", object.getTypeStr());
+    Function::Function(const Object& object):Object(object) {
+        if (object.getType() != Type::CLOSURE && object.getType() != Type::NATIVECLOSURE) throw TypeException("bad cast", "CLOSURE", object.getTypeStr());
     }
 
-    SqFunction::SqFunction(const SqFunction& other):SqObject(other) {
+    Function::Function(const Function& other):Object(other) {
             
     }
 
-    SqFunction::SqFunction(SqFunction&& other) NOEXCEPT :SqObject(std::forward<SqFunction>(other)) {
+    Function::Function(Function&& other) NOEXCEPT :Object(std::forward<Function>(other)) {
             
     }
 
-    unsigned int SqFunction::getNumOfParams() const {
+    unsigned int Function::getNumOfParams() const {
         SQUnsignedInteger nparams;
         SQUnsignedInteger nfreevars;
         sq_pushobject(vm, obj);
         if (SQ_FAILED(sq_getclosureinfo(vm, -1, &nparams, &nfreevars))) {
             sq_pop(vm, 1);
-            throw SqTypeException("Get function info failed");
+            throw TypeException("Get function info failed");
         }
         sq_pop(vm, 1);
         return nparams -1;
     }
 
-    SqFunction& SqFunction::operator = (const SqFunction& other){
-        SqObject::operator = (other);
+    Function& Function::operator = (const Function& other){
+        Object::operator = (other);
         return *this;
     }
 
-    SqFunction& SqFunction::operator = (SqFunction&& other) NOEXCEPT {
-        SqObject::operator = (std::forward<SqFunction>(other));
+    Function& Function::operator = (Function&& other) NOEXCEPT {
+        Object::operator = (std::forward<Function>(other));
         return *this;
     }
 }

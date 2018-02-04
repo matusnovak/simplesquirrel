@@ -1,23 +1,23 @@
-#include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/script.hpp"
+#include "../include/simplesquirrel/object.hpp"
+#include "../include/simplesquirrel/script.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqScript::SqScript(HSQUIRRELVM vm) :SqObject(vm) {
+namespace ssq {
+    Script::Script(HSQUIRRELVM vm) :Object(vm) {
 
     }
 
-    void SqScript::swap(SqScript& other) NOEXCEPT {
-        SqObject::swap(other);
+    void Script::swap(Script& other) NOEXCEPT {
+        Object::swap(other);
     }
 
-    SqScript::SqScript(SqScript&& other) NOEXCEPT :SqObject(std::forward<SqObject>(other)) {
+    Script::Script(Script&& other) NOEXCEPT :Object(std::forward<Object>(other)) {
 
     }
 
-    SqScript& SqScript::operator = (SqScript&& other) NOEXCEPT {
-        SqObject::operator = (std::forward<SqScript>(other));
+    Script& Script::operator = (Script&& other) NOEXCEPT {
+        Object::operator = (std::forward<Script>(other));
         return *this;
     }
 }

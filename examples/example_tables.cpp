@@ -1,26 +1,22 @@
-#define SQUIRREL_STATIC
-#include <squirrelbind/squirrelbind.hpp>
-
-using namespace SquirrelBind;
-
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main() {
     // Create VM with stack size of 1024 and load string and math libraries
-    SqVM vm(1024, SqLibs::STRING | SqLibs::MATH);
+    ssq::VM vm(1024, ssq::Libs::STRING | ssq::Libs::MATH);
 
     try {
         // Compile script and run it
-        SqScript script = vm.compileFile("example_tables.nut");
+        ssq::Script script = vm.compileFile("example_tables.nut");
 
         // Run the script
         vm.run(script);
 
-        SqFunction funcSet = vm.findFunc("set");
-        SqFunction funcGet = vm.findFunc("get");
-        SqFunction funcPrintContents = vm.findFunc("printContents");
+        ssq::Function funcSet = vm.findFunc("set");
+        ssq::Function funcGet = vm.findFunc("get");
+        ssq::Function funcPrintContents = vm.findFunc("printContents");
 
         // Get the table using function get
-        SqTable table = vm.callFunc(funcGet, vm).toTable();
+        ssq::Table table = vm.callFunc(funcGet, vm).toTable();
 
         // Add new slot into the table
         table.set("banana", std::string("potasium"));
@@ -31,16 +27,16 @@ int main() {
         // Call printContents
         vm.callFunc(funcPrintContents, vm);
 
-    } catch (SqCompileException& e) {
+    } catch (ssq::CompileException& e) {
         std::cerr << "Failed to run file: " << e.what() << std::endl;
         return -1;
-    } catch (SqTypeException& e) {
+    } catch (ssq::TypeException& e) {
         std::cerr << "Something went wrong passing objects: " << e.what() << std::endl;
         return -1;
-    } catch (SqRuntimeException& e) {
+    } catch (ssq::RuntimeException& e) {
         std::cerr << "Something went wrong during execution: " << e.what() << std::endl;
         return -1;
-    } catch (SqNotFoundException& e) {
+    } catch (ssq::NotFoundException& e) {
         std::cerr << e.what() << std::endl;
         return -1;
     }

@@ -1,64 +1,68 @@
-#include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/class.hpp"
-#include "../include/squirrelbind/exceptions.hpp"
-#include "../include/squirrelbind/function.hpp"
+#include "../include/simplesquirrel/object.hpp"
+#include "../include/simplesquirrel/class.hpp"
+#include "../include/simplesquirrel/exceptions.hpp"
+#include "../include/simplesquirrel/function.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqClass::SqClass(HSQUIRRELVM vm) :SqObject(vm), tableSet(vm), tableGet(vm) {
+namespace ssq {
+	Class::Class() :Object(), tableSet(), tableGet() {
 
     }
 
-    SqClass::SqClass(const SqObject& object) : SqObject(object.getHandle())
+    Class::Class(HSQUIRRELVM vm) :Object(vm), tableSet(vm), tableGet(vm) {
+
+    }
+
+    Class::Class(const Object& object) : Object(object.getHandle())
         , tableSet(object.getHandle()), tableGet(object.getHandle()) {
 
-        if (object.getType() != SqType::CLASS) throw SqTypeException("bad cast", "CLASS", object.getTypeStr());
+        if (object.getType() != Type::CLASS) throw TypeException("bad cast", "CLASS", object.getTypeStr());
         if (vm != nullptr && !object.isEmpty()) {
             obj = object.getRaw();
             sq_addref(vm, &obj);
         }
     }
 
-    SqClass::SqClass(const SqClass& other) :SqObject(other), tableSet(other.tableSet), tableGet(other.tableGet) {
+    Class::Class(const Class& other) :Object(other), tableSet(other.tableSet), tableGet(other.tableGet) {
 
     }
 
-    SqClass::SqClass(SqClass&& other) NOEXCEPT : SqObject(std::forward<SqClass>(other)),
-        tableSet(std::forward<SqObject>(other.tableSet)),
-        tableGet(std::forward<SqObject>(other.tableGet)) {
+    Class::Class(Class&& other) NOEXCEPT : Object(std::forward<Class>(other)),
+        tableSet(std::forward<Object>(other.tableSet)),
+        tableGet(std::forward<Object>(other.tableGet)) {
 
     }
 
-    void SqClass::swap(SqClass& other) NOEXCEPT {
+    void Class::swap(Class& other) NOEXCEPT {
         if (this != &other) {
-            SqObject::swap(other);
+            Object::swap(other);
             tableSet.swap(other.tableSet);
             tableGet.swap(other.tableGet);
         }
     }
 
-    SqFunction SqClass::findFunc(const char* name) const {
-        SqObject object = SqObject::find(name);
-        return SqFunction(object);
+    Function Class::findFunc(const char* name) const {
+        Object object = Object::find(name);
+        return Function(object);
     }
 
-    SqClass& SqClass::operator = (const SqClass& other) {
+    Class& Class::operator = (const Class& other) {
         if (this != &other) {
-            SqClass o(other);
+            Class o(other);
             swap(o);
         }
         return *this;
     }
 
-    SqClass& SqClass::operator = (SqClass&& other) NOEXCEPT {
+    Class& Class::operator = (Class&& other) NOEXCEPT {
         if (this != &other) {
             swap(other);
         }
         return *this;
     }
 
-    void SqClass::findTable(const char* name, SqObject& table, SQFUNCTION dlg) const {
+    void Class::findTable(const char* name, Object& table, SQFUNCTION dlg) const {
         // Check if the table has been referenced
         if(!table.isEmpty()) {
             return;
@@ -73,7 +77,7 @@ namespace SquirrelBind {
             sq_pop(vm, 1);
 
             // Create one
-            table = SqObject(vm);
+            table = Object(vm);
             sq_newtable(vm);
             sq_getstackobj(vm, -1, &table.getRaw());
             sq_addref(vm, &table.getRaw());
@@ -85,21 +89,21 @@ namespace SquirrelBind {
             sq_newclosure(vm, dlg, 1);
 
             if(SQ_FAILED(sq_newslot(vm, -3, false))) {
-                throw SqTypeException("Failed to create table!");
+                throw TypeException("Failed to create table!");
             }
 
             sq_pop(vm, 1); // Pop class obj
 
         } else {
             // Return one
-            table = SqObject(vm);
+            table = Object(vm);
             sq_getstackobj(vm, -1, &table.getRaw());
             sq_addref(vm, &table.getRaw());
             sq_pop(vm, 2);
         }
     }
 
-    SQInteger SqClass::dlgGetStub(HSQUIRRELVM vm) {
+    SQInteger Class::dlgGetStub(HSQUIRRELVM vm) {
         // Find the set method in the set table
         sq_push(vm, 2);
         if (!SQ_SUCCEEDED(sq_get(vm, -2))) {
@@ -116,7 +120,7 @@ namespace SquirrelBind {
         return 1;
     }
 
-    SQInteger SqClass::dlgSetStub(HSQUIRRELVM vm) {
+    SQInteger Class::dlgSetStub(HSQUIRRELVM vm) {
         sq_push(vm, 2);
         if (!SQ_SUCCEEDED(sq_get(vm, -2))) {
             const SQChar* s;

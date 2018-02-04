@@ -1,14 +1,11 @@
 #define CATCH_CONFIG_MAIN 
 #include <catch/catch.hpp>
-#define SQUIRREL_STATIC
-#include "../include/squirrelbind/squirrelbind.hpp"
+#include "../include/simplesquirrel/simplesquirrel.hpp"
 
 #define STRINGIFY(x) #x
 
-using namespace SquirrelBind;
-
 TEST_CASE("Test object properties"){
-    SqObject object;
+    ssq::Object object;
 
     REQUIRE(object.isEmpty() == true);
 }
@@ -24,25 +21,25 @@ TEST_CASE("Find object") {
         print("Message: " + foo.bar);\n
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    REQUIRE(vm.getType() == SqType::TABLE);
+    REQUIRE(vm.getType() == ssq::Type::TABLE);
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     REQUIRE(script.isEmpty() == false);
     vm.run(script);
 
     auto top = vm.getTop();
 
-    SqObject found = vm.find("Foo");
+    ssq::Object found = vm.find("Foo");
 
     REQUIRE(top == vm.getTop());
     REQUIRE(found.isEmpty() == false);
 
-    SqType type = found.getType();
+    ssq::Type type = found.getType();
 
     REQUIRE(top == vm.getTop());
-    REQUIRE(type == SqType::CLASS);
+    REQUIRE(type == ssq::Type::CLASS);
 }
 
 TEST_CASE("Find class and method") {
@@ -56,15 +53,15 @@ TEST_CASE("Find class and method") {
         };
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqClass cls = vm.findClass("Foo");
+    ssq::Class cls = vm.findClass("Foo");
 
     REQUIRE(cls.isEmpty() == false);
 
-    SqFunction baz = cls.findFunc("baz");
+    ssq::Function baz = cls.findFunc("baz");
 
     REQUIRE(baz.isEmpty() == false);
 }
@@ -97,20 +94,20 @@ TEST_CASE("Test stack manipulation") {
         }
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 
     static auto top = vm.getTop();
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     REQUIRE(top == vm.getTop());
 
     vm.run(script);
     REQUIRE(top == vm.getTop());
 
-    SqFunction funcTest = vm.findFunc("test");
+    ssq::Function funcTest = vm.findFunc("test");
     REQUIRE(top == vm.getTop());
 
-    SqClass classFoo = vm.findClass("Foo");
+    ssq::Class classFoo = vm.findClass("Foo");
     REQUIRE(top == vm.getTop());
 
     REQUIRE_THROWS(vm.findFunc("invalid"));
@@ -119,28 +116,28 @@ TEST_CASE("Test stack manipulation") {
     REQUIRE_THROWS(vm.findClass("invalid"));
     REQUIRE(top == vm.getTop());
 
-    SqTable table = vm.newTable();
+    ssq::Table table = vm.newTable();
     REQUIRE(top == vm.getTop());
 
-    SqArray arr = vm.newArray();
+    ssq::Array arr = vm.newArray();
     REQUIRE(top == vm.getTop());
 
     funcTest.getNumOfParams();
     REQUIRE(top == vm.getTop());
 
-    SqInstance inst = vm.newInstance(classFoo, std::string("Banana"));
+    ssq::Instance inst = vm.newInstance(classFoo, std::string("Banana"));
     REQUIRE(top == vm.getTop());
 
-    SqFunction funcFooBaz = classFoo.findFunc("baz");
+    ssq::Function funcFooBaz = classFoo.findFunc("baz");
     REQUIRE(top == vm.getTop());
 
-    SqFunction funcCopy = funcFooBaz;
+    ssq::Function funcCopy = funcFooBaz;
     REQUIRE(top == vm.getTop());
 
-    SqObject ret = vm.callFunc(funcFooBaz, inst, 10, 20);
+    ssq::Object ret = vm.callFunc(funcFooBaz, inst, 10, 20);
     REQUIRE(top == vm.getTop());
 
-    SqObject retCopy = ret;
+    ssq::Object retCopy = ret;
     REQUIRE(top == vm.getTop());
 
     int retInt = ret.toInt();
@@ -149,7 +146,7 @@ TEST_CASE("Test stack manipulation") {
     REQUIRE_THROWS(vm.callFunc(funcFooBaz, inst, 1, 2, 3, 4, 5));
     REQUIRE(top == vm.getTop());
 
-    SqEnum enm = vm.addEnum("Fruit");
+    ssq::Enum enm = vm.addEnum("Fruit");
     REQUIRE(top == vm.getTop());
 
     enm.addSlot("BANANA", 0);
@@ -158,7 +155,7 @@ TEST_CASE("Test stack manipulation") {
     enm.addSlot("LEMON", 3);
     REQUIRE(top == vm.getTop());
 
-    SqEnum enmCopy = enm;
+    ssq::Enum enmCopy = enm;
     REQUIRE(top == vm.getTop());
 
     table.set("one", 123);
@@ -168,7 +165,7 @@ TEST_CASE("Test stack manipulation") {
     auto tableSize = table.size();
     REQUIRE(top == vm.getTop());
 
-    SqTable copyRef = table;
+    ssq::Table copyRef = table;
     REQUIRE(top == vm.getTop());
 
     REQUIRE_THROWS(table.get<int>("invalid"));
@@ -186,8 +183,8 @@ TEST_CASE("Test stack manipulation") {
         int year;
         std::string color;
 
-        static SqClass expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Car", [](std::string man, int y, std::string col) -> Car* {
+        static ssq::Class expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Car", [](std::string man, int y, std::string col) -> Car* {
                 auto car = new Car;
                 car->manufacturer = man;
                 car->year = y;
@@ -210,13 +207,13 @@ TEST_CASE("Test stack manipulation") {
 	Car::expose(vm);
     REQUIRE(top == vm.getTop());
 
-    SqClass carClass = vm.findClass("Car");
+    ssq::Class carClass = vm.findClass("Car");
     REQUIRE(top == vm.getTop());
 
-    SqInstance carInstance = vm.newInstance(carClass, std::string("Squirrel"), 2017, std::string("Blue"));
+    ssq::Instance carInstance = vm.newInstance(carClass, std::string("Squirrel"), 2017, std::string("Blue"));
     REQUIRE(top == vm.getTop());
 
-    SqArray array = vm.newArray();
+    ssq::Array array = vm.newArray();
     REQUIRE(top == vm.getTop());
 
     array.size();
@@ -254,15 +251,15 @@ TEST_CASE("Test stack manipulation") {
 
     std::unique_ptr<Bar> ptr(new Bar("Hello"));
 
-    SqFunction funcSetVal = vm.findFunc("setVal");
-    SqFunction funcGetVal = vm.findFunc("getVal");
+    ssq::Function funcSetVal = vm.findFunc("setVal");
+    ssq::Function funcGetVal = vm.findFunc("getVal");
     REQUIRE(top == vm.getTop());
 
     vm.callFunc(funcSetVal, vm, ptr.get());
     REQUIRE(top == vm.getTop());
 
     ret = vm.callFunc(funcGetVal, vm);
-    REQUIRE(ret.getType() == SqType::USERPOINTER);
+    REQUIRE(ret.getType() == ssq::Type::USERPOINTER);
     REQUIRE(top == vm.getTop());
 
     Bar* ptrTest = ret.to<Bar*>();
@@ -286,20 +283,20 @@ TEST_CASE("Test nullptr") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGetVal = vm.findFunc("getVal");
-    SqFunction funcSetVal = vm.findFunc("setVal");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcGetVal = vm.findFunc("getVal");
+    ssq::Function funcSetVal = vm.findFunc("setVal");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     vm.callFunc(funcSetVal, vm, nullptr);
 
-    SqObject ret = vm.callFunc(funcGetVal, vm);
+    ssq::Object ret = vm.callFunc(funcGetVal, vm);
 
     REQUIRE(ret.isNull() == true);
-    REQUIRE(ret.getType() == SqType::NULLPTR);
+    REQUIRE(ret.getType() == ssq::Type::NULLPTR);
 
     auto type = vm.callFunc(funcGetType, vm).toString();
     REQUIRE(type == "null");
@@ -308,54 +305,54 @@ TEST_CASE("Test nullptr") {
 TEST_CASE("Test param packer") {
     char ptr[64];
 
-    detail::paramPacker<int>(ptr);
+    ssq::detail::paramPacker<int>(ptr);
     REQUIRE(std::string(ptr) == "i");
 
-    detail::paramPacker<const int>(ptr);
+    ssq::detail::paramPacker<const int>(ptr);
     REQUIRE(std::string(ptr) == "i");
 
-    detail::paramPacker<int&>(ptr);
+    ssq::detail::paramPacker<int&>(ptr);
     REQUIRE(std::string(ptr) == "i");
 
-    detail::paramPacker<const int&>(ptr);
+    ssq::detail::paramPacker<const int&>(ptr);
     REQUIRE(std::string(ptr) == "i");
 
-    detail::paramPacker<int const&>(ptr);
+    ssq::detail::paramPacker<int const&>(ptr);
     REQUIRE(std::string(ptr) == "i");
 
-    detail::paramPacker<std::string>(ptr);
+    ssq::detail::paramPacker<std::string>(ptr);
     REQUIRE(std::string(ptr) == "s");
 
-    detail::paramPacker<const std::string>(ptr);
+    ssq::detail::paramPacker<const std::string>(ptr);
     REQUIRE(std::string(ptr) == "s");
 
-    detail::paramPacker<std::string&>(ptr);
+    ssq::detail::paramPacker<std::string&>(ptr);
     REQUIRE(std::string(ptr) == "s");
 
-    detail::paramPacker<const std::string&>(ptr);
+    ssq::detail::paramPacker<const std::string&>(ptr);
     REQUIRE(std::string(ptr) == "s");
 
-    detail::paramPacker<std::string const&>(ptr);
+    ssq::detail::paramPacker<std::string const&>(ptr);
     REQUIRE(std::string(ptr) == "s");
 
-    detail::paramPacker<SqObject>(ptr);
+    ssq::detail::paramPacker<ssq::Object>(ptr);
     REQUIRE(std::string(ptr) == ".");
 
-    detail::paramPacker<SqInstance>(ptr);
+    ssq::detail::paramPacker<ssq::Instance>(ptr);
     REQUIRE(std::string(ptr) == "x");
 
-    detail::paramPacker<SqClass>(ptr);
+    ssq::detail::paramPacker<ssq::Class>(ptr);
     REQUIRE(std::string(ptr) == "y");
 
-    detail::paramPacker<SqTable>(ptr);
+    ssq::detail::paramPacker<ssq::Table>(ptr);
     REQUIRE(std::string(ptr) == "t");
 
-    detail::paramPacker<SqArray>(ptr);
+    ssq::detail::paramPacker<ssq::Array>(ptr);
     REQUIRE(std::string(ptr) == "a");
 
-    detail::paramPacker<SqFunction>(ptr);
+    ssq::detail::paramPacker<ssq::Function>(ptr);
     REQUIRE(std::string(ptr) == "c");
 
-    detail::paramPacker<std::nullptr_t>(ptr);
+    ssq::detail::paramPacker<std::nullptr_t>(ptr);
     REQUIRE(std::string(ptr) == "o");
 }

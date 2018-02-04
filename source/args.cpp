@@ -1,34 +1,37 @@
-#include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/args.hpp"
-#include "../include/squirrelbind/class.hpp"
-#include "../include/squirrelbind/instance.hpp"
-#include "../include/squirrelbind/table.hpp"
-#include "../include/squirrelbind/function.hpp"
-#include "../include/squirrelbind/enum.hpp"
-#include "../include/squirrelbind/array.hpp"
+#include "../include/simplesquirrel/object.hpp"
+#include "../include/simplesquirrel/args.hpp"
+#include "../include/simplesquirrel/class.hpp"
+#include "../include/simplesquirrel/instance.hpp"
+#include "../include/simplesquirrel/table.hpp"
+#include "../include/simplesquirrel/function.hpp"
+#include "../include/simplesquirrel/enum.hpp"
+#include "../include/simplesquirrel/array.hpp"
 #include <squirrel.h>
 
-namespace SquirrelBind {
+namespace ssq {
     namespace detail {
-        void pushRaw(HSQUIRRELVM vm, const SqObject& value) {
+        void pushRaw(HSQUIRRELVM vm, const Object& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqClass& value) {
+        void pushRaw(HSQUIRRELVM vm, const Class& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqInstance& value) {
+        void pushRaw(HSQUIRRELVM vm, const Instance& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqTable& value) {
+        void pushRaw(HSQUIRRELVM vm, const Table& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqFunction& value) {
+        void pushRaw(HSQUIRRELVM vm, const Function& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqEnum& value) {
+        void pushRaw(HSQUIRRELVM vm, const Enum& value) {
             sq_pushobject(vm, value.getRaw());
         }
-        void pushRaw(HSQUIRRELVM vm, const SqArray& value) {
+        void pushRaw(HSQUIRRELVM vm, const Array& value) {
+            sq_pushobject(vm, value.getRaw());
+        }
+        void pushRaw(HSQUIRRELVM vm, const SqWeakRef& value) {
             sq_pushobject(vm, value.getRaw());
         }
     }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project (squirrelbind)
+project (simplesquirrel)
 
 set (CMAKE_CXX_STANDARD 11)
 option(BUILD_TESTS "Build tests" ON)
@@ -32,14 +32,14 @@ if(UNIX OR APPLE)
 endif()
 
 AUX_SOURCE_DIRECTORY(${CMAKE_SOURCE_DIR}/source SOURCES) 
-FILE(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/squirrelbind/*.hpp)
+FILE(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/simplesquirrel/*.hpp)
 
 message(STATUS ${SOURCES})
   
 # Add our library
 add_library(${PROJECT_NAME}_static STATIC ${SOURCES} ${HEADERS})
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
-target_compile_definitions(${PROJECT_NAME} PRIVATE SQUIRREL_BIND_EXPORTS=1 DLL_CONFIG=1)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SSQ_EXPORTS=1 SSQ_DLL=1)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 target_link_libraries(${PROJECT_NAME} ${SQUIRREL_LIBRARIES})
