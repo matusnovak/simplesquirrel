@@ -1,8 +1,5 @@
-#define SQUIRREL_STATIC
-#include <squirrelbind/squirrelbind.hpp>
+#include <simplesquirrel/simplesquirrel.hpp>
 #include <iomanip>
-
-using namespace SquirrelBind;
 
 // Some random global function
 std::string appendString(const std::string& str) {
@@ -25,7 +22,7 @@ std::string getLocalTime() {
 
 int main() {
     // Create VM with stack size of 1024 and load string and math libraries
-    SqVM vm(1024, SqLibs::STRING | SqLibs::MATH);
+    ssq::VM vm(1024, ssq::Libs::STRING | ssq::Libs::MATH);
 
     try {
         // Expose the global function bia function pointer
@@ -42,13 +39,13 @@ int main() {
         });
 
         // Compile script and run it
-        SqScript script = vm.compileFile("example_functions.nut");
+        ssq::Script script = vm.compileFile("example_functions.nut");
         vm.run(script);
 
         // Once the script is compiled, its functions are exposed to us
         // Find the foo and bar functions
-        SqFunction fooFunc = vm.findFunc("foo");
-        SqFunction barFunc = vm.findFunc("bar");
+        ssq::Function fooFunc = vm.findFunc("foo");
+        ssq::Function barFunc = vm.findFunc("bar");
 
         // Get the number of parameters the functions accept
         std::cout << "Squirrel foo function accepts " << fooFunc.getNumOfParams() << " params" << std::endl;
@@ -62,19 +59,19 @@ int main() {
         vm.callFunc(fooFunc, vm, std::string("Hello World!"));
 
         // Call the bar func and expect a return value
-        SqObject ret = vm.callFunc(barFunc, vm, 10, 5, 3);
+        ssq::Object ret = vm.callFunc(barFunc, vm, 10, 5, 3);
         std::cout << "Squirrel foo returned: " << ret.toInt() << std::endl;
 
-    } catch (SqCompileException& e) {
+    } catch (ssq::CompileException& e) {
         std::cerr << "Failed to run file: " << e.what() << std::endl;
         return -1;
-    } catch (SqTypeException& e) {
+    } catch (ssq::TypeException& e) {
         std::cerr << "Something went wrong passing objects: " << e.what() << std::endl;
         return -1;
-    } catch (SqRuntimeException& e) {
+    } catch (ssq::RuntimeException& e) {
         std::cerr << "Something went wrong during execution: " << e.what() << std::endl;
         return -1;
-    } catch (SqNotFoundException& e) {
+    } catch (ssq::NotFoundException& e) {
         std::cerr << e.what() << std::endl;
         return -1;
     }

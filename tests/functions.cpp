@@ -1,11 +1,8 @@
 #define CATCH_CONFIG_MAIN 
 #include <catch/catch.hpp>
-#define SQUIRREL_STATIC
-#include "../include/squirrelbind/squirrelbind.hpp"
+#include "../include/simplesquirrel/simplesquirrel.hpp"
 
 #define STRINGIFY(x) #x
-
-using namespace SquirrelBind;
 
 TEST_CASE("Find and call function"){
     static const std::string source = STRINGIFY(
@@ -14,25 +11,25 @@ TEST_CASE("Find and call function"){
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqObject found = vm.find("foo");
+    ssq::Object found = vm.find("foo");
     
     REQUIRE(found.isEmpty() == false);
-    REQUIRE(found.getType() == SqType::CLOSURE);
+    REQUIRE(found.getType() == ssq::Type::CLOSURE);
 
-    SqFunction func = vm.findFunc("foo");
+    ssq::Function func = vm.findFunc("foo");
 
     REQUIRE(func.isEmpty() == false);
-    REQUIRE(func.getType() == SqType::CLOSURE);
+    REQUIRE(func.getType() == ssq::Type::CLOSURE);
     REQUIRE(func.getNumOfParams() == 2);
 
-    SqObject ret = vm.callFunc(func, vm, 10, 20);
+    ssq::Object ret = vm.callFunc(func, vm, 10, 20);
 
     REQUIRE(ret.isEmpty() == false);
-    REQUIRE(ret.getType() == SqType::INTEGER);
+    REQUIRE(ret.getType() == ssq::Type::INTEGER);
 
     REQUIRE(ret.toInt() == 30);
 }
@@ -44,11 +41,11 @@ TEST_CASE("Call pure void function") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     REQUIRE(bar.isEmpty() == false);
 
     vm.callFunc(bar, vm);
@@ -65,14 +62,14 @@ TEST_CASE("Call function and return function") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     REQUIRE(bar.isEmpty() == false);
 
-    SqFunction foo = vm.callFunc(bar, vm).toFunction();
+    ssq::Function foo = vm.callFunc(bar, vm).toFunction();
 
     int ret = vm.callFunc(foo, vm, 8, 4).toInt();
 
@@ -86,14 +83,14 @@ TEST_CASE("Call function and return lambda") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     REQUIRE(bar.isEmpty() == false);
 
-    SqFunction lambda = vm.callFunc(bar, vm).toFunction();
+    ssq::Function lambda = vm.callFunc(bar, vm).toFunction();
 
     int ret = vm.callFunc(lambda, vm, 8, 4).toInt();
 
@@ -108,16 +105,16 @@ TEST_CASE("Register C++ func and call from squirrel") {
         }
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 
     vm.addFunc("foo", std::function<int(int, int)>([](int a, int b){
         return a + b;
     }));
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction getResult = vm.findFunc("getResult");
+    ssq::Function getResult = vm.findFunc("getResult");
 
     int result = vm.callFunc(getResult, vm).to<int>();
 
@@ -132,16 +129,16 @@ TEST_CASE("Register C++ lambda and call from squirrel") {
         }
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 
     vm.addFunc("foo", [](int a, int b) -> std::string {
         return std::to_string(a + b);
     });
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction getResult = vm.findFunc("getResult");
+    ssq::Function getResult = vm.findFunc("getResult");
 
     auto result = vm.callFunc(getResult, vm).toString();
 
@@ -163,17 +160,17 @@ static void testType(T value, const std::string& type) {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction foo = vm.findFunc("foo");
-    SqFunction bar = vm.findFunc("bar");
-    SqFunction baz = vm.findFunc("baz");
+    ssq::Function foo = vm.findFunc("foo");
+    ssq::Function bar = vm.findFunc("bar");
+    ssq::Function baz = vm.findFunc("baz");
 
     vm.callFunc(foo, vm, value);
 
-    SqObject result = vm.callFunc(bar, vm);
+    ssq::Object result = vm.callFunc(bar, vm);
     REQUIRE(result.isEmpty() == false);
 
     REQUIRE(value == Approx(result.to<T>()));
@@ -206,17 +203,17 @@ void testType(std::string value, const std::string& type) {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction foo = vm.findFunc("foo");
-    SqFunction bar = vm.findFunc("bar");
-    SqFunction baz = vm.findFunc("baz");
+    ssq::Function foo = vm.findFunc("foo");
+    ssq::Function bar = vm.findFunc("bar");
+    ssq::Function baz = vm.findFunc("baz");
 
     vm.callFunc(foo, vm, value);
 
-    SqObject result = vm.callFunc(bar, vm);
+    ssq::Object result = vm.callFunc(bar, vm);
     REQUIRE(result.isEmpty() == false);
 
 #ifdef SQUNICODE
@@ -345,13 +342,13 @@ TEST_CASE("Pass class object as user data") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     Data data{42, 123.456f, "Banana"};
 
@@ -385,8 +382,8 @@ TEST_CASE("Pass class object as copy instance") {
             this->value = value;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValue", &Foo::getValue);
             cls.addFunc("setValue", &Foo::setValue);
@@ -408,15 +405,15 @@ TEST_CASE("Pass class object as copy instance") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
 	Foo::expose(vm);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     Foo foo("Hello World");
 
@@ -449,17 +446,17 @@ TEST_CASE("Return userdata") {
         result = foo();
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 
     vm.addFunc("foo", []() -> Data {
         return Data{42, 123.456f, "Banana"};
     });
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     auto type = vm.callFunc(funcGetType, vm).toString();
 
@@ -490,8 +487,8 @@ TEST_CASE("Return instance") {
             this->value = value;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValue", &Foo::getValue);
             cls.addFunc("setValue", &Foo::setValue);
@@ -512,17 +509,17 @@ TEST_CASE("Return instance") {
         result = foo();
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 	Foo::expose(vm);
     vm.addFunc("foo", []() -> Foo {
         return Foo("Banana");
     });
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     auto type = vm.callFunc(funcGetType, vm).toString();
     REQUIRE(type == "instance");
@@ -554,18 +551,18 @@ TEST_CASE("Test passing table") {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcTest = vm.findFunc("test");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcTest = vm.findFunc("test");
 
-    SqObject ret = vm.callFunc(funcGet, vm);
-    REQUIRE(ret.getType() == SqType::TABLE);
+    ssq::Object ret = vm.callFunc(funcGet, vm);
+    REQUIRE(ret.getType() == ssq::Type::TABLE);
 
-    SqTable table = ret.toTable();
+    ssq::Table table = ret.toTable();
 
     int test1 = table.get<int>("test1");
     std::string deleteme = table.get<std::string>("deleteme");
@@ -582,13 +579,13 @@ TEST_CASE("Test passing table") {
 
     REQUIRE(test1 == 42);
 
-    SqTable newTable = vm.newTable();
+    ssq::Table newTable = vm.newTable();
 
     newTable.set("aaa", 123);
     newTable.set("bbb", true);
     newTable.set("ccc", std::string("Hello"));
 
-    SqTable result = vm.callFunc(funcTest, vm, newTable).toTable();
+    ssq::Table result = vm.callFunc(funcTest, vm, newTable).toTable();
 
     REQUIRE(result.size() == 4);
     REQUIRE(result.get<std::string>("ddd") == "World");
@@ -618,21 +615,21 @@ TEST_CASE("Test passing array") {
         "	if (a[1] != \"Orange\") throw \"a[1] is not \\\"Orange\\\"\";\n"
         "}\n";
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcFoo = vm.findFunc("foo");
-    SqFunction funcTest = vm.findFunc("test");
-    SqFunction funcTest2 = vm.findFunc("test2");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcFoo = vm.findFunc("foo");
+    ssq::Function funcTest = vm.findFunc("test");
+    ssq::Function funcTest2 = vm.findFunc("test2");
 
-    SqObject ret = vm.callFunc(funcGet, vm);
+    ssq::Object ret = vm.callFunc(funcGet, vm);
 
-    REQUIRE(ret.getType() == SqType::ARRAY);
+    REQUIRE(ret.getType() == ssq::Type::ARRAY);
 
-    SqArray arr = ret.toArray();
+    ssq::Array arr = ret.toArray();
 
     REQUIRE(arr.size() == 3);
 
@@ -655,7 +652,7 @@ TEST_CASE("Test passing array") {
     vec.push_back("Banana");
     vec.push_back("Orange");
 
-    SqArray vecArr = vm.newArray(vec);
+    ssq::Array vecArr = vm.newArray(vec);
     vm.callFunc(funcTest2, vm, vecArr);
 }
 
@@ -692,19 +689,19 @@ TEST_CASE("Test passing instance") {
 		baz(instance);
     );
 
-    SqVM vm(1024);
+    ssq::VM vm(1024);
 
-	SqClass cls = vm.addClass("GuiButton", SqClass::Ctor<GuiButton(std::string)>());
+	ssq::Class cls = vm.addClass("GuiButton", ssq::Class::Ctor<GuiButton(std::string)>());
 	cls.addFunc("getLabel", &GuiButton::getLabel);
 
 	vm.addFunc("bar", [&](GuiButton* button) -> void {
 		REQUIRE(button == buttonPtr);
 	});
 
-	vm.addFunc("baz", [&](SqInstance instance) -> void {
+	vm.addFunc("baz", [&](ssq::Instance instance) -> void {
 		REQUIRE(instance.toPtrUnsafe<GuiButton*>() == buttonPtr);
 	});
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 }

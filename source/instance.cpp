@@ -1,35 +1,35 @@
-#include "../include/squirrelbind/instance.hpp"
-#include "../include/squirrelbind/exceptions.hpp"
-#include "../include/squirrelbind/class.hpp"
+#include "../include/simplesquirrel/instance.hpp"
+#include "../include/simplesquirrel/exceptions.hpp"
+#include "../include/simplesquirrel/class.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqInstance::SqInstance():SqObject() {
+namespace ssq {
+    Instance::Instance():Object() {
             
     }
 
-    SqInstance::SqInstance(HSQUIRRELVM vm):SqObject(vm) {
+    Instance::Instance(HSQUIRRELVM vm):Object(vm) {
             
     }
 
-    SqInstance::SqInstance(const SqObject& object):SqObject(object) {
-        if (object.getType() != SqType::INSTANCE) throw SqTypeException("bad cast", "INSTANCE", object.getTypeStr());
+    Instance::Instance(const Object& object):Object(object) {
+        if (object.getType() != Type::INSTANCE) throw TypeException("bad cast", "INSTANCE", object.getTypeStr());
     }
 
-    SqInstance::SqInstance(const SqInstance& other):SqObject(other) {
+    Instance::Instance(const Instance& other):Object(other) {
             
     }
 
-    SqInstance::SqInstance(SqInstance&& other) NOEXCEPT :SqObject(std::forward<SqInstance>(other)) {
+    Instance::Instance(Instance&& other) NOEXCEPT :Object(std::forward<Instance>(other)) {
             
     }
 
-    SqClass SqInstance::getClass() {
-        SqClass cls(vm);
+    Class Instance::getClass() {
+        Class cls(vm);
         sq_pushobject(vm, obj);
         if(SQ_FAILED(sq_getclass(vm, -1))) {
-            throw SqTypeException("Failed to get class from instance");
+            throw TypeException("Failed to get class from instance");
         }
         sq_getstackobj(vm, -1, &cls.getRaw());
         sq_addref(vm, &cls.getRaw());
@@ -37,42 +37,47 @@ namespace SquirrelBind {
         return cls;
     }
 
-    SqInstance& SqInstance::operator = (const SqInstance& other){
-        SqObject::operator = (other);
+    Instance& Instance::operator = (const Instance& other){
+        Object::operator = (other);
         return *this;
     }
 
-    SqInstance& SqInstance::operator = (SqInstance&& other) NOEXCEPT {
-        SqObject::operator = (std::forward<SqInstance>(other));
+    Instance& Instance::operator = (Instance&& other) NOEXCEPT {
+        Object::operator = (std::forward<Instance>(other));
         return *this;
     }
 
-    SqWeakRef::SqWeakRef():SqInstance() {
+    SqWeakRef::SqWeakRef():Instance() {
         weak = true;
     }
 
-    SqWeakRef::SqWeakRef(HSQUIRRELVM vm):SqInstance(vm) {
+    SqWeakRef::SqWeakRef(HSQUIRRELVM vm):Instance(vm) {
         weak = true;
     }
 
-    SqWeakRef::SqWeakRef(const SqWeakRef& other):SqInstance(other) {
+    SqWeakRef::SqWeakRef(const SqWeakRef& other):Instance(other) {
     }
 
-    SqWeakRef::SqWeakRef(SqWeakRef&& other):SqInstance() {
-        SqInstance::swap(other);
+    SqWeakRef::SqWeakRef(const Instance& instance): Instance(instance.getHandle()) {
+        weak = true;
+        obj = instance.getRaw();
+    }
+
+    SqWeakRef::SqWeakRef(SqWeakRef&& other):Instance() {
+        Instance::swap(other);
     }
 
     void SqWeakRef::swap(SqWeakRef& other) {
-        SqInstance::swap(other);
+        Instance::swap(other);
     }
 
     SqWeakRef& SqWeakRef::operator = (const SqWeakRef& other){
-        SqInstance::operator= (other);
+        Instance::operator= (other);
         return *this;
     }
 
     SqWeakRef& SqWeakRef::operator = (SqWeakRef&& other){
-        SqInstance::operator= (std::forward<SqWeakRef>(other));
+        Instance::operator= (std::forward<SqWeakRef>(other));
         return *this;
     }
 }

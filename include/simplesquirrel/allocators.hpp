@@ -1,12 +1,12 @@
 #pragma once
-#ifndef SQUIRREL_BIND_ALLOCATORS_HEADER_H
-#define SQUIRREL_BIND_ALLOCATORS_HEADER_H
+#ifndef SSQ_ALLOCATORS_HEADER_H
+#define SSQ_ALLOCATORS_HEADER_H
 
 #include "object.hpp"
 #include "args.hpp"
 #include <functional>
 
-namespace SquirrelBind {
+namespace ssq {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<class Ret>
@@ -70,7 +70,7 @@ namespace SquirrelBind {
     }
 
     template<typename T>
-    inline T SqObject::to() const {
+    inline T Object::to() const {
         sq_pushobject(vm, obj);
         try {
             auto ret = detail::pop<T>(vm, -1);

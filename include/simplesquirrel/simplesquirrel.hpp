@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SQUIRREL_BIND_H
-#define SQUIRREL_BIND_H
+#ifndef SSQ_H
+#define SSQ_H
 
 #include "type.hpp"
 #include "exceptions.hpp"

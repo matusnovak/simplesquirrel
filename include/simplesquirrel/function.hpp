@@ -1,34 +1,38 @@
 #pragma once
-#ifndef SQUIRREL_BIND_FUNCTION_HEADER_H
-#define SQUIRREL_BIND_FUNCTION_HEADER_H
+#ifndef SSQ_FUNCTION_HEADER_H
+#define SSQ_FUNCTION_HEADER_H
 
 #include "object.hpp"
 #include "exceptions.hpp"
 #include "args.hpp"
 
-namespace SquirrelBind {
+namespace ssq {
     /**
     * @brief Squirrel function
     */
-    class SQBIND_API SqFunction: public SqObject {
+    class SSQ_API Function: public Object {
     public:
         /**
         * @brief Constructs empty function object
         */
-        explicit SqFunction(HSQUIRRELVM vm);
+        explicit Function(HSQUIRRELVM vm);
         /**
-        * @brief Converts SqObject to SqFunction
-        * @throws SqTypeException if the SqObject is not type of a function
+        * @brief Destructor
         */
-        explicit SqFunction(const SqObject& object);
+        virtual ~Function() = default;
+        /**
+        * @brief Converts Object to Function
+        * @throws TypeException if the Object is not type of a function
+        */
+        explicit Function(const Object& object);
         /**
         * @brief Copy constructor
         */
-        SqFunction(const SqFunction& other);
+        Function(const Function& other);
         /**
         * @brief Move constructor
         */
-        SqFunction(SqFunction&& other) NOEXCEPT;
+        Function(Function&& other) NOEXCEPT;
         /**
         * @brief Returns the number of parameters needed by the function
         * @note This ignores the "this" pointer
@@ -37,19 +41,19 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */
-        SqFunction& operator = (const SqFunction& other);
+        Function& operator = (const Function& other);
         /**
         * @brief Move assingment operator
         */
-        SqFunction& operator = (SqFunction&& other) NOEXCEPT;
+        Function& operator = (Function&& other) NOEXCEPT;
     };
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<>
-        inline SqFunction popValue(HSQUIRRELVM vm, SQInteger index){
+        inline Function popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_CLOSURE);
-            SqFunction val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqTable from squirrel stack");
+            Function val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Table from squirrel stack");
             sq_addref(vm, &val.getRaw());
             return val;
         }

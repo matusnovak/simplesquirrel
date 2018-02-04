@@ -1,53 +1,53 @@
-#include "../include/squirrelbind/object.hpp"
-#include "../include/squirrelbind/function.hpp"
-#include "../include/squirrelbind/class.hpp"
-#include "../include/squirrelbind/instance.hpp"
-#include "../include/squirrelbind/exceptions.hpp"
-#include "../include/squirrelbind/table.hpp"
-#include "../include/squirrelbind/array.hpp"
+#include "../include/simplesquirrel/object.hpp"
+#include "../include/simplesquirrel/function.hpp"
+#include "../include/simplesquirrel/class.hpp"
+#include "../include/simplesquirrel/instance.hpp"
+#include "../include/simplesquirrel/exceptions.hpp"
+#include "../include/simplesquirrel/table.hpp"
+#include "../include/simplesquirrel/array.hpp"
 #include <squirrel.h>
 #include <cstring>
 
-namespace SquirrelBind {
+namespace ssq {
 
-    const char* sqTypeToStr(SqType type) {
+    const char* typeToStr(Type type) {
         switch (type) {
-        case SqType::NULLPTR: return "NULLPTR";
-        case SqType::INTEGER: return "INTEGER";
-        case SqType::FLOAT: return "FLOAT";
-        case SqType::BOOL: return "BOOL";
-        case SqType::STRING: return "STRING";
-        case SqType::TABLE: return "TABLE";
-        case SqType::ARRAY: return "ARRAY";
-        case SqType::USERDATA: return "USERDATA";
-        case SqType::CLOSURE: return "CLOSURE";
-        case SqType::NATIVECLOSURE: return "NATIVECLOSURE";
-        case SqType::GENERATOR: return "GENERATOR";
-        case SqType::USERPOINTER: return "USERPOINTER";
-        case SqType::THREAD: return "THREAD";
-        case SqType::FUNCPROTO: return "FUNCPROTO";
-        case SqType::CLASS: return "CLASS";
-        case SqType::INSTANCE: return "INSTANCE";
-        case SqType::WEAKREF: return "WEAKREF";
-        case SqType::OUTER: return "OUTER";
+        case Type::NULLPTR: return "NULLPTR";
+        case Type::INTEGER: return "INTEGER";
+        case Type::FLOAT: return "FLOAT";
+        case Type::BOOL: return "BOOL";
+        case Type::STRING: return "STRING";
+        case Type::TABLE: return "TABLE";
+        case Type::ARRAY: return "ARRAY";
+        case Type::USERDATA: return "USERDATA";
+        case Type::CLOSURE: return "CLOSURE";
+        case Type::NATIVECLOSURE: return "NATIVECLOSURE";
+        case Type::GENERATOR: return "GENERATOR";
+        case Type::USERPOINTER: return "USERPOINTER";
+        case Type::THREAD: return "THREAD";
+        case Type::FUNCPROTO: return "FUNCPROTO";
+        case Type::CLASS: return "CLASS";
+        case Type::INSTANCE: return "INSTANCE";
+        case Type::WEAKREF: return "WEAKREF";
+        case Type::OUTER: return "OUTER";
         default: return "UNKNOWN";
         }
     }
 
-    SqObject::SqObject() :vm(nullptr), weak(false) {
+    Object::Object() :vm(nullptr), weak(false) {
         sq_resetobject(&obj);
     }
 
-    SqObject::SqObject(HSQUIRRELVM vm) : vm(vm), weak(false) {
-        if (vm == nullptr) throw SqRuntimeException("VM is not initialised");
+    Object::Object(HSQUIRRELVM vm) : vm(vm), weak(false) {
+        if (vm == nullptr) throw RuntimeException("VM is not initialised");
         sq_resetobject(&obj);
     }
 
-    SqObject::~SqObject() {
+    Object::~Object() {
         reset();
     }
 
-    void SqObject::reset() {
+    void Object::reset() {
         if (vm != nullptr && !sq_isnull(obj) && !weak) {
             sq_release(vm, &obj);
         }
@@ -55,52 +55,52 @@ namespace SquirrelBind {
         weak = false;
     }
 
-    void SqObject::swap(SqObject& other) NOEXCEPT {
+    void Object::swap(Object& other) NOEXCEPT {
         using std::swap;
         swap(obj, other.obj);
         swap(vm, other.vm);
         swap(weak, other.weak);
     }
 
-    SqObject::SqObject(const SqObject& other) :vm(other.vm), obj(other.obj), weak(other.weak) {
+    Object::Object(const Object& other) :vm(other.vm), obj(other.obj), weak(other.weak) {
         if (vm != nullptr && !other.isEmpty() && !weak) {
             sq_addref(vm, &obj);
         }
     }
 
-    SqObject::SqObject(SqObject&& other) NOEXCEPT :vm(nullptr) {
+    Object::Object(Object&& other) NOEXCEPT :vm(nullptr) {
         vm = nullptr;
         sq_resetobject(&obj);
         swap(other);
     }
 
-    bool SqObject::isEmpty() const {
+    bool Object::isEmpty() const {
         return sq_isnull(obj);
     }
 
-    const HSQOBJECT& SqObject::getRaw() const {
+    const HSQOBJECT& Object::getRaw() const {
         return obj;
     }
 
-    HSQOBJECT& SqObject::getRaw() {
+    HSQOBJECT& Object::getRaw() {
         return obj;
     }
 
-    bool SqObject::isNull() const {
-        return getType() == SqType::NULLPTR;
+    bool Object::isNull() const {
+        return getType() == Type::NULLPTR;
     }
 
-    SqObject SqObject::find(const char* name) const {
-        if (vm == nullptr) throw SqRuntimeException("VM is not initialised");
+    Object Object::find(const char* name) const {
+        if (vm == nullptr) throw RuntimeException("VM is not initialised");
 
-        SqObject ret(vm);
+        Object ret(vm);
 
         sq_pushobject(vm, obj);
         sq_pushstring(vm, name, strlen(name));
 
         if (SQ_FAILED(sq_get(vm, -2))) {
             sq_pop(vm, 1);
-            throw SqNotFoundException(name);
+            throw NotFoundException(name);
         }
 
         sq_getstackobj(vm, -1, &ret.getRaw());
@@ -110,17 +110,17 @@ namespace SquirrelBind {
         return ret;
     }
 
-    SqType SqObject::getType() const {
-        if (isEmpty()) return SqType::NULLPTR;
+    Type Object::getType() const {
+        if (isEmpty()) return Type::NULLPTR;
 
         /*sq_pushobject(vm, obj);
         auto valueType = sq_gettype(vm, -1);
         sq_pop(vm, 1);*/
 
-        return SqType(obj._type);
+        return Type(obj._type);
     }
 
-    size_t SqObject::getTypeTag() const {
+    size_t Object::getTypeTag() const {
         if (isEmpty()) return 0;
         SQUserPointer typetag;
         sq_pushobject(vm, obj);
@@ -129,27 +129,27 @@ namespace SquirrelBind {
         return reinterpret_cast<size_t>(typetag);
     }
 
-    const char* SqObject::getTypeStr() const {
-        return sqTypeToStr(getType());
+    const char* Object::getTypeStr() const {
+        return typeToStr(getType());
     }
 
     /**
     * @brief Returns the Squirrel virtual machine handle associated
     * with this instance
     */
-    const HSQUIRRELVM& SqObject::getHandle() const {
+    const HSQUIRRELVM& Object::getHandle() const {
         return vm;
     }
 
-    SqObject& SqObject::operator = (const SqObject& other) {
+    Object& Object::operator = (const Object& other) {
         if (this != &other) {
-            SqObject o(other);
+            Object o(other);
             swap(o);
         }
         return *this;
     }
 
-    SqObject& SqObject::operator = (SqObject&& other) NOEXCEPT {
+    Object& Object::operator = (Object&& other) NOEXCEPT {
         if (this != &other) {
             swap(other);
         }
@@ -157,61 +157,61 @@ namespace SquirrelBind {
     }
 
 #ifdef _SQ64
-    int64_t SqObject::toInt() const {
+    int64_t Object::toInt() const {
         return to<int64_t>();
     }
 #else
-    int32_t SqObject::toInt() const {
+    int32_t Object::toInt() const {
         return to<int32_t>();
     }
 #endif
 
 #ifdef SQUSEDOUBLE
-    double SqObject::toFloat() const {
+    double Object::toFloat() const {
         return to<double>();
     }
 #else
-    float SqObject::toFloat() const {
+    float Object::toFloat() const {
         return to<float>();
     }
 #endif
 
 #ifdef SQUNICODE
-    std::wstring SqObject::toString() const {
+    std::wstring Object::toString() const {
         return to<std::wstring>();
     }
 #else
-    std::string SqObject::toString() const {
+    std::string Object::toString() const {
         return to<std::string>();
     }
 #endif
 
-    bool SqObject::toBool() const {
+    bool Object::toBool() const {
         return to<bool>();
     }
 
-    SqFunction SqObject::toFunction() const {
+    Function Object::toFunction() const {
         auto type = getType();
-        return SqFunction(*this);
+        return Function(*this);
     }
 
-    SqInstance SqObject::toInstance() const {
+    Instance Object::toInstance() const {
         auto type = getType();
-        return SqInstance(*this);
+        return Instance(*this);
     }
     
-    SqClass SqObject::toClass() const {
+    Class Object::toClass() const {
         auto type = getType();
-        return SqClass(*this);
+        return Class(*this);
     }
 
-    SqTable SqObject::toTable() const {
+    Table Object::toTable() const {
         auto type = getType();
-        return SqTable(*this);
+        return Table(*this);
     }
 
-    SqArray SqObject::toArray() const {
+    Array Object::toArray() const {
         auto type = getType();
-        return SqArray(*this);
+        return Array(*this);
     }
 }

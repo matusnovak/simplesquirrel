@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SQUIRREL_BIND_VM_HEADER_H
-#define SQUIRREL_BIND_VM_HEADER_H
+#ifndef SSQ_VM_HEADER_H
+#define SSQ_VM_HEADER_H
 
 #include "exceptions.hpp"
 #include "table.hpp"
@@ -18,13 +18,13 @@
 #pragma warning( disable: 4251 )
 #endif
 
-namespace SquirrelBind {
+namespace ssq {
     typedef void(*SqPrintFunc)(HSQUIRRELVM, const SQChar*, ...);
     typedef void(*SqErrorFunc)(HSQUIRRELVM, const SQChar*, ...);
     typedef SQInteger(*SqRuntimeErrorFunc)(HSQUIRRELVM);
     typedef void(*SqCompileErrorFunc)(HSQUIRRELVM, const SQChar*, const SQChar*, SQInteger, SQInteger);
 
-    class SqLibs {
+    class Libs {
     public:
         typedef int Flag;
         static const Flag NONE = 0x0000;
@@ -39,12 +39,12 @@ namespace SquirrelBind {
     /**
     * @brief Squirrel Virtual Machine object
     */
-    class SQBIND_API SqVM: public SqTable {
+    class SSQ_API VM: public Table {
     public:
         /**
         * @brief Creates a VM with a fixed stack size
         */
-        SqVM(size_t stackSize, SqLibs::Flag flags = 0x00);
+        VM(size_t stackSize, Libs::Flag flags = 0x00);
         /**
         * @brief Destroys the VM and all of this objects
         */
@@ -52,23 +52,23 @@ namespace SquirrelBind {
         /**
         * @brief Destructor
         */
-        virtual ~SqVM();
+        virtual ~VM();
         /**
         * @brief Swaps the contents of this VM with another one
         */
-        void swap(SqVM& other) NOEXCEPT;
+        void swap(VM& other) NOEXCEPT;
         /**
         * @brief Disabled copy constructor
         */
-        SqVM(const SqVM& other) = delete;
+        VM(const VM& other) = delete;
         /**
         * @brief Move constructor
         */
-        SqVM(SqVM&& other) NOEXCEPT;
+        VM(VM&& other) NOEXCEPT;
         /**
         * @brief Registers standard template libraries
         */
-        void registerStdlib(SqLibs::Flag flags);
+        void registerStdlib(Libs::Flag flags);
         /**
         * @brief Registers print and error functions
         */
@@ -88,48 +88,48 @@ namespace SquirrelBind {
         /**
         * @brief Returns the last compilation exception
         */
-        const SqCompileException& getLastCompileException() const {
+        const CompileException& getLastCompileException() const {
             return *compileException.get();
         }
         /**
         * @brief Returns the last runtime exception
         */
-        const SqRuntimeException& getLastRuntimeException() const {
+        const RuntimeException& getLastRuntimeException() const {
             return *runtimeException.get();
         }
         /**
         * @brief Compiles a script from a memory
         * @details The script can be associated with a name as a second parameter.
         * This name is used during runtime error information.
-        * @throws SqCompileException
+        * @throws CompileException
         */
-        SqScript compileSource(const char* source, const char* name = "buffer");
+        Script compileSource(const char* source, const char* name = "buffer");
         /**
         * @brief Compiles a script from a source file
-        * @throws SqCompileException
+        * @throws CompileException
         */
-        SqScript compileFile(const char* path);
+        Script compileFile(const char* path);
         /**
         * @brief Runs a script
         * @details When the script runs for the first time, the contens such as
         * class definitions are assigned to the root table (global table).
-        * @throws SqRuntimeException
+        * @throws RuntimeException
         */
-        void run(const SqScript& script) const;
+        void run(const Script& script) const;
         /**
         * @brief Calls a global function
         * @param func The instance of a function
         * @param args Any number of arguments
-        * @throws SqRuntimeException if an exception is thrown or number of arguments
+        * @throws RuntimeException if an exception is thrown or number of arguments
         * do not match
-        * @throws SqTypeException if casting from Squirrel objects to C++ objects failed
+        * @throws TypeException if casting from Squirrel objects to C++ objects failed
         */
         template<class... Args>
-        SqObject callFunc(const SqFunction& func, const SqObject& env, Args&&... args) const {
+        Object callFunc(const Function& func, const Object& env, Args&&... args) const {
             static const std::size_t params = sizeof...(Args);
 
             if(func.getNumOfParams() != params){
-                throw SqRuntimeException("Number of arguments does not match");
+                throw RuntimeException("Number of arguments does not match");
             }
 
             auto top = sq_gettop(vm);
@@ -144,22 +144,22 @@ namespace SquirrelBind {
         * @brief Creates a new instance of class and call constructor with given arguments
         * @param cls The object of a class
         * @param args Any number of arguments
-        * @throws SqRuntimeException
+        * @throws RuntimeException
         */
         template<class... Args>
-        SqInstance newInstance(const SqClass& cls, Args&&... args) const {
-            SqInstance inst = newInstanceNoCtor(cls);
-            SqFunction ctor = cls.findFunc("constructor");
+        Instance newInstance(const Class& cls, Args&&... args) const {
+            Instance inst = newInstanceNoCtor(cls);
+            Function ctor = cls.findFunc("constructor");
             callFunc(ctor, inst, std::forward<Args>(args)...);
             return inst;
         }
         /**
         * @brief Creates a new instance of class without calling a constructor
         * @param cls The object of a class
-        * @throws SqRuntimeException
+        * @throws RuntimeException
         */
-        SqInstance newInstanceNoCtor(const SqClass& cls) const {
-            SqInstance inst(vm);
+        Instance newInstanceNoCtor(const Class& cls) const {
+            Instance inst(vm);
             sq_pushobject(vm, cls.getRaw());
             sq_createinstance(vm, -1);
             sq_remove(vm, -2);
@@ -171,26 +171,26 @@ namespace SquirrelBind {
         /**
         * @brief Creates a new empty table
         */
-        SqTable newTable() const {
-            return SqTable(vm);
+        Table newTable() const {
+            return Table(vm);
         }
         /**
         * @brief Creates a new empty array
         */
-        SqArray newArray() const {
-            return SqArray(vm);
+        Array newArray() const {
+            return Array(vm);
         }
         /**
         * @brief Creates a new array
         */
         template<class T>
-        SqArray newArray(const std::vector<T>& vector) const {
-            return SqArray(vm, vector);
+        Array newArray(const std::vector<T>& vector) const {
+            return Array(vm, vector);
         }
         /**
          * @brief Adds a new enum to this table
          */
-        SqEnum addEnum(const char* name);
+        Enum addEnum(const char* name);
         /**
          * @brief Adds a new constant key-value pair to this table
          */
@@ -217,14 +217,14 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */
-        SqVM& operator = (const SqVM& other) = delete;
+        VM& operator = (const VM& other) = delete;
         /**
         * @brief Move assingment operator
         */
-        SqVM& operator = (SqVM&& other) NOEXCEPT;
+        VM& operator = (VM&& other) NOEXCEPT;
     private:
-        std::unique_ptr<SqCompileException> compileException;
-        std::unique_ptr<SqRuntimeException> runtimeException;
+        std::unique_ptr<CompileException> compileException;
+        std::unique_ptr<RuntimeException> runtimeException;
 		std::unordered_map<size_t, HSQOBJECT> classMap;
 
         static void pushArgs();
@@ -235,7 +235,7 @@ namespace SquirrelBind {
             pushArgs(std::forward<Rest>(rest)...);
         }
 
-        SqObject callAndReturn(SQUnsignedInteger nparams, SQInteger top) const;
+        Object callAndReturn(SQUnsignedInteger nparams, SQInteger top) const;
 
         static void defaultPrintFunc(HSQUIRRELVM vm, const SQChar *s, ...);
 

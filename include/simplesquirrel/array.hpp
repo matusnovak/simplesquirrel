@@ -1,27 +1,31 @@
 #pragma once
-#ifndef SQUIRREL_BIND_ARRAY_HEADER_H
-#define SQUIRREL_BIND_ARRAY_HEADER_H
+#ifndef SSQ_ARRAY_HEADER_H
+#define SSQ_ARRAY_HEADER_H
 
 #include "object.hpp"
 #include "args.hpp"
 #include <squirrel.h>
 #include <vector>
 
-namespace SquirrelBind {
+namespace ssq {
     /**
     * @brief Squirrel intance of array object
     */
-    class SQBIND_API SqArray: public SqObject {
+    class SSQ_API Array: public Object {
     public:
         /**
         * @brief Constructs empty array
         */
-        SqArray(HSQUIRRELVM vm, size_t len = 0);
+        Array(HSQUIRRELVM vm, size_t len = 0);
+        /**
+        * @brief Destructor
+        */
+        virtual ~Array() = default;
         /**
         * @brief Constructs array out of std::vector
         */
         template<typename T>
-        SqArray(HSQUIRRELVM vm, const std::vector<T>& vector):SqObject(vm) {
+        Array(HSQUIRRELVM vm, const std::vector<T>& vector):Object(vm) {
             sq_newarray(vm, 0);
             sq_getstackobj(vm, -1, &obj);
             sq_addref(vm, &obj);
@@ -30,25 +34,25 @@ namespace SquirrelBind {
                 detail::push(vm, val);
                 if(SQ_FAILED(sq_arrayappend(vm, -2))) {
                     sq_pop(vm, 2);
-                    throw SqTypeException("Failed to push value to back of the array");
+                    throw TypeException("Failed to push value to back of the array");
                 }
             }
 
             sq_pop(vm, 1); // Pop array
         }
         /**
-        * @brief Converts SqObject to SqArray
-        * @throws SqTypeException if the SqObject is not type of an array
+        * @brief Converts Object to Array
+        * @throws TypeException if the Object is not type of an array
         */
-        explicit SqArray(const SqObject& object);
+        explicit Array(const Object& object);
         /**
         * @brief Copy constructor
         */
-        SqArray(const SqArray& other);
+        Array(const Array& other);
         /**
         * @brief Move constructor
         */
-        SqArray(SqArray&& other) NOEXCEPT;
+        Array(Array&& other) NOEXCEPT;
         /**
         * @brief Returns the size of the array
         */
@@ -62,7 +66,7 @@ namespace SquirrelBind {
             detail::push(vm, value);
             if(SQ_FAILED(sq_arrayappend(vm, -2))) {
                 sq_pop(vm, 2);
-                throw SqTypeException("Failed to push value to back of the array");
+                throw TypeException("Failed to push value to back of the array");
             }
             sq_pop(vm, 1);
         }
@@ -75,13 +79,13 @@ namespace SquirrelBind {
             auto s = sq_getsize(vm, -1);
             if(s == 0) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Out of bounds");
+                throw TypeException("Out of bounds");
             }
 
             try {
                 if(SQ_FAILED(sq_arraypop(vm, -1, true))) {
                     sq_pop(vm, 1);
-                    throw SqTypeException("Failed to pop value from back of the array");
+                    throw TypeException("Failed to pop value from back of the array");
                 }
                 T ret(detail::pop<T>(vm, -1));
                 sq_pop(vm, 1);
@@ -97,7 +101,7 @@ namespace SquirrelBind {
         void pop();
         /**
         * @brief Returns an element from the specific index
-        * @throws SqTypeException if the index is out of bounds or element cannot be returned
+        * @throws TypeException if the index is out of bounds or element cannot be returned
         */
         template<typename T>
         T get(size_t index) {
@@ -105,12 +109,12 @@ namespace SquirrelBind {
             auto s = static_cast<size_t>(sq_getsize(vm, -1));
             if(index >= s) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Out of bounds");
+                throw TypeException("Out of bounds");
             }
             detail::push(vm, index);
             if(SQ_FAILED(sq_get(vm, -2))) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Failed to get value from the array");
+                throw TypeException("Failed to get value from the array");
             }
             try {
                 T ret(detail::pop<T>(vm, -1));
@@ -123,7 +127,7 @@ namespace SquirrelBind {
         }
         /**
          * Returns the element at the start of the array
-         * @throws SqTypeException if the array is empty or element cannot be returned
+         * @throws TypeException if the array is empty or element cannot be returned
          */
         template<typename T>
         T begin() {
@@ -131,17 +135,17 @@ namespace SquirrelBind {
         }
         /**
          * Returns the element at the end of the array
-         * @throws SqTypeException if the array is empty or element cannot be returned
+         * @throws TypeException if the array is empty or element cannot be returned
          */
         template<typename T>
         T back() {
             auto s = size();
-            if (s == 0) throw SqTypeException("Out of bounds");
+            if (s == 0) throw TypeException("Out of bounds");
             return get<T>(s - 1);
         }
         /**
         * @brief Sets an element at the specific index
-        * @throws SqTypeException if the index is out of bounds or element cannot be set
+        * @throws TypeException if the index is out of bounds or element cannot be set
         */
         template<typename T>
         void set(size_t index, const T& value) {
@@ -149,20 +153,20 @@ namespace SquirrelBind {
             auto s = static_cast<size_t>(sq_getsize(vm, -1));
             if(index >= s) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Out of bounds");
+                throw TypeException("Out of bounds");
             }
             detail::push(vm, index);
             detail::push(vm, value);
             if(SQ_FAILED(sq_set(vm, -3))) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Failed to set value in the array");
+                throw TypeException("Failed to set value in the array");
             }
             sq_pop(vm, 1);
         }
         /**
          * @brief Converts this array to std::vector of objects
          */
-        std::vector<SqObject> convertRaw();
+        std::vector<Object> convertRaw();
         /**
          * @brief Converts this array to std::vector of specific type T
          */
@@ -182,19 +186,19 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */ 
-        SqArray& operator = (const SqArray& other);
+        Array& operator = (const Array& other);
         /**
         * @brief Move assingment operator
         */
-        SqArray& operator = (SqArray&& other) NOEXCEPT;
+        Array& operator = (Array&& other) NOEXCEPT;
     };
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<>
-        inline SqArray popValue(HSQUIRRELVM vm, SQInteger index){
+        inline Array popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_ARRAY);
-            SqArray val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqArray from squirrel stack");
+            Array val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Array from squirrel stack");
             sq_addref(vm, &val.getRaw());
             return val;
         }

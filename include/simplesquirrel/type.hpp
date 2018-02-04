@@ -1,21 +1,21 @@
 #pragma once
-#ifndef SQUIRREL_BIND_TYPE_HEADER_H
-#define SQUIRREL_BIND_TYPE_HEADER_H
+#ifndef SSQ_TYPE_HEADER_H
+#define SSQ_TYPE_HEADER_H
 
 #include <squirrel.h>
 
-#if defined(DLL_CONFIG) && defined(_MSC_VER)
-    #ifdef SQUIRREL_BIND_EXPORTS
-		#define SQBIND_API __declspec(dllexport)
+#if defined(SSQ_DLL) && defined(_MSC_VER)
+    #ifdef SSQ_EXPORTS
+		#define SSQ_API __declspec(dllexport)
     #else
-		#define SQBIND_API __declspec(dllimport)
+		#define SSQ_API __declspec(dllimport)
     #endif
 #else
-    #define SQBIND_API
+    #define SSQ_API
 #endif
 
-namespace SquirrelBind {
-    enum class SqType {
+namespace ssq {
+    enum class Type {
         NULLPTR = OT_NULL,
         INTEGER = OT_INTEGER,
         FLOAT = OT_FLOAT,
@@ -36,7 +36,7 @@ namespace SquirrelBind {
         OUTER = OT_OUTER
     };
 
-    SQBIND_API const char* sqTypeToStr(SqType type);
+    SSQ_API const char* typeToStr(Type type);
 }
 
 #endif

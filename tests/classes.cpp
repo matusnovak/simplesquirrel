@@ -1,11 +1,8 @@
 #define CATCH_CONFIG_MAIN 
 #include <catch/catch.hpp>
-#define SQUIRREL_STATIC
-#include "../include/squirrelbind/squirrelbind.hpp"
+#include "../include/simplesquirrel/simplesquirrel.hpp"
 
 #define STRINGIFY(x) #x
-
-using namespace SquirrelBind;
 
 SQInteger print_args(HSQUIRRELVM v)
 {
@@ -93,18 +90,18 @@ TEST_CASE("Find class"){
         };
     );
 
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqClass vectorClass = vm.findClass("Vector");
-    SqInstance vector = vm.newInstance(vectorClass, 5, 10, 15);
+    ssq::Class vectorClass = vm.findClass("Vector");
+    ssq::Instance vector = vm.newInstance(vectorClass, 5, 10, 15);
 
     REQUIRE(vector.isEmpty() == false);
 
-    SqFunction getX = vectorClass.findFunc("getX");
-    SqFunction getY = vectorClass.findFunc("getY");
-    SqFunction getZ = vectorClass.findFunc("getZ");
+    ssq::Function getX = vectorClass.findFunc("getX");
+    ssq::Function getY = vectorClass.findFunc("getY");
+    ssq::Function getZ = vectorClass.findFunc("getZ");
 
     REQUIRE(vm.callFunc(getX, vector).toInt() == 5);
     REQUIRE(vm.callFunc(getY, vector).toInt() == 10);
@@ -134,8 +131,8 @@ TEST_CASE("Register class") {
             this->val = -100;
         }
 
-        static SqClass expose(SqVM& vm){
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(int)>());
+        static ssq::Class expose(ssq::VM& vm){
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(int)>());
 
             cls.addFunc("setVal", &Foo::setVal);
             cls.addFunc("doStuff", &Foo::doStuff);
@@ -172,35 +169,35 @@ TEST_CASE("Register class") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
 	Foo::expose(vm);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
 
     REQUIRE(type == "class");
 
-    SqFunction baz = vm.findFunc("baz");
+    ssq::Function baz = vm.findFunc("baz");
     type = vm.callFunc(baz, vm).toString();
 
     REQUIRE(type == "function");
 
-    SqFunction baz2 = vm.findFunc("baz2");
+    ssq::Function baz2 = vm.findFunc("baz2");
     vm.callFunc(baz2, vm);
 
     REQUIRE(ptr->getVal() == 123456);
 
-    SqFunction baz3 = vm.findFunc("baz3");
+    ssq::Function baz3 = vm.findFunc("baz3");
     vm.callFunc(baz3, vm);
 
     REQUIRE(ptr->getVal() == -100);
 
     ptr->setVal(102030);
 
-    SqFunction baz4 = vm.findFunc("baz4");
+    ssq::Function baz4 = vm.findFunc("baz4");
     auto ret = vm.callFunc(baz4, vm).toInt();
 
     REQUIRE(ret == 102030);
@@ -229,8 +226,8 @@ TEST_CASE("Register class with std::string type") {
             this->val = "Potato";
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("setVal", &Foo::setVal);
             cls.addFunc("doStuff", &Foo::doStuff);
@@ -265,35 +262,35 @@ TEST_CASE("Register class with std::string type") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
 	Foo::expose(vm);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
 
     REQUIRE(type == "class");
 
-    SqFunction baz = vm.findFunc("baz");
+    ssq::Function baz = vm.findFunc("baz");
     type = vm.callFunc(baz, vm).toString();
 
     REQUIRE(type == "function");
 
-    SqFunction baz2 = vm.findFunc("baz2");
+    ssq::Function baz2 = vm.findFunc("baz2");
     vm.callFunc(baz2, vm);
 
     REQUIRE(ptr->getVal() == "Banana");
 
-    SqFunction baz3 = vm.findFunc("baz3");
+    ssq::Function baz3 = vm.findFunc("baz3");
     vm.callFunc(baz3, vm);
 
     REQUIRE(ptr->getVal() == "Potato");
 
     ptr->setVal("Squirrel");
 
-    SqFunction baz4 = vm.findFunc("baz4");
+    ssq::Function baz4 = vm.findFunc("baz4");
     auto ret = vm.callFunc(baz4, vm).toString();
 
     REQUIRE(ret == "Squirrel");
@@ -322,8 +319,8 @@ TEST_CASE("Register class with std::string type using lambdas") {
             this->val = "Potato";
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("setVal", [](Foo* ptr, std::string value) -> void {
                 ptr->setVal(value);
@@ -364,35 +361,35 @@ TEST_CASE("Register class with std::string type using lambdas") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
 	Foo::expose(vm);
 
-    SqFunction bar = vm.findFunc("bar");
+    ssq::Function bar = vm.findFunc("bar");
     std::string type = vm.callFunc(bar, vm).toString();
 
     REQUIRE(type == "class");
 
-    SqFunction baz = vm.findFunc("baz");
+    ssq::Function baz = vm.findFunc("baz");
     type = vm.callFunc(baz, vm).toString();
 
     REQUIRE(type == "function");
 
-    SqFunction baz2 = vm.findFunc("baz2");
+    ssq::Function baz2 = vm.findFunc("baz2");
     vm.callFunc(baz2, vm);
 
     REQUIRE(ptr->getVal() == "Banana");
 
-    SqFunction baz3 = vm.findFunc("baz3");
+    ssq::Function baz3 = vm.findFunc("baz3");
     vm.callFunc(baz3, vm);
 
     REQUIRE(ptr->getVal() == "Potato");
 
     ptr->setVal("Squirrel");
 
-    SqFunction baz4 = vm.findFunc("baz4");
+    ssq::Function baz4 = vm.findFunc("baz4");
     auto ret = vm.callFunc(baz4, vm).toString();
 
     REQUIRE(ret == "Squirrel");
@@ -434,8 +431,8 @@ static void testTypeClass(T value) {
             this->value = value;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(T)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(T)>());
 
             cls.addFunc("getValueRefConst", &Foo::getValueRefConst);
             cls.addFunc("getValueRef", &Foo::getValueRef);
@@ -472,17 +469,17 @@ static void testTypeClass(T value) {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
 
 	Foo::expose(vm);
     vm.run(script);
 
-    SqFunction get = vm.findFunc("get");
-    SqFunction getByRef = vm.findFunc("getByRef");
-    SqFunction getByRefConst = vm.findFunc("getByRefConst");
-    SqFunction set = vm.findFunc("set");
-    SqFunction setByRefConst = vm.findFunc("setByRefConst");
+    ssq::Function get = vm.findFunc("get");
+    ssq::Function getByRef = vm.findFunc("getByRef");
+    ssq::Function getByRefConst = vm.findFunc("getByRefConst");
+    ssq::Function set = vm.findFunc("set");
+    ssq::Function setByRefConst = vm.findFunc("setByRefConst");
 
     T getResult = vm.callFunc(get, vm).to<T>();
     REQUIRE(getResult == 42);
@@ -540,8 +537,8 @@ void testTypeClass(std::string value) {
             this->value = value;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("getValueRefConst", &Foo::getValueRefConst);
             cls.addFunc("getValueRef", &Foo::getValueRef);
@@ -578,17 +575,17 @@ void testTypeClass(std::string value) {
         }
     );
 
-    SqVM vm(1024);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024);
+    ssq::Script script = vm.compileSource(source.c_str());
 
 	Foo::expose(vm);
     vm.run(script);
 
-    SqFunction get = vm.findFunc("get");
-    SqFunction getByRef = vm.findFunc("getByRef");
-    SqFunction getByRefConst = vm.findFunc("getByRefConst");
-    SqFunction set = vm.findFunc("set");
-    SqFunction setByRefConst = vm.findFunc("setByRefConst");
+    ssq::Function get = vm.findFunc("get");
+    ssq::Function getByRef = vm.findFunc("getByRef");
+    ssq::Function getByRefConst = vm.findFunc("getByRefConst");
+    ssq::Function set = vm.findFunc("set");
+    ssq::Function setByRefConst = vm.findFunc("setByRefConst");
 
     std::string getResult = vm.callFunc(get, vm).to<std::string>();
     REQUIRE(getResult == "Heyo");
@@ -695,8 +692,8 @@ TEST_CASE("Register class with member variables") {
         int varY;
         std::string varS;
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(int, int, std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(int, int, std::string)>());
 
             cls.addVar("varX", &Foo::varX);
             cls.addVar("varY", &Foo::varY);
@@ -721,19 +718,19 @@ TEST_CASE("Register class with member variables") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 	Foo::expose(vm);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
     REQUIRE(cpy->varX == 10);
     REQUIRE(cpy->varY == 20);
     REQUIRE(cpy->varS == "Hello!");
 
-    SqFunction foo = vm.findFunc("foo");
+    ssq::Function foo = vm.findFunc("foo");
     vm.callFunc(foo, vm);
 
-    SqFunction get = vm.findFunc("get");
+    ssq::Function get = vm.findFunc("get");
     Foo ret = vm.callFunc(get, vm).to<Foo>();
 
     REQUIRE(ret.varX == 15);
@@ -756,8 +753,8 @@ TEST_CASE("Register class and push as pointer") {
             this->msg = msg;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("getMsg", &Foo::getMsg);
             cls.addFunc("setMsg", &Foo::setMsg);
@@ -786,15 +783,15 @@ TEST_CASE("Register class and push as pointer") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 	Foo::expose(vm);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcGetType = vm.findFunc("getType");
-    SqFunction funcGetMsg = vm.findFunc("getMsg");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcGetType = vm.findFunc("getType");
+    ssq::Function funcGetMsg = vm.findFunc("getMsg");
 
     std::unique_ptr<Foo> ptr(new Foo("Hello World"));
 
@@ -806,10 +803,10 @@ TEST_CASE("Register class and push as pointer") {
     auto msg = vm.callFunc(funcGetMsg, vm).toString();
     REQUIRE(msg == "Hello World");
 
-    SqObject ret = vm.callFunc(funcGet, vm);
-    REQUIRE(ret.getType() == SqType::INSTANCE);
+    ssq::Object ret = vm.callFunc(funcGet, vm);
+    REQUIRE(ret.getType() == ssq::Type::INSTANCE);
 
-    SqInstance inst = ret.toInstance();
+    ssq::Instance inst = ret.toInstance();
 
     Foo* test = inst.to<Foo*>();
     REQUIRE(ptr.get() == test);
@@ -849,13 +846,13 @@ TEST_CASE("Register class and push as userpointer") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction funcSet = vm.findFunc("set");
-    SqFunction funcGet = vm.findFunc("get");
-    SqFunction funcGetType = vm.findFunc("getType");
+    ssq::Function funcSet = vm.findFunc("set");
+    ssq::Function funcGet = vm.findFunc("get");
+    ssq::Function funcGetType = vm.findFunc("getType");
 
     std::unique_ptr<Foo> ptr(new Foo("Hello World"));
 
@@ -864,8 +861,8 @@ TEST_CASE("Register class and push as userpointer") {
     auto type = vm.callFunc(funcGetType, vm).toString();
     REQUIRE(type == "userdata");
 
-    SqObject ret = vm.callFunc(funcGet, vm);
-    REQUIRE(ret.getType() == SqType::USERPOINTER);
+    ssq::Object ret = vm.callFunc(funcGet, vm);
+    REQUIRE(ret.getType() == ssq::Type::USERPOINTER);
 
     Foo* test = ret.to<Foo*>();
     REQUIRE(ptr.get() == test);
@@ -892,8 +889,8 @@ TEST_CASE("Register class and extend it") {
             this->msg = msg;
         }
 
-        static void expose(SqVM& vm) {
-            SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+        static void expose(ssq::VM& vm) {
+            ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
             cls.addFunc("getMsg", &Foo::getMsg);
             cls.addFunc("setMsg", &Foo::setMsg);
@@ -926,18 +923,18 @@ TEST_CASE("Register class and extend it") {
         }
     );
 
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 	Foo::expose(vm);
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
-    SqFunction getInstance = vm.findFunc("getInstance");
-    SqInstance instance = vm.callFunc(getInstance, vm).toInstance();
-    SqClass instanceClass = instance.getClass();
+    ssq::Function getInstance = vm.findFunc("getInstance");
+    ssq::Instance instance = vm.callFunc(getInstance, vm).toInstance();
+    ssq::Class instanceClass = instance.getClass();
 
     REQUIRE(fooMsg == "Hello");
 
-    SqFunction funcSetMsg = instanceClass.findFunc("setMsg");
+    ssq::Function funcSetMsg = instanceClass.findFunc("setMsg");
     vm.callFunc(funcSetMsg, instance, std::string("World"));
 
     REQUIRE(fooPtr->getMsg() == "World");

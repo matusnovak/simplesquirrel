@@ -1,16 +1,16 @@
 #pragma once
-#ifndef SQUIRREL_BIND_CLASS_HEADER_H
-#define SQUIRREL_BIND_CLASS_HEADER_H
+#ifndef SSQ_CLASS_HEADER_H
+#define SSQ_CLASS_HEADER_H
 
 #include <functional>
 #include "function.hpp"
 #include "binding.hpp"
 
-namespace SquirrelBind {
+namespace ssq {
     /**
     * @brief Squirrel class object
     */
-    class SQBIND_API SqClass : public SqObject {
+    class SSQ_API Class : public Object {
     public:
         /**
         * @brief Constructor helper class
@@ -27,47 +27,51 @@ namespace SquirrelBind {
 		/**
         * @brief Creates an empty invalid class
         */
-		SqClass();
+		Class();
+        /**
+        * @brief Destructor
+        */
+        virtual ~Class() = default;
         /**
         * @brief Creates a new empty class
         */
-        SqClass(HSQUIRRELVM vm);
+        Class(HSQUIRRELVM vm);
         /**
-        * @brief Converts SqObject to class object
-        * @throws SqTypeException if the SqObject is not type of a class
+        * @brief Converts Object to class object
+        * @throws TypeException if the Object is not type of a class
         */
-        explicit SqClass(const SqObject& object);
+        explicit Class(const Object& object);
         /**
         * @brief Copy constructor
         */
-        SqClass(const SqClass& other);
+        Class(const Class& other);
         /**
         * @brief Move constructor
         */
-        SqClass(SqClass&& other) NOEXCEPT;
+        Class(Class&& other) NOEXCEPT;
         /**
         * @brief Swaps two classes
         */
-        void swap(SqClass& other) NOEXCEPT;
+        void swap(Class& other) NOEXCEPT;
         /**
         * @brief Finds a function in this class
-        * @throws SqRuntimeException if VM is invalid
-        * @throws SqNotFoundException if function was not found
-        * @throws SqTypeException if the object found is not a function
+        * @throws RuntimeException if VM is invalid
+        * @throws NotFoundException if function was not found
+        * @throws TypeException if the object found is not a function
         */
-        SqFunction findFunc(const char* name) const;
+        Function findFunc(const char* name) const;
         /**
         * @brief Adds a new function type to this class
         * @param name Name of the function to add
         * @param func std::function that contains "this" pointer to the class type followed
         * by any number of arguments with any type
-        * @throws SqRuntimeException if VM is invalid
-        * @returns SqFunction object references the added function
+        * @throws RuntimeException if VM is invalid
+        * @returns Function object references the added function
         */
         template <typename Return, typename Object, typename... Args>
-        SqFunction addFunc(const char* name, const std::function<Return(Object*, Args...)>& func, bool isStatic = false) {
-            if (vm == nullptr) throw SqRuntimeException("VM is not initialised");
-            SqFunction ret(vm);
+        Function addFunc(const char* name, const std::function<Return(Object*, Args...)>& func, bool isStatic = false) {
+            if (vm == nullptr) throw RuntimeException("VM is not initialised");
+            Function ret(vm);
             sq_pushobject(vm, obj);
             detail::addMemberFunc(vm, name, func, isStatic);
             sq_pop(vm, 1);
@@ -77,11 +81,11 @@ namespace SquirrelBind {
         * @brief Adds a new function type to this class
         * @param name Name of the function to add
         * @param memfunc Pointer to member function
-        * @throws SqRuntimeException if VM is invalid
-        * @returns SqFunction object references the added function
+        * @throws RuntimeException if VM is invalid
+        * @returns Function object references the added function
         */
         template <typename Return, typename Object, typename... Args>
-        SqFunction addFunc(const char* name, Return(Object::*memfunc)(Args...), bool isStatic = false) {
+        Function addFunc(const char* name, Return(Object::*memfunc)(Args...), bool isStatic = false) {
             auto func = std::function<Return(Object*, Args...)>(std::mem_fn(memfunc));
             return addFunc(name, func, isStatic);
         }
@@ -89,11 +93,11 @@ namespace SquirrelBind {
         * @brief Adds a new function type to this class
         * @param name Name of the function to add
         * @param memfunc Pointer to constant member function
-        * @throws SqRuntimeException if VM is invalid
-        * @returns SqFunction object references the added function
+        * @throws RuntimeException if VM is invalid
+        * @returns Function object references the added function
         */
         template <typename Return, typename Object, typename... Args>
-        SqFunction addFunc(const char* name, Return(Object::*memfunc)(Args...) const, bool isStatic = false) {
+        Function addFunc(const char* name, Return(Object::*memfunc)(Args...) const, bool isStatic = false) {
             auto func = std::function<Return(Object*, Args...)>(std::mem_fn(memfunc));
             return addFunc(name, func, isStatic);
         }
@@ -102,11 +106,11 @@ namespace SquirrelBind {
         * @param name Name of the function to add
         * @param lambda Lambda function that contains "this" pointer to the class type followed
         * by any number of arguments with any type
-        * @throws SqRuntimeException if VM is invalid
-        * @returns SqFunction object references the added function
+        * @throws RuntimeException if VM is invalid
+        * @returns Function object references the added function
         */
         template<typename F>
-        SqFunction addFunc(const char* name, const F& lambda, bool isStatic = false) {
+        Function addFunc(const char* name, const F& lambda, bool isStatic = false) {
             return addFunc(name, detail::make_function(lambda), isStatic);
         }
         template<typename T, typename V>
@@ -126,13 +130,13 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */
-        SqClass& operator = (const SqClass& other);
+        Class& operator = (const Class& other);
         /**
         * @brief Move assingment operator
         */
-        SqClass& operator = (SqClass&& other) NOEXCEPT;
+        Class& operator = (Class&& other) NOEXCEPT;
     protected:
-        void findTable(const char* name, SqObject& table, SQFUNCTION dlg) const;
+        void findTable(const char* name, Object& table, SQFUNCTION dlg) const;
         static SQInteger dlgGetStub(HSQUIRRELVM vm);
         static SQInteger dlgSetStub(HSQUIRRELVM vm);
 
@@ -149,7 +153,7 @@ namespace SquirrelBind {
             sq_newclosure(vm, stub, 1);
 
             if (SQ_FAILED(sq_newslot(vm, -3, isStatic))) {
-                throw SqTypeException("Failed to bind member variable to class");
+                throw TypeException("Failed to bind member variable to class");
             }
 
             sq_pop(vm, 1);
@@ -184,17 +188,17 @@ namespace SquirrelBind {
             return 0;
         }
 
-        SqObject tableSet;
-        SqObject tableGet;
+        Object tableSet;
+        Object tableGet;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<>
-        inline SqClass popValue(HSQUIRRELVM vm, SQInteger index){
+        inline Class popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_CLASS);
-            SqClass val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqClass from squirrel stack");
+            Class val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Class from squirrel stack");
             sq_addref(vm, &val.getRaw());
             return val;
         }

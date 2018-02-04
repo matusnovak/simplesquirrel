@@ -1,38 +1,38 @@
-#include "../include/squirrelbind/enum.hpp"
+#include "../include/simplesquirrel/enum.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqEnum::SqEnum():SqObject() {
+namespace ssq {
+    Enum::Enum():Object() {
             
     }
 
-    SqEnum::SqEnum(const SqObject& object):SqObject(object) {
-        if (object.getType() != SqType::TABLE) throw SqTypeException("bad cast", "TABLE", object.getTypeStr());
+    Enum::Enum(const Object& object):Object(object) {
+        if (object.getType() != Type::TABLE) throw TypeException("bad cast", "TABLE", object.getTypeStr());
     }
 
-    SqEnum::SqEnum(HSQUIRRELVM vm):SqObject(vm) {
+    Enum::Enum(HSQUIRRELVM vm):Object(vm) {
         sq_newtable(vm);
         sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm,1); // Pop enum table
     }
 
-    SqEnum::SqEnum(const SqEnum& other):SqObject(other) {
+    Enum::Enum(const Enum& other):Object(other) {
             
     }
 
-    SqEnum::SqEnum(SqEnum&& other) NOEXCEPT :SqObject(std::forward<SqEnum>(other)) {
+    Enum::Enum(Enum&& other) NOEXCEPT :Object(std::forward<Enum>(other)) {
             
     }
 
-    SqEnum& SqEnum::operator = (const SqEnum& other){
-        SqObject::operator = (other);
+    Enum& Enum::operator = (const Enum& other){
+        Object::operator = (other);
         return *this;
     }
 
-    SqEnum& SqEnum::operator = (SqEnum&& other) NOEXCEPT {
-        SqObject::operator = (std::forward<SqEnum>(other));
+    Enum& Enum::operator = (Enum&& other) NOEXCEPT {
+        Object::operator = (std::forward<Enum>(other));
         return *this;
     }
 }

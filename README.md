@@ -75,7 +75,7 @@ git clone https://github.com/matusnovak/squirrel_bind.git
 cd squirrel_bind
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_TESTS=OFF -DBUILD_TESTS=OFF
 sudo make install
 ```
 
@@ -86,7 +86,7 @@ git clone https://github.com/matusnovak/squirrel_bind.git
 cd squirrel_bind
 mkdir build
 cd build
-cmake .. -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
+cmake .. -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want -DBUILD_TESTS=OFF
 ```
 
 If you get errors that `SQSTDLIB_LIBRARIES` and `SQUIRREL_LIBRARIES` was not found, you need to
@@ -103,6 +103,7 @@ cmake .. -G "Visual Studio 15 2017" \
     -DINCLUDE_DIRECTORIES=C:/Users/username/Documents/squirrel/include \
     -DSQUIRREL_LIBRARIES=C:/Users/username/Documents/squirrel/build/squirrel/MinSizeRel/squirrel_static.lib \
     -DSQSTDLIB_LIBRARIES=C:/Users/username/Documents/squirrel/build/sqstdlib/MinSizeRel/sqstdlib_static.lib \
+    -DBUILD_TESTS=OFF
 ```
 
 ## Create Squirrel VM
@@ -112,13 +113,12 @@ once it falls out of scope. Or, if you have created it via `new` operator,
 it will be destroyed, and all of its resources, once you call `delete`.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
     // Create and register Squirrel std libraries
     // More here: http://squirrel-lang.org/squirreldoc/stdlib/index.html
-    SqVM vm(1024, SqLibs::STRING | SqLibs::IO | SqLibs::MATH);
+    ssq::VM vm(1024, ssq::Libs::STRING | ssq::Libs::IO | ssq::Libs::MATH);
 
     // Available flags:
     // NONE
@@ -139,14 +139,13 @@ Compiling script can be done via raw source `const char*` or via path to source
 file.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
-    SqScript scriptA = vm.compileSource(/* raw char array here */);
-    SqScript scriptB = vm.compileFile(/* path to source file */);
+    ssq::Script scriptA = vm.compileSource(/* raw char array here */);
+    ssq::Script scriptB = vm.compileFile(/* path to source file */);
 
     return 0;
 }
@@ -155,17 +154,17 @@ int main(){
 ## Squirrel object manipulation
 
 All Squirrel objects are dynamic and they can hold any value, no static typing. Since C++
-is statically typed, we need to check the type returned. You can do so by calling `SqObject::getType()` 
-which returns `SqType` enum. The object can be: instance, class, function (closure), integer, float,
+is statically typed, we need to check the type returned. You can do so by calling `ssq::Object::getType()` 
+which returns `ssq::Type` enum. The object can be: instance, class, function (closure), integer, float,
 string, boolean, userdata, userpointer, array, table, and null. You can convert the raw object to
-any type using `SqObject::toXyz();` such as: `toInt()`, `toFloat()`, `toString()`, `toBool()`, 
+any type using `ssq::Object::toXyz();` such as: `toInt()`, `toFloat()`, `toString()`, `toBool()`, 
 `toTable()`, `toArray()`, `toClass()`, `toInstance()`, and `toFunction()`. To check if the object is
 empty use `isEmpty()` method and to check if the object is null use `isNull()`. Note that object being
 null is not the same as object being empty! However, it is impossible for Squirrel to use empty objects
 so you will most likely never use `isEmpty()`, only `isNull()`.
 
 **Always use std::string when calling Squirrel function or when casting the result of function
-call from SqObject to string. Do not use const char\* as those two types are different.**
+call from ssq::Object to string. Do not use const char\* as those two types are different.**
 
 Here are the C++ types and their Squirrel equivalents:
 
@@ -190,12 +189,12 @@ Here are the C++ types and their Squirrel equivalents:
 | const char* | userpointer | `to<const char*>()` |
 | const char[N] | N/A | compiler error |
 | char* | userpointer | `to<char*>()` |
-| SqObject | anything | You can't convet SqObject to SqObject :D |
-| SqFunction | closure/nativeclosure | `toFunction()` |
-| SqClass | class | `toClass()` |
-| SqInstance | instance | `toInstance()` |
-| SqTable | table | `toTable()` |
-| SqArray | array | `toArray()` |
+| ssq::Object | anything | You can't convet ssq::Object to ssq::Object :D |
+| ssq::Function | closure/nativeclosure | `toFunction()` |
+| ssq::Class | class | `toClass()` |
+| ssq::Instance | instance | `toInstance()` |
+| ssq::Table | table | `toTable()` |
+| ssq::Array | array | `toArray()` |
 | void* | userpointer | `to<void*>()` |
 | any pointer to class **not added to VM via addClass** | userpointer | `to<Class_Type*>()` |
 | any reference (or copy) to class **not added to VM via addClass** | userdata | `to<Class_Type>()` |
@@ -207,11 +206,11 @@ On 64-bit compiler, the integer is stored as `long long`, on 32-bit compiler, it
 in order to pass `long long` into squirrel on 32-bit compiler, it will be converted into userdata. We can't 
 store 64-bit integer in 32-integer. Conversion to userdata is done to preserve the information. On 64-bit compiler
 this is simply an integer. Floats are also stored as float on 32-bit compiler and double on 64-bit compiler.
-**Getting double from SqObject on 32-bit compiler will result in loss of information!**
+**Getting double from ssq::Object on 32-bit compiler will result in loss of information!**
 
 Also, unsigned types are converted into signed types. For example, passing 0xFFFFFFFF (the max value of 
 unsigned long) will be represented in squirrel as -1. However, when you try to get the -1 from Squirrel
-back to C++ and you convert the function call result (from SqObject) to `to<unsigned long>()` it 
+back to C++ and you convert the function call result (from ssq::Object) to `to<unsigned long>()` it 
 will be exactly the same as previously, the 0xFFFFFFFF. Information is always preserved, nothing is lost.
 Therefore I highly suggest to use signed integers only.
 
@@ -230,34 +229,33 @@ a copy of the object and the life of the given object will be also handled by Sq
 For example, the following code will return copy of the instance inside of Squirrel:
 
 ```cpp
-SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
-SqObject result = vm.call(mySquirrelFunc, vm, ...);
+ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+ssq::Object result = vm.call(mySquirrelFunc, vm, ...);
 Foo copy = result.to<Foo>();
 ```
 
 However the following will return pointer to the instance, no copy performed:
 
 ```cpp
-SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
-SqObject result = vm.call(mySquirrelFunc, vm, ...);
+ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+ssq::Object result = vm.call(mySquirrelFunc, vm, ...);
 Foo* copy = result.to<Foo*>();
 ```
 
 Here is an example how to handle return value from function call:
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(...);
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(...);
     vm.run(script);
 
-    SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+    ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
 
     // Get the result of the function call
-    SqObject result = vm.call(mySquirrelFunc, vm, 10, true, std::string("Hello World"));
+    ssq::Object result = vm.call(mySquirrelFunc, vm, 10, true, std::string("Hello World"));
 
     // Check if the object is empty
     result.isEmpty(); // Returns true or false depending on what has been returned
@@ -266,7 +264,7 @@ int main(){
     result.isNull(); // True or false depending on what has been returned
 
     // Check if object is an integer
-    if (result.getType() == SqType::INTEGER) {
+    if (result.getType() == ssq::Type::INTEGER) {
         // Object is integer, we can convert it
         int myInt = result.toInt();
         // or:
@@ -274,10 +272,10 @@ int main(){
     }
 
     // Converting to something else than the object contains
-    // results in SqTypeException thrown
+    // results in ssq::TypeException thrown
     try {
         std::string str = result.toString();
-    } catch (SqTypeException& e){
+    } catch (ssq::TypeException& e){
         std::cerr << e.what() << std::endl;
     }
 
@@ -293,15 +291,14 @@ The function arguments are deduced at compile time. No std::tuple, no std::any,
 just good old metaprogramming.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 std::string myCppFunc(int a, int b){
     return std::to_string(a + b);
 }
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
     // Bind global function
     vm.addFunc("myCppFunc", myCppFunc);
@@ -330,27 +327,26 @@ first compile **and run** the script. Squirrel is a dynamic language, therefore 
 are evaulated at run time.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 std::string myCppFunc(int a, int b){
     return std::to_string(a + b);
 }
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
     static const std::string source = 
     "function mySquirrelFunc(a, b){\n"
     "    return a + b;\n"
     "}\n";
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
     // Now the mySquirrelFunc is ready for us, let's
     // find it from VM
-    SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+    ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
 
     // We can get the number of parameters required via:
     // mySquirrelFunc.getNumOfParams()
@@ -361,10 +357,10 @@ int main(){
     // the second parameter needs to be an instance object.
     // Since the mySquirrelFunc is global, we will pass the
     // root table -> the VM instance.
-    SqObject result = vm.call(mySquirrelFunc, vm, 10, 20);
+    ssq::Object result = vm.call(mySquirrelFunc, vm, 10, 20);
 
     // We have the result and we can check its type via:
-    // result.getType() which returns SqType enum
+    // result.getType() which returns ssq::Type enum
     // Or get the type as const char*
     // result.getTypeStr()
 
@@ -379,7 +375,7 @@ int main(){
 
 ## Bind C++ class
 
-Binding of classes is done via `SqVM::addClass(...)`. You have to expose your class to VM. Otherwise 
+Binding of classes is done via `ssq::VM::addClass(...)`. You have to expose your class to VM. Otherwise 
 any of your classes will be passed around in squirrel as user data and not as an instance. 
 
 You don't need to expose your class if you do not wish to use it in Squirrel as an instance. Any
@@ -389,8 +385,7 @@ cannot be manipulated, has no methods, and is created via copy. For example, you
 to use `std::unique_ptr` as userdata because it does not allow a copy.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 class Foo {
 public:
@@ -405,8 +400,8 @@ public:
         this->msg = msg;
     }
 
-    static void expose(SqVM& vm) {
-        SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(std::string)>());
+    static void expose(ssq::VM& vm) {
+        ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
 
         // You can also use lambdas (or std::function) to define constructor
         // The function has to return pointer to the new instance
@@ -427,7 +422,7 @@ public:
 };
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
     static const std::string source = 
     "// Create instance\n"
@@ -441,7 +436,7 @@ int main(){
     "print(\"Foo now has: \" + foo.msg);\n"
     "\n";
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     Foo::expose(vm); // Bind the class to this VM
     vm.run(script);
 
@@ -459,7 +454,7 @@ class Foo {
     const std::string& getMessage() const;
     std::string& getMessage();
 
-    static SqClass expose(SqVM& vm);
+    static ssq::Class expose(ssq::VM& vm);
 };
 ```
 
@@ -469,8 +464,8 @@ cause compiler ambiguity error. You can solve the problem by explicitly defining
 template when binding those functions, for example:
 
 ```
-static void Foo::expose(SqVM& vm) {
-    SqClass cls = vm.addClass("Foo", SqClass::Ctor<Foo(.....)>());
+static void Foo::expose(ssq::VM& vm) {
+    ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(.....)>());
 
     // Explicitly define return type to "const std::string&" in order
     // for the compiler to know which overloaded method to use.
@@ -484,11 +479,10 @@ Finding classes and creating instances is easy as the following code below.
 It is self explanatory.
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
+    ssq::VM vm(1024, ssq::Libs::ALL);
 
     static const std::string source = 
     "class Foo {\n"
@@ -507,20 +501,20 @@ int main(){
     "    value = null;\n"
     "}\n";
 
-    SqScript script = vm.compileSource(source.c_str());
+    ssq::Script script = vm.compileSource(source.c_str());
     vm.run(script);
 
     // Find class
-    SqClass cls = vm.findClass("Foo");
+    ssq::Class cls = vm.findClass("Foo");
 
     // Create instance of it.
     // The life of the object is determined by Squirrel.
     // You don't need to release the object yourself.
-    SqInstance clsInstance = vm.newInstance(cls, std::string("Hello World!"));
+    ssq::Instance clsInstance = vm.newInstance(cls, std::string("Hello World!"));
 
     // Find class methods
-    SqFunction funcSetMsg = cls.findFunc("setMsg");
-    SqFunction funcGetMsg = cls.findFunc("getMsg");
+    ssq::Function funcSetMsg = cls.findFunc("setMsg");
+    ssq::Function funcGetMsg = cls.findFunc("getMsg");
 
     // Call method, set new message
     vm.callFunc(funcSetMsg, clsInstance, "Banana");
@@ -537,16 +531,15 @@ int main(){
 ## Manipulate Squirrel array
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(...);
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(...);
     vm.run(script);
 
     // Create new array
-    SqArray arr = vm.newArray();
+    ssq::Array arr = vm.newArray();
 
     // To get the size of the array use: arr.size() 
 
@@ -559,8 +552,8 @@ int main(){
     // You can retrieve individual indexes via:
     std::string first = arr.get<std::string>(0);
 
-    // If you want raw object (SqObject) do it as:
-    SqObject firstRaw = arr.get<SqObject>(0);
+    // If you want raw object (ssq::Object) do it as:
+    ssq::Object firstRaw = arr.get<ssq::Object>(0);
 
     // Use pop to release last element
     int arr.popAndGet<int>();
@@ -570,12 +563,12 @@ int main(){
     arr.pop(); // Returns nothing
 
     // Then, simply pass it into any squirrel function as any other value
-    SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+    ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
     vm.call(mySquirrelFunc, vm, arr);
 
     // If you want to retrieve array from squirrel function,
     // you can do it simply by converting the return value to array:
-    SqArray result = vm.call(..., vm).toArray();
+    ssq::Array result = vm.call(..., vm).toArray();
 
     return 0;
 }
@@ -584,16 +577,15 @@ int main(){
 ## Manipulate Squirrel table
 
 ```cpp
-#include <squirrelbind/squirrelbind.hpp>
-using namespace SquirrelBind;
+#include <simplesquirrel/simplesquirrel.hpp>
 
 int main(){
-    SqVM vm(1024, SqLibs::ALL);
-    SqScript script = vm.compileSource(...);
+    ssq::VM vm(1024, ssq::Libs::ALL);
+    ssq::Script script = vm.compileSource(...);
     vm.run(script);
 
     // Create new table
-    SqTable table = vm.newTable();
+    ssq::Table table = vm.newTable();
 
     // To get the size of the table use: table.size() 
 
@@ -606,16 +598,16 @@ int main(){
     // You can retrieve individual indexes via:
     std::string first = table.get<std::string>("myString");
 
-    // If you want raw object (SqObject) do it as:
-    SqObject firstRaw = table.get<SqObject>("myString");
+    // If you want raw object (ssq::Object) do it as:
+    ssq::Object firstRaw = table.get<ssq::Object>("myString");
 
     // Then, simply pass it into any squirrel function as any other value
-    SqFunction mySquirrelFunc = vm.findFunc("mySquirrelFunc");
+    ssq::Function mySquirrelFunc = vm.findFunc("mySquirrelFunc");
     vm.call(mySquirrelFunc, vm, table);
 
     // If you want to retrieve table from squirrel function,
     // you can do it simply by converting the return value to table:
-    SqTable result = vm.call(..., vm).toTable();
+    ssq::Table result = vm.call(..., vm).toTable();
 
     return 0;
 }
@@ -629,12 +621,12 @@ and not Squirrel objects. So, you will probably try to do the following:
 
 ```cpp
 // This will cause undefined behavior! Most likely SEGFAULT! See another example below...
-fooClass.addFunc("setOnClickCallback", [](Foo* self, SqFunction func, SqInstance inst) -> void {
-    // Using SqInstance here is OK!
+fooClass.addFunc("setOnClickCallback", [](Foo* self, ssq::Function func, ssq::Instance inst) -> void {
+    // Using ssq::Instance here is OK!
     doSomethingElse(inst);
 
     self.setOnClick([=](SomeEventData data) {
-        // Using SqInstance in here nested lambda with [=] capture is bad!
+        // Using ssq::Instance in here nested lambda with [=] capture is bad!
         vm.callFunc(func, inst, data);
     });
 });
@@ -659,14 +651,14 @@ baz.setOnClickCallback(function(data){
 Why is this bad? Because the inner lambda captures the instance, it will cause to extend the
 life of Foo object inside of Squirrel. When you try to destroy your VM, it will most likely cause
 to crash program. Squirrel tracks objects by reference so that when reference counter goes to zero,
-the object is deleted. With the example above the SqInstance object will live inside of the lambda
+the object is deleted. With the example above the ssq::Instance object will live inside of the lambda
 capture, extending the life of the instance. The reference counter will always be +1. This problem
 only happens when you use lambda capture inside of lambda as above. 
 **How to solve this? Use weak reference!** 
 
 ```cpp
 // This will NOT cause any problems
-fooClass.addFunc("setOnClickCallback", [](Foo* self, SqFunction func, SqWeakRef ref) -> void {
+fooClass.addFunc("setOnClickCallback", [](Foo* self, ssq::Function func, SqWeakRef ref) -> void {
     self.setOnClick([=](SomeEventData data) {
         vm.callFunc(func, ref, data);
     });

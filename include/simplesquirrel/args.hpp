@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SQUIRREL_BIND_ARGS_HEADER_H
-#define SQUIRREL_BIND_ARGS_HEADER_H
+#ifndef SSQ_ARGS_HEADER_H
+#define SSQ_ARGS_HEADER_H
 
 #include "exceptions.hpp"
 #include <squirrel.h>
@@ -8,15 +8,16 @@
 #include <typeinfo>
 #include <vector>
 
-namespace SquirrelBind {
-    class SqArray;
-    class SqEnum;
-    class SqVM;
+namespace ssq {
+    class Array;
+    class Enum;
+    class VM;
+    class SqWeakRef;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
-        SQBIND_API void addClassObj(HSQUIRRELVM vm, size_t hashCode, const HSQOBJECT& obj);
-        SQBIND_API const HSQOBJECT& getClassObj(HSQUIRRELVM vm, size_t hashCode);
+        SSQ_API void addClassObj(HSQUIRRELVM vm, size_t hashCode, const HSQOBJECT& obj);
+        SSQ_API const HSQOBJECT& getClassObj(HSQUIRRELVM vm, size_t hashCode);
 
         template<class T>
         static SQInteger classDestructor(SQUserPointer ptr, SQInteger size) {
@@ -35,10 +36,10 @@ namespace SquirrelBind {
         inline void checkType(HSQUIRRELVM vm, SQInteger index, SQObjectType expected){
             auto type = sq_gettype(vm, index);
             if (expected == OT_CLOSURE) {
-                if (type != OT_CLOSURE && type != OT_NATIVECLOSURE) throw SqTypeException("bad cast", sqTypeToStr(SqType(expected)), sqTypeToStr(SqType(type)));
+                if (type != OT_CLOSURE && type != OT_NATIVECLOSURE) throw TypeException("bad cast", typeToStr(Type(expected)), typeToStr(Type(type)));
                 return;
             }
-            if (type != expected) throw SqTypeException("bad cast", sqTypeToStr(SqType(expected)), sqTypeToStr(SqType(type)));
+            if (type != expected) throw TypeException("bad cast", typeToStr(Type(expected)), typeToStr(Type(type)));
         }
 
         template<typename T>
@@ -50,7 +51,7 @@ namespace SquirrelBind {
                 sq_getuserdata(vm, index, &ptr, &typetag);
 
                 if(reinterpret_cast<size_t>(typetag) != typeid(T).hash_code()) {
-                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                    throw TypeException("bad cast", typeid(T).name(), "UNKNOWN");
                 }
 
                 T** p = reinterpret_cast<T**>(ptr);
@@ -61,14 +62,14 @@ namespace SquirrelBind {
                 sq_gettypetag(vm, index, &typetag);
 
                 if(reinterpret_cast<size_t>(typetag) != typeid(T*).hash_code()) {
-                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                    throw TypeException("bad cast", typeid(T).name(), "UNKNOWN");
                 }
 
                 T* p = reinterpret_cast<T*>(ptr);
                 return T(*p);
             }
             else {
-                throw SqTypeException("bad cast", "INSTANCE", sqTypeToStr(SqType(type)));
+                throw TypeException("bad cast", "INSTANCE", typeToStr(Type(type)));
             }
         }
 
@@ -78,28 +79,28 @@ namespace SquirrelBind {
             if(type == OT_USERPOINTER) {
                 SQUserPointer val;
                 if (SQ_FAILED(sq_getuserpointer(vm, index, &val))) {
-                    throw SqTypeException("Could not get instance from squirrel stack");
+                    throw TypeException("Could not get instance from squirrel stack");
                 }
                 return reinterpret_cast<T>(val);
             }
             else {
-                if (type != OT_INSTANCE) throw SqTypeException("bad cast", sqTypeToStr(SqType(OT_INSTANCE)), sqTypeToStr(SqType(type)));
+                if (type != OT_INSTANCE) throw TypeException("bad cast", typeToStr(Type(OT_INSTANCE)), typeToStr(Type(type)));
                 SQUserPointer val;
-                sq_gettypetag(vm, index, &val);
+                /*sq_gettypetag(vm, index, &val);
                 if (reinterpret_cast<size_t>(val) != typeid(T).hash_code()) {
-                    throw SqTypeException("bad cast", typeid(T).name(), "UNKNOWN");
-                }
+                    throw TypeException("bad cast", typeid(T).name(), "UNKNOWN");
+                }*/
                 if (SQ_FAILED(sq_getinstanceup(vm, index, &val, nullptr))) {
-                    throw SqTypeException("Could not get instance from squirrel stack");
+                    throw TypeException("Could not get instance from squirrel stack");
                 }
                 return reinterpret_cast<T>(val);
             }
         }
 
         template<>
-        inline SqObject popValue(HSQUIRRELVM vm, SQInteger index){
-            SqObject val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqObject from squirrel stack");
+        inline Object popValue(HSQUIRRELVM vm, SQInteger index){
+            Object val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Object from squirrel stack");
             sq_addref(vm, &val.getRaw());
             return val;
         }
@@ -108,7 +109,7 @@ namespace SquirrelBind {
         inline char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get char from squirrel stack");
             return static_cast<char>(val);
         }
 
@@ -116,7 +117,7 @@ namespace SquirrelBind {
         inline signed char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get signed char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get signed char from squirrel stack");
             return static_cast<signed char>(val);
         }
 
@@ -124,7 +125,7 @@ namespace SquirrelBind {
         inline short popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get short from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get short from squirrel stack");
             return static_cast<short>(val);
         }
 
@@ -132,7 +133,7 @@ namespace SquirrelBind {
         inline int popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get int from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get int from squirrel stack");
             return static_cast<int>(val);
         }
 
@@ -140,7 +141,7 @@ namespace SquirrelBind {
         inline long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get long from squirrel stack");
             return static_cast<long>(val);
         }
 
@@ -148,7 +149,7 @@ namespace SquirrelBind {
         inline unsigned char popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned char from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get unsigned char from squirrel stack");
             return static_cast<unsigned char>(val);
         }
 
@@ -156,7 +157,7 @@ namespace SquirrelBind {
         inline unsigned short popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned short from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get unsigned short from squirrel stack");
             return static_cast<unsigned short>(val);
         }
 
@@ -164,7 +165,7 @@ namespace SquirrelBind {
         inline unsigned int popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned int from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get unsigned int from squirrel stack");
             return static_cast<unsigned int>(val);
         }
 
@@ -172,7 +173,7 @@ namespace SquirrelBind {
         inline unsigned long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get unsigned long from squirrel stack");
             return static_cast<unsigned long>(val);
         }
 
@@ -181,7 +182,7 @@ namespace SquirrelBind {
         inline long long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get long long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get long long from squirrel stack");
             return static_cast<long long>(val);
         }
 
@@ -189,7 +190,7 @@ namespace SquirrelBind {
         inline unsigned long long popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQInteger val;
-            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw SqTypeException("Could not get unsigned long long from squirrel stack");
+            if (SQ_FAILED(sq_getinteger(vm, index, &val))) throw TypeException("Could not get unsigned long long from squirrel stack");
             return static_cast<unsigned long long>(val);
         }
 #endif
@@ -199,7 +200,7 @@ namespace SquirrelBind {
         inline double popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INTEGER);
             SQFloat val;
-            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not get double from squirrel stack");
+            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw TypeException("Could not get double from squirrel stack");
             return static_cast<double>(val);
         }
 #endif
@@ -208,7 +209,7 @@ namespace SquirrelBind {
         inline float popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_FLOAT);
             SQFloat val;
-            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw SqTypeException("Could not get float from squirrel stack");
+            if (SQ_FAILED(sq_getfloat(vm, index, &val))) throw TypeException("Could not get float from squirrel stack");
             return static_cast<float>(val);
         }
 
@@ -216,7 +217,7 @@ namespace SquirrelBind {
         inline bool popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_BOOL);
             SQBool val;
-            if (SQ_FAILED(sq_getbool(vm, index, &val))) throw SqTypeException("Could not get bool from squirrel stack");
+            if (SQ_FAILED(sq_getbool(vm, index, &val))) throw TypeException("Could not get bool from squirrel stack");
             return static_cast<bool>(val);
         }
 
@@ -225,7 +226,7 @@ namespace SquirrelBind {
         inline std::wstring popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_STRING);
             const SQChar* val;
-            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not get string from squirrel stack");
+            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw TypeException("Could not get string from squirrel stack");
             return std::wstring(val == nullptr ? L"" : val);
         }
 #else
@@ -233,7 +234,7 @@ namespace SquirrelBind {
         inline std::string popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_STRING);
             const SQChar* val;
-            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw SqTypeException("Could not get string from squirrel stack");
+            if (SQ_FAILED(sq_getstring(vm, index, &val))) throw TypeException("Could not get string from squirrel stack");
             return std::string(val == nullptr ? "" : val);
         }
 #endif
@@ -273,13 +274,14 @@ namespace SquirrelBind {
             pushByCopy<T>(vm, value);
         }
 
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqObject& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqClass& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqInstance& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqTable& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqFunction& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqEnum& value);
-        SQBIND_API void pushRaw(HSQUIRRELVM vm, const SqArray& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Object& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Class& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Instance& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Table& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Function& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Enum& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const Array& value);
+        SSQ_API void pushRaw(HSQUIRRELVM vm, const SqWeakRef& value);
 
         template<>
         inline void pushValue(HSQUIRRELVM vm, const std::nullptr_t& value){
@@ -293,37 +295,42 @@ namespace SquirrelBind {
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqObject& value){
+        inline void pushValue(HSQUIRRELVM vm, const Object& value){
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqClass& value){
+        inline void pushValue(HSQUIRRELVM vm, const Class& value){
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqInstance& value){
+        inline void pushValue(HSQUIRRELVM vm, const Instance& value){
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqTable& value){
+        inline void pushValue(HSQUIRRELVM vm, const SqWeakRef& value) {
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqFunction& value){
+        inline void pushValue(HSQUIRRELVM vm, const Table& value){
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqEnum& value){
+        inline void pushValue(HSQUIRRELVM vm, const Function& value){
             pushRaw(vm, value);
         }
 
         template<>
-        inline void pushValue(HSQUIRRELVM vm, const SqArray& value){
+        inline void pushValue(HSQUIRRELVM vm, const Enum& value){
+            pushRaw(vm, value);
+        }
+
+        template<>
+        inline void pushValue(HSQUIRRELVM vm, const Array& value){
             pushRaw(vm, value);
         }
 

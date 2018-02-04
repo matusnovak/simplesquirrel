@@ -49,7 +49,7 @@ The documentation for this namespace was generated from: `include/squirrelbind/a
 
 | Type | Name |
 | -------: | :------- |
-|  SQBIND_API const char * | [sqTypeToStr](#693f5011) (SqType _type_)  |
+|  SSQ_API const char * | [sqTypeToStr](#693f5011) (SqType _type_)  |
 
 
 ## Enums Documentation
@@ -124,7 +124,7 @@ void(* SqCompileErrorFunc
 ### _function_ <a id="693f5011" href="#693f5011">sqTypeToStr</a>
 
 ```cpp
-SQBIND_API const char * sqTypeToStr (
+SSQ_API const char * sqTypeToStr (
     SqType type
 ) 
 ```

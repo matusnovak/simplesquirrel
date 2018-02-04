@@ -1,73 +1,73 @@
-#include "../include/squirrelbind/array.hpp"
-#include "../include/squirrelbind/exceptions.hpp"
+#include "../include/simplesquirrel/array.hpp"
+#include "../include/simplesquirrel/exceptions.hpp"
 #include <squirrel.h>
 #include <forward_list>
 
-namespace SquirrelBind {
-    SqArray::SqArray(HSQUIRRELVM vm, size_t len):SqObject(vm) {
+namespace ssq {
+    Array::Array(HSQUIRRELVM vm, size_t len):Object(vm) {
         sq_newarray(vm, len);
         sq_getstackobj(vm, -1, &obj);
         sq_addref(vm, &obj);
         sq_pop(vm,1); // Pop array
     }
 
-    SqArray::SqArray(const SqObject& object):SqObject(object) {
-        if (object.getType() != SqType::ARRAY) throw SqTypeException("bad cast", "ARRAY", object.getTypeStr());
+    Array::Array(const Object& object):Object(object) {
+        if (object.getType() != Type::ARRAY) throw TypeException("bad cast", "ARRAY", object.getTypeStr());
     }
 
-    SqArray::SqArray(const SqArray& other):SqObject(other) {
+    Array::Array(const Array& other):Object(other) {
             
     }
 
-    SqArray::SqArray(SqArray&& other) NOEXCEPT :SqObject(std::forward<SqArray>(other)) {
+    Array::Array(Array&& other) NOEXCEPT :Object(std::forward<Array>(other)) {
             
     }
 
-    size_t SqArray::size() {
+    size_t Array::size() {
         sq_pushobject(vm, obj);
         SQInteger s = sq_getsize(vm, -1);
         sq_pop(vm, 1);
         return static_cast<size_t>(s);
     }
 
-    std::vector<SqObject> SqArray::convertRaw() {
+    std::vector<Object> Array::convertRaw() {
         sq_pushobject(vm, obj);
         SQInteger s = sq_getsize(vm, -1);
-        std::vector<SqObject> ret;
+        std::vector<Object> ret;
         ret.reserve(s);
         while(s--) {
             if(SQ_FAILED(sq_arraypop(vm, -1, true))) {
                 sq_pop(vm, 1);
-                throw SqTypeException("Failed to pop value from back of the array");
+                throw TypeException("Failed to pop value from back of the array");
             }
-            ret.push_back(detail::pop<SqObject>(vm, -1));
+            ret.push_back(detail::pop<Object>(vm, -1));
         }
         sq_pop(vm, 1);
         return ret;
     }
 
-    void SqArray::pop() {
+    void Array::pop() {
         sq_pushobject(vm, obj);
         auto s = sq_getsize(vm, -1);
         if(s == 0) {
             sq_pop(vm, 1);
-            throw SqTypeException("Out of bounds");
+            throw TypeException("Out of bounds");
         }
 
         if(SQ_FAILED(sq_arraypop(vm, -1, false))) {
             sq_pop(vm, 1);
-            throw SqTypeException("Failed to pop value from back of the array");
+            throw TypeException("Failed to pop value from back of the array");
         }
         sq_pop(vm, 1);
     }
 
-    SqArray& SqArray::operator = (const SqArray& other){
-        SqObject::operator = (other);
+    Array& Array::operator = (const Array& other){
+        Object::operator = (other);
         return *this;
     }
 
-    SqArray& SqArray::operator = (SqArray&& other) NOEXCEPT {
-        SqObject::operator = (std::forward<SqArray>(other));
+    Array& Array::operator = (Array&& other) NOEXCEPT {
+        Object::operator = (std::forward<Array>(other));
         return *this;
     }
 }

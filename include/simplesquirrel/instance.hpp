@@ -1,62 +1,67 @@
 #pragma once
-#ifndef SQUIRREL_BIND_INSTANCE_HEADER_H
-#define SQUIRREL_BIND_INSTANCE_HEADER_H
+#ifndef SSQ_INSTANCE_HEADER_H
+#define SSQ_INSTANCE_HEADER_H
 
 #include "object.hpp"
 #include "args.hpp"
 
-namespace SquirrelBind {
-    class SqClass;
+namespace ssq {
+    class Class;
     /**
     * @brief Squirrel intance of class object
     */
-    class SQBIND_API SqInstance: public SqObject {
+    class SSQ_API Instance: public Object {
     public:
         /**
         * @brief Constructs empty invalid instance
         */
-        SqInstance();
+        Instance();
+        /**
+        * @brief Destructor
+        */
+        virtual ~Instance() = default;
         /**
         * @brief Constructs empty instance
         */
-        SqInstance(HSQUIRRELVM vm);
+        Instance(HSQUIRRELVM vm);
         /**
-        * @brief Converts SqObject to SqInstance
-        * @throws SqTypeException if the SqObject is not type of an instance
+        * @brief Converts Object to Instance
+        * @throws TypeException if the Object is not type of an instance
         */
-        explicit SqInstance(const SqObject& object);
+        explicit Instance(const Object& object);
         /**
         * @brief Copy constructor
         */
-        SqInstance(const SqInstance& other);
+        Instance(const Instance& other);
         /**
         * @brief Move constructor
         */
-        SqInstance(SqInstance&& other) NOEXCEPT;
+        Instance(Instance&& other) NOEXCEPT;
         /**
         * @brief Returns the class associated with this instance
-        * @throws SqTypeException if something went wrong
+        * @throws TypeException if something went wrong
         */
-        SqClass getClass();
+        Class getClass();
         /**
         * @brief Copy assingment operator
         */ 
-        SqInstance& operator = (const SqInstance& other);
+        Instance& operator = (const Instance& other);
         /**
         * @brief Move assingment operator
         */
-        SqInstance& operator = (SqInstance&& other) NOEXCEPT;
+        Instance& operator = (Instance&& other) NOEXCEPT;
     };
 
     /**
      * @brief Weak reference class that does not extend the life of the instance
      */
-    class SQBIND_API SqWeakRef: public SqInstance {
+    class SSQ_API SqWeakRef: public Instance {
     public:
         SqWeakRef();
         SqWeakRef(HSQUIRRELVM vm);
         SqWeakRef(const SqWeakRef& other);
         SqWeakRef(SqWeakRef&& other);
+        explicit SqWeakRef(const Instance& instance);
 
         void swap(SqWeakRef& other);
 
@@ -67,10 +72,10 @@ namespace SquirrelBind {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         template<>
-        inline SqInstance popValue(HSQUIRRELVM vm, SQInteger index){
+        inline Instance popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INSTANCE);
-            SqInstance val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqInstance from squirrel stack");
+            Instance val(vm);
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Instance from squirrel stack");
             sq_addref(vm, &val.getRaw());
             return val;
         }
@@ -79,7 +84,7 @@ namespace SquirrelBind {
         inline SqWeakRef popValue(HSQUIRRELVM vm, SQInteger index){
             checkType(vm, index, OT_INSTANCE);
             SqWeakRef val(vm);
-            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw SqTypeException("Could not get SqInstance from squirrel stack");
+            if (SQ_FAILED(sq_getstackobj(vm, index, &val.getRaw()))) throw TypeException("Could not get Instance from squirrel stack");
             return val;
         }
     }

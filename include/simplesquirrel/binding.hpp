@@ -1,12 +1,12 @@
 #pragma once
-#ifndef SQUIRREL_BIND_BINDING_HEADER_H
-#define SQUIRREL_BIND_BINDING_HEADER_H
+#ifndef SSQ_BINDING_HEADER_H
+#define SSQ_BINDING_HEADER_H
 
 #include "allocators.hpp"
 #include <functional>
 #include <cstring>
 
-namespace SquirrelBind {
+namespace ssq {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
         // function_traits and make_function credits by @tinlyx https://stackoverflow.com/a/21665705
@@ -63,11 +63,11 @@ namespace SquirrelBind {
 #else
         template <> struct Param<std::string> {static const char type = 's';};
 #endif
-        template <> struct Param<SqClass> {static const char type = 'y';};
-        template <> struct Param<SqFunction> {static const char type = 'c';};
-        template <> struct Param<SqTable> {static const char type = 't';};
-        template <> struct Param<SqArray> {static const char type = 'a';};
-        template <> struct Param<SqInstance> {static const char type = 'x';};
+        template <> struct Param<Class> {static const char type = 'y';};
+        template <> struct Param<Function> {static const char type = 'c';};
+        template <> struct Param<Table> {static const char type = 't';};
+        template <> struct Param<Array> {static const char type = 'a';};
+        template <> struct Param<Instance> {static const char type = 'x';};
         template <> struct Param<std::nullptr_t> {static const char type = 'o';};
 
         template <typename A>
@@ -90,11 +90,11 @@ namespace SquirrelBind {
         }
 
         template<typename T, typename... Args>
-        static SqObject addClass(HSQUIRRELVM vm, const char* name, const std::function<T*(Args...)>& allocator, bool release = true) {
+        static Object addClass(HSQUIRRELVM vm, const char* name, const std::function<T*(Args...)>& allocator, bool release = true) {
             static const auto hashCode = typeid(T*).hash_code();
             static const std::size_t nparams = sizeof...(Args);
 
-            SqObject clsObj(vm);
+            Object clsObj(vm);
             
             sq_pushstring(vm, name, strlen(name));
             sq_newclass(vm, false);
@@ -128,9 +128,9 @@ namespace SquirrelBind {
         }
 
         template<typename T>
-        static SqObject addAbstractClass(HSQUIRRELVM vm, const char* name) {
+        static Object addAbstractClass(HSQUIRRELVM vm, const char* name) {
             static const auto hashCode = typeid(T*).hash_code();
-            SqObject clsObj(vm);
+            Object clsObj(vm);
 
             sq_pushstring(vm, name, strlen(name));
             sq_newclass(vm, false);
@@ -197,7 +197,7 @@ namespace SquirrelBind {
             sq_newclosure(vm, &detail::func<1, R, Args...>::global, 1);
             sq_setparamscheck(vm, nparams + 1, params);
             if(SQ_FAILED(sq_newslot(vm, -3, SQFalse))) {
-                throw SqTypeException("Failed to bind function");
+                throw TypeException("Failed to bind function");
             }
         }
 
@@ -214,7 +214,7 @@ namespace SquirrelBind {
             sq_newclosure(vm, &detail::func<0, R, Args...>::global, 1);
             sq_setparamscheck(vm, nparams, params);
             if(SQ_FAILED(sq_newslot(vm, -3, isStatic))) {
-                throw SqTypeException("Failed to bind member function");
+                throw TypeException("Failed to bind member function");
             }
         }
     }

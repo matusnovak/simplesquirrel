@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SQUIRREL_BIND_OBJECT_HEADER_H
-#define SQUIRREL_BIND_OBJECT_HEADER_H
+#ifndef SSQ_OBJECT_HEADER_H
+#define SSQ_OBJECT_HEADER_H
 
 #if !defined(HAS_NOEXCEPT) && !defined(NOEXCEPT)
     #if defined(__clang__)
@@ -27,13 +27,13 @@
 
 #include "type.hpp"
 
-namespace SquirrelBind {
-    class SqFunction;
-    class SqTable;
-    class SqClass;
-    class SqInstance;
-    class SqTable;
-    class SqArray;
+namespace ssq {
+    class Function;
+    class Table;
+    class Class;
+    class Instance;
+    class Table;
+    class Array;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
@@ -45,30 +45,30 @@ namespace SquirrelBind {
     /**
     * @brief Raw Squirrel object
     */
-    class SQBIND_API SqObject {
+    class SSQ_API Object {
     public:
         /**
         * @brief Creates an empty object with null VM
         * @note This object won't be usable
         */
-        SqObject();
+        Object();
         /**
         * @brief Creates an empty object
         */
-        SqObject(HSQUIRRELVM vm);
-        virtual ~SqObject();
+        Object(HSQUIRRELVM vm);
+        virtual ~Object();
         /**
         * @brief Swaps two objects
         */
-        void swap(SqObject& other) NOEXCEPT;
+        void swap(Object& other) NOEXCEPT;
         /**
         * @brief Copy constructor to copy the object reference
         */
-        SqObject(const SqObject& other);
+        Object(const Object& other);
         /**
         * @brief Move constructor
         */
-        SqObject(SqObject&& other) NOEXCEPT;
+        Object(Object&& other) NOEXCEPT;
         /**
         * @brief Checks if the object is empty
         */
@@ -84,11 +84,11 @@ namespace SquirrelBind {
         /**
         * @brief Finds object within this object
         */
-        SqObject find(const char* name) const;
+        Object find(const char* name) const;
         /**
         * @brief Returns the type of the object
         */
-        SqType getType() const;
+        Type getType() const;
         /**
         * @brief Returns the type of the object in string format
         */
@@ -113,7 +113,7 @@ namespace SquirrelBind {
         void reset();
         /**
         * @brief Returns the integer value of this object
-        * @throws SqTypeException if this object is not an integer
+        * @throws TypeException if this object is not an integer
         */
 #ifdef _SQ64
         int64_t toInt() const;
@@ -122,7 +122,7 @@ namespace SquirrelBind {
 #endif
         /**
         * @brief Returns the float value of this object
-        * @throws SqTypeException if this object is not a float
+        * @throws TypeException if this object is not a float
         */
 #ifdef SQUSEDOUBLE
         double toFloat() const;
@@ -131,7 +131,7 @@ namespace SquirrelBind {
 #endif
         /**
         * @brief Returns the string value of this object
-        * @throws SqTypeException if this object is not a sring
+        * @throws TypeException if this object is not a sring
         */
 #ifdef SQUNICODE
         std::wstring toString() const;
@@ -140,48 +140,48 @@ namespace SquirrelBind {
 #endif
         /**
         * @brief Returns the boolean value of this object
-        * @throws SqTypeException if this object is not a boolean
+        * @throws TypeException if this object is not a boolean
         */
         bool toBool() const;
         /**
-        * @brief Returns the SqFunction value of this object
-        * @throws SqTypeException if this object is not a function
+        * @brief Returns the Function value of this object
+        * @throws TypeException if this object is not a function
         */
-        SqFunction toFunction() const;
+        Function toFunction() const;
         /**
-        * @brief Returns the SqInstance value of this object
-        * @throws SqTypeException if this object is not an instance
+        * @brief Returns the Instance value of this object
+        * @throws TypeException if this object is not an instance
         */
-        SqInstance toInstance() const;
+        Instance toInstance() const;
         /**
-        * @brief Returns the SqClass value of this object
-        * @throws SqTypeException if this object is not a class
+        * @brief Returns the Class value of this object
+        * @throws TypeException if this object is not a class
         */
-        SqClass toClass() const;
+        Class toClass() const;
         /**
-        * @brief Returns the SqTable value of this object
-        * @throws SqTypeException if this object is not a table
+        * @brief Returns the Table value of this object
+        * @throws TypeException if this object is not a table
         */
-        SqTable toTable() const;
+        Table toTable() const;
         /**
-        * @brief Returns the SqArray value of this object
-        * @throws SqTypeException if this object is not an array
+        * @brief Returns the Array value of this object
+        * @throws TypeException if this object is not an array
         */
-        SqArray toArray() const;
+        Array toArray() const;
         /**
         * @brief Returns an arbitary value of this object
-        * @throws SqTypeException if this object is not an type of T
+        * @throws TypeException if this object is not an type of T
         */
         template<typename T>
         T to() const;
         /**
         * @brief Unsafe cast this object into any pointer of type T
-        * @throws SqTypeException if this object is not an instance
+        * @throws TypeException if this object is not an instance
         */
         template<typename T>
         T toPtrUnsafe() const {
-            if (getType() != SqType::INSTANCE) {
-                throw SqTypeException("bad cast", "INSTANCE", getTypeStr());
+            if (getType() != Type::INSTANCE) {
+                throw TypeException("bad cast", "INSTANCE", getTypeStr());
             }
             sq_pushobject(vm, obj);
             SQUserPointer val;
@@ -192,11 +192,11 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */
-        SqObject& operator = (const SqObject& other);
+        Object& operator = (const Object& other);
         /**
         * @brief Move assingment operator
         */
-        SqObject& operator = (SqObject&& other) NOEXCEPT;
+        Object& operator = (Object&& other) NOEXCEPT;
 
     protected:
         HSQUIRRELVM vm;

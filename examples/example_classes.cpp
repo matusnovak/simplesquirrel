@@ -1,9 +1,6 @@
-#define SQUIRREL_STATIC
-#include <squirrelbind/squirrelbind.hpp>
+#include <simplesquirrel/simplesquirrel.hpp>
 #include <iomanip>
 #include <algorithm>
-
-using namespace SquirrelBind;
 
 class CppClass {
 public:
@@ -23,8 +20,8 @@ public:
         return integer;
     }
 
-    static SqClass expose(SqVM& vm) {
-        // auto cls = vm.addClass("CppClass", SqClass::Ctor<CppClass(std::string, int)>());
+    static ssq::Class expose(ssq::VM& vm) {
+        // auto cls = vm.addClass("CppClass", ssq::Class::Ctor<CppClass(std::string, int)>());
         // Alternative approach using lambda:
         auto cls = vm.addClass("CppClass", [](std::string message, int integer) -> CppClass* {
             return new CppClass(message, integer);
@@ -52,11 +49,11 @@ public:
 
 int main() {
     // Create VM with stack size of 1024 and load string and math libraries
-    SqVM vm(1024, SqLibs::STRING | SqLibs::MATH);
+    ssq::VM vm(1024, ssq::Libs::STRING | ssq::Libs::MATH);
 
     try {
         // Compile script and run it
-        SqScript script = vm.compileFile("example_classes.nut");
+        ssq::Script script = vm.compileFile("example_classes.nut");
 
         // Expose the class
 		CppClass::expose(vm);
@@ -65,9 +62,9 @@ int main() {
         vm.run(script);
 
         // We run the script, now we will getRaw getInstance and doStuff functions
-        SqFunction getInstance = vm.findFunc("getInstance");
-        SqFunction doStuff = vm.findFunc("doStuff");
-        SqFunction foo = vm.findFunc("foo");
+        ssq::Function getInstance = vm.findFunc("getInstance");
+        ssq::Function doStuff = vm.findFunc("doStuff");
+        ssq::Function foo = vm.findFunc("foo");
         
         // We will getRaw copy of the instance allocated in the squirrel
         CppClass cpy = vm.callFunc(getInstance, vm).to<CppClass>();
@@ -81,16 +78,16 @@ int main() {
         // Call foo function to print out the instance message inside of squirrel
         vm.callFunc(foo, vm);
 
-    } catch (SqCompileException& e) {
+    } catch (ssq::CompileException& e) {
         std::cerr << "Failed to run file: " << e.what() << std::endl;
         return -1;
-    } catch (SqTypeException& e) {
+    } catch (ssq::TypeException& e) {
         std::cerr << "Something went wrong passing objects: " << e.what() << std::endl;
         return -1;
-    } catch (SqRuntimeException& e) {
+    } catch (ssq::RuntimeException& e) {
         std::cerr << "Something went wrong during execution: " << e.what() << std::endl;
         return -1;
-    } catch (SqNotFoundException& e) {
+    } catch (ssq::NotFoundException& e) {
         std::cerr << e.what() << std::endl;
         return -1;
     }

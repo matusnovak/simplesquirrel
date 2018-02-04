@@ -1,37 +1,41 @@
 #pragma once
-#ifndef SQUIRREL_BIND_ENUM_HEADER_H
-#define SQUIRREL_BIND_ENUM_HEADER_H
+#ifndef SSQ_ENUM_HEADER_H
+#define SSQ_ENUM_HEADER_H
 
 #include "class.hpp"
 
-namespace SquirrelBind {
+namespace ssq {
     /**
     * @brief Squirrel table object
     */
-    class SQBIND_API SqEnum: public SqObject {
+    class SSQ_API Enum: public Object {
     public:
         /**
         * @brief Creates empty table with null VM
         * @note This object will be unusable
         */
-        SqEnum();
+        Enum();
         /**
-        * @brief Converts SqObject to SqEnum
-        * @throws SqTypeException if the SqObject is not type of an enum (table)
+        * @brief Destructor
         */
-        explicit SqEnum(const SqObject& other);
+        virtual ~Enum() = default;
+        /**
+        * @brief Converts Object to Enum
+        * @throws TypeException if the Object is not type of an enum (table)
+        */
+        explicit Enum(const Object& other);
         /**
         * @brief Creates empty enum
         */
-        explicit SqEnum(HSQUIRRELVM vm);
+        explicit Enum(HSQUIRRELVM vm);
         /**
         * @brief Copy constructor
         */
-        SqEnum(const SqEnum& other);
+        Enum(const Enum& other);
         /**
         * @brief Move constructor
         */
-        SqEnum(SqEnum&& other) NOEXCEPT;
+        Enum(Enum&& other) NOEXCEPT;
         /**
          * @brief Adds a new key-value pair to this table
          */
@@ -46,11 +50,11 @@ namespace SquirrelBind {
         /**
         * @brief Copy assingment operator
         */
-        SqEnum& operator = (const SqEnum& other);
+        Enum& operator = (const Enum& other);
         /**
         * @brief Move assingment operator
         */
-        SqEnum& operator = (SqEnum&& other) NOEXCEPT;
+        Enum& operator = (Enum&& other) NOEXCEPT;
     };
 }
 
