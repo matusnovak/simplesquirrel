@@ -2,7 +2,7 @@ Ctor< T(Args...)>
 ===================================
 
 
-The documentation for this struct was generated from: `include/squirrelbind/class.hpp`
+The documentation for this struct was generated from: `include/simplesquirrel/class.hpp`
 
 
 
@@ -10,12 +10,12 @@ The documentation for this struct was generated from: `include/squirrelbind/clas
 
 | Type | Name |
 | -------: | :------- |
-|  T * | [allocate](#f3303c7b) (Args &&... _args_)  |
+|  T * | [allocate](#decbbdee) (Args &&... _args_)  |
 
 
 ## Public Static Functions Documentation
 
-### _function_ <a id="f3303c7b" href="#f3303c7b">allocate</a>
+### _function_ <a id="decbbdee" href="#decbbdee">allocate</a>
 
 ```cpp
 static inline T * allocate (

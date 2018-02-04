@@ -1,7 +1,7 @@
-# SquirrelBind
+# SimpleSquirrel
 Yet another simple binding in C++11 for [Squirrel scripting language](http://www.squirrel-lang.org/)
 
-API Documentation can be found here: <https://matusnovak.github.io/squirrel_bind/docs/SquirrelBind.html>
+API Documentation can be found here: <https://matusnovak.github.io/simplesquirrel/docs/ssq.html>
 
 ## Features
 
@@ -63,7 +63,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
 make install
 ```
 
-## Install Squirrel Bind
+## Install SimplqSquirrel
 
 To compile and install Squirrel Bind use the command line instructions below. I highly recommend
 using the GUI tool `cmake-gui` and set it up from there using your favourite IDE as generator.
@@ -71,19 +71,19 @@ using the GUI tool `cmake-gui` and set it up from there using your favourite IDE
 **Linux:**
 
 ```bash
-git clone https://github.com/matusnovak/squirrel_bind.git
-cd squirrel_bind
+git clone https://github.com/matusnovak/simplesquirrel.git
+cd simplesquirrel
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_TESTS=OFF -DBUILD_TESTS=OFF
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_TESTS=OFF
 sudo make install
 ```
 
 **Windows:**
 
 ```bash
-git clone https://github.com/matusnovak/squirrel_bind.git
-cd squirrel_bind
+git clone https://github.com/matusnovak/simplesquirrel.git
+cd simplesquirrel
 mkdir build
 cd build
 cmake .. -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want -DBUILD_TESTS=OFF
