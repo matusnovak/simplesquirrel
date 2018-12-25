@@ -227,7 +227,14 @@ namespace ssq {
             checkType(vm, index, OT_STRING);
             const SQChar* val;
             if (SQ_FAILED(sq_getstring(vm, index, &val))) throw TypeException("Could not get string from squirrel stack");
-            return std::wstring(val == nullptr ? L"" : val);
+
+            if(val == nullptr)
+            {
+                return std::wstring(L""); 
+            }
+
+            SQInteger len = sq_getsize(vm,index);    
+            return std::wstring(val,len);
         }
 #else
         template<>
@@ -235,7 +242,14 @@ namespace ssq {
             checkType(vm, index, OT_STRING);
             const SQChar* val;
             if (SQ_FAILED(sq_getstring(vm, index, &val))) throw TypeException("Could not get string from squirrel stack");
-            return std::string(val == nullptr ? "" : val);
+
+            if(val == nullptr)
+            {
+                return std::string(""); 
+            }
+
+            SQInteger len = sq_getsize(vm,index);    
+            return std::string(val,len);
         }
 #endif
 
