@@ -25,6 +25,7 @@
 #include <squirrel.h>
 #include <unordered_map>
 
+#include "exceptions.hpp"
 #include "type.hpp"
 
 namespace ssq {
@@ -181,7 +182,7 @@ namespace ssq {
         template<typename T>
         T toPtrUnsafe() const {
             if (getType() != Type::INSTANCE) {
-                throw TypeException("bad cast", "INSTANCE", getTypeStr());
+                throw ssq::TypeException("bad cast", "INSTANCE", getTypeStr());
             }
             sq_pushobject(vm, obj);
             SQUserPointer val;
