@@ -21,8 +21,8 @@ namespace ssq {
     }
 
     unsigned int Function::getNumOfParams() const {
-        SQUnsignedInteger nparams;
-        SQUnsignedInteger nfreevars;
+        SQInteger nparams;
+        SQInteger nfreevars;
         sq_pushobject(vm, obj);
         if (SQ_FAILED(sq_getclosureinfo(vm, -1, &nparams, &nfreevars))) {
             sq_pop(vm, 1);
