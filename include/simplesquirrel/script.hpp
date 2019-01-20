@@ -7,6 +7,7 @@
 namespace ssq {
     /**
     * @brief Squirrel script object
+    * @ingroup simplesquirrel
     */
     class SSQ_API Script: public Object {
     public:

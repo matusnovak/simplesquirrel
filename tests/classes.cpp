@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN 
-#include <catch/catch.hpp>
-#include "../include/simplesquirrel/simplesquirrel.hpp"
+#include "catch.hpp"
+#include <simplesquirrel/simplesquirrel.hpp>
 
 #define STRINGIFY(x) #x
 

@@ -38,3 +38,8 @@ install/
 _book
 .vscode
 .publish
+
+# doxygen
+doxygen/*.md
+doxygen/xml
+!doxygen/index.md

@@ -9,6 +9,7 @@
 namespace ssq {
     /**
     * @brief Raw exception
+    * @ingroup simplesquirrel
     */
     class Exception: public std::exception {
     public:
@@ -23,6 +24,7 @@ namespace ssq {
     };
     /**
     * @brief Not Found exception thrown if object with a given name does not exist
+    * @ingroup simplesquirrel
     */
     class NotFoundException: public Exception {
     public:
@@ -40,6 +42,7 @@ namespace ssq {
     };
     /**
     * @brief Compile exception thrown during compilation
+    * @ingroup simplesquirrel
     */
     class CompileException: public Exception {
     public:
@@ -61,6 +64,7 @@ namespace ssq {
     };
     /**
     * @brief Type exception thrown if casting between squirrel and C++ objects failed
+    * @ingroup simplesquirrel
     */
     class TypeException: public Exception {
     public:
@@ -82,6 +86,7 @@ namespace ssq {
     };
     /**
     * @brief Runtime exception thrown if something went wrong during execution
+    * @ingroup simplesquirrel
     */
     class RuntimeException: public Exception {
     public:

@@ -10,6 +10,7 @@
 namespace ssq {
     /**
     * @brief Squirrel intance of array object
+    * @ingroup simplesquirrel
     */
     class SSQ_API Array: public Object {
     public:

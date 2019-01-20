@@ -1,7 +1,7 @@
 {
     "name": "simplesquirrel",
     "version": "1.0.0",
-    "description": "Squirrel Binding library for C++11",
+    "description": "Simple Squirrel Binding library for C++11",
     "repository": {
       "url": "git@git@github.com:matusnovak/squirrel_bind.git",
       "type": "git"

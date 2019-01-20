@@ -9,6 +9,29 @@
 namespace ssq {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     namespace detail {
+        template <size_t... Is>
+        struct index_list {
+        };
+
+        // Declare primary template for index range builder
+        template <size_t MIN, size_t N, size_t... Is>
+        struct range_builder;
+
+        // Base step
+        template <size_t MIN, size_t... Is>
+        struct range_builder<MIN, MIN, Is...> {
+            typedef index_list<Is...> type;
+        };
+
+        // Induction step
+        template <size_t MIN, size_t N, size_t... Is>
+        struct range_builder : public range_builder<MIN, N - 1, N - 1, Is...> {
+        };
+
+        // Meta-function that returns a [MIN, MAX) index range
+        template<size_t MIN, size_t MAX>
+        using index_range = typename detail::range_builder<MIN, MAX>::type;
+
         template<class Ret>
         struct FuncPtr {
             const std::function<Ret()>* ptr;
@@ -24,6 +47,11 @@ namespace ssq {
             return new T();
         }
 
+        template<class T, class... Args, size_t... Is>
+        static T* callConstructor(HSQUIRRELVM vm, FuncPtr<T*(Args...)>* funcPtr, index_list<Is...>) {
+            return funcPtr->ptr->operator()(detail::pop<Args>(vm, Is + 2)...);
+        }
+
         template<class T, class... Args>
         static SQInteger classAllocator(HSQUIRRELVM vm) {
             static const std::size_t nparams = sizeof...(Args);
@@ -31,9 +59,8 @@ namespace ssq {
 
             FuncPtr<T*(Args...)>* funcPtr;
             sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
-            int index = nparams + 1;
 
-            T* p = funcPtr->ptr->operator()(detail::pop<Args>(vm, index--)...);
+            T* p = callConstructor<T, Args...>(vm, funcPtr, index_range<0, sizeof...(Args)>());
             sq_setinstanceup(vm, -2 -off, p);
             sq_setreleasehook(vm, -2 -off, &detail::classDestructor<T>);
 
@@ -50,9 +77,8 @@ namespace ssq {
 
             FuncPtr<T*(Args...)>* funcPtr;
             sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
-            int index = nparams + 1;
 
-            T* p = funcPtr->ptr->operator()(detail::pop<Args>(vm, index--)...);
+            T* p = callConstructor<T, Args...>(vm, funcPtr, index_range<0, sizeof...(Args)>());
             sq_setinstanceup(vm, -2 -off, p);
 
             sq_getclass(vm, -2 -off);
@@ -69,6 +95,9 @@ namespace ssq {
         }
     }
 
+    /**
+     * @ingroup simplesquirrel
+     */
     template<typename T>
     inline T Object::to() const {
         sq_pushobject(vm, obj);

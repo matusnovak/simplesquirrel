@@ -15,6 +15,9 @@
 #endif
 
 namespace ssq {
+    /**
+     * @ingroup simplesquirrel
+     */
     enum class Type {
         NULLPTR = OT_NULL,
         INTEGER = OT_INTEGER,
@@ -35,7 +38,9 @@ namespace ssq {
         WEAKREF = OT_WEAKREF,
         OUTER = OT_OUTER
     };
-
+    /**
+     * @ingroup simplesquirrel
+     */
     SSQ_API const char* typeToStr(Type type);
 }
 

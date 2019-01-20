@@ -9,6 +9,7 @@ namespace ssq {
     class Class;
     /**
     * @brief Squirrel intance of class object
+    * @ingroup simplesquirrel
     */
     class SSQ_API Instance: public Object {
     public:
@@ -54,6 +55,7 @@ namespace ssq {
 
     /**
      * @brief Weak reference class that does not extend the life of the instance
+     * @ingroup simplesquirrel
      */
     class SSQ_API SqWeakRef: public Instance {
     public:

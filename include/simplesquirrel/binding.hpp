@@ -148,6 +148,11 @@ namespace ssq {
             return clsObj;
         }
 
+        template<class Ret, class... Args, size_t... Is>
+        static Ret callGlobal(HSQUIRRELVM vm, FuncPtr<Ret(Args...)>* funcPtr, index_list<Is...>) {
+            return funcPtr->ptr->operator()(detail::pop<typename std::remove_reference<Args>::type>(vm, Is + 1)...);
+        }
+
         template<int offet, typename R, typename... Args>
         struct func {
             static SQInteger global(HSQUIRRELVM vm) {
@@ -157,8 +162,7 @@ namespace ssq {
                     FuncPtr<R(Args...)>* funcPtr;
                     sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
 
-                    int index = nparams + offet;
-                    push(vm, std::forward<R>(funcPtr->ptr->operator()(pop<typename std::remove_reference<Args>::type>(vm, index--)...)));
+                    push(vm, std::forward<R>(callGlobal(vm, funcPtr, index_range<offet, sizeof...(Args) + offet>())));
                     return 1;
                 } catch (std::exception& e) {
                     return sq_throwerror(vm, e.what());
@@ -175,8 +179,7 @@ namespace ssq {
                     FuncPtr<void(Args...)>* funcPtr;
                     sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
 
-                    int index = nparams + offet;
-                    funcPtr->ptr->operator()(pop<typename std::remove_reference<Args>::type>(vm, index--)...);
+                    callGlobal(vm, funcPtr, index_range<offet, sizeof...(Args) + offet>());
                     return 0;
                 } catch (std::exception& e) {
                     return sq_throwerror(vm, e.what());
