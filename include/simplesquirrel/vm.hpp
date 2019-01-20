@@ -19,11 +19,25 @@
 #endif
 
 namespace ssq {
+    /**
+     * @ingroup simplesquirrel
+     */
     typedef void(*SqPrintFunc)(HSQUIRRELVM, const SQChar*, ...);
+    /**
+     * @ingroup simplesquirrel
+     */
     typedef void(*SqErrorFunc)(HSQUIRRELVM, const SQChar*, ...);
+    /**
+     * @ingroup simplesquirrel
+     */
     typedef SQInteger(*SqRuntimeErrorFunc)(HSQUIRRELVM);
+    /**
+     * @ingroup simplesquirrel
+     */
     typedef void(*SqCompileErrorFunc)(HSQUIRRELVM, const SQChar*, const SQChar*, SQInteger, SQInteger);
-
+    /**
+     * @ingroup simplesquirrel
+     */
     class Libs {
     public:
         typedef int Flag;
@@ -38,6 +52,7 @@ namespace ssq {
 
     /**
     * @brief Squirrel Virtual Machine object
+    * @ingroup simplesquirrel
     */
     class SSQ_API VM: public Table {
     public:

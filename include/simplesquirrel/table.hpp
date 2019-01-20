@@ -8,6 +8,7 @@ namespace ssq {
     class Enum;
     /**
     * @brief Squirrel table object
+    * @ingroup simplesquirrel
     */
     class SSQ_API Table: public Object {
     public:

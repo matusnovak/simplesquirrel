@@ -1,16 +1,17 @@
 {
-    "name": "simplesquirrel",
-    "version": "1.0.0",
-    "description": "Squirrel Binding library for C++11",
-    "repository": {
-      "url": "git@git@github.com:matusnovak/squirrel_bind.git",
-      "type": "git"
-    },
-    "author": "matusnovak",
-    "license": "MIT",
-    "devDependencies": {
-      "gulp": "^3.9.1",
-      "gulp-gh-pages": "^0.5.4",
-      "gulp-load-plugins": "^1.3.0"
-    }
+  "name": "simplesquirrel",
+  "version": "1.0.0",
+  "description": "Simple Squirrel Binding library for C++11",
+  "repository": {
+    "url": "git@git@github.com:matusnovak/simplesquirrel.git",
+    "type": "git"
+  },
+  "scripts": {
+    "publish": "node gh-pages.js"
+  },
+  "author": "matusnovak",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
+}

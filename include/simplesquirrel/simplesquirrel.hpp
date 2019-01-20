@@ -2,6 +2,11 @@
 #ifndef SSQ_H
 #define SSQ_H
 
+/**
+ * @defgroup simplesquirrel
+ * @brief Yet another simple binding in C++11 for Squirrel scripting language
+ */
+
 #include "type.hpp"
 #include "exceptions.hpp"
 #include "object.hpp"

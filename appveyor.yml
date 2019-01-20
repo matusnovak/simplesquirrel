@@ -1,0 +1,136 @@
+version: '{build}'
+
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+branches:
+  only:
+    - master
+    - devel
+  except:
+    - gh-pages
+skip_tags: true
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+platform: Any CPU
+environment:
+  matrix:
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    COMPILER: mingw
+    TOOLSET: w64-mingw32
+    ARCH: i686
+    GENERATOR: '"MinGW Makefiles"'
+    MINGW_DIR_BIN: C:\mingw-w64\i686-6.3.0-posix-dwarf-rt_v5-rev1\mingw32\bin
+    CMAKE_C_COMPILER: C:/mingw-w64/i686-6.3.0-posix-dwarf-rt_v5-rev1/mingw32/bin/gcc.exe
+    CMAKE_CXX_COMPILER: C:/mingw-w64/i686-6.3.0-posix-dwarf-rt_v5-rev1/mingw32/bin/g++.exe
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+    COMPILER: mingw
+    TOOLSET: w64-mingw32
+    ARCH: x86_64
+    GENERATOR: '"MinGW Makefiles"'
+    MINGW_DIR_BIN: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin
+    CMAKE_C_COMPILER: C:/mingw-w64/x86_64-6.3.0-posix-seh-rt_v5-rev1/mingw64/bin/gcc.exe
+    CMAKE_CXX_COMPILER: C:/mingw-w64/x86_64-6.3.0-posix-seh-rt_v5-rev1/mingw64/bin/g++.exe
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    COMPILER: msvc
+    MINGW_DIR_BIN: ''
+    TOOLSET: vc14
+    ARCH: win32
+    GENERATOR: '"Visual Studio 14 2015"'
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    COMPILER: msvc
+    MINGW_DIR_BIN: ''
+    TOOLSET: vc14
+    ARCH: win64
+    GENERATOR: '"Visual Studio 14 2015 Win64"'
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    COMPILER: msvc
+    MINGW_DIR_BIN: ''
+    TOOLSET: vc15
+    ARCH: win32
+    GENERATOR: '"Visual Studio 15 2017"'
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    COMPILER: msvc
+    MINGW_DIR_BIN: ''
+    TOOLSET: vc15
+    ARCH: win64
+    GENERATOR: '"Visual Studio 15 2017 Win64"'
+
+#---------------------------------#
+#            steps                #
+#---------------------------------#
+install:
+  - cmd: curl -k -o next_git_tag.bat https://gist.githubusercontent.com/matusnovak/eba81343f5578c38cf0a9bc22b548727/raw/e3745d1cda3391a7cf30c7478e91297d7e2b4243/next_git_tag.bat
+  - cmd: git submodule init
+  - cmd: git submodule update
+  - cmd: if [%COMPILER%]==[mingw] (mkdir build-debug)
+  - cmd: if [%COMPILER%]==[mingw] (mkdir build-release)
+  - cmd: if [%COMPILER%]==[msvc] (mkdir build-debug)
+  - cmd: if [%COMPILER%]==[msvc] (mkdir build-release)
+  - cmd: set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+  - cmd: set PATH=%MINGW_DIR_BIN%;%PATH%
+  - cmd: if [%COMPILER%]==[mingw] (cd build-debug & cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX="..\install" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=_d || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[mingw] (cd build-release & cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX="..\install" -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_DEBUG_POSTFIX=_d || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-debug & cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX="..\install" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEBUG_POSTFIX=_d || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-release & cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX="..\install" -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_DEBUG_POSTFIX=_d || exit 1 & cd ..)
+
+build_script:
+  - cmd: if [%COMPILER%]==[mingw] (cd build-debug & cmake --build . --target all || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[mingw] (cd build-release & cmake --build . --target all || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-debug & cmake --build . --target ALL_BUILD --config Debug || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-release & cmake --build . --target ALL_BUILD --config MinSizeRel || exit 1 & cd ..)
+
+test_script:
+  - cmd: if [%COMPILER%]==[mingw] (cd build-debug & ctest --verbose || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[mingw] (cd build-release & ctest --verbose || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-debug & ctest --verbose -C "Debug" || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-release & ctest --verbose -C "MinSizeRel" || exit 1 & cd ..)
+
+after_test:
+  - cmd: if [%COMPILER%]==[mingw] (cd build-debug & cmake --build . --target install || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-debug & cmake --build . --target INSTALL --config Debug || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[mingw] (cd build-release & cmake --build . --target install || exit 1 & cd ..)
+  - cmd: if [%COMPILER%]==[msvc] (cd build-release & cmake --build . --target INSTALL --config MinSizeRel || exit 1 & cd ..)
+  - cmd: 7z.exe a "simplesquirrel-%ARCH%-%TOOLSET%.zip" .\install\* || exit 1
+
+before_deploy:
+  - cmd: call .\next_git_tag.bat
+  - ps: appveyor SetVariable -Name APPVEYOR_REPO_COMMIT_MESSAGE -Value (git log -1 --pretty=%B)
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+artifacts:
+  - path: simplesquirrel-*.zip
+    name: Compiled
+
+#---------------------------------#
+#           deployment            #
+#---------------------------------#
+deploy:
+  description: '$(APPVEYOR_REPO_COMMIT_MESSAGE)'
+  tag: $(appveyor_repo_tag_name)
+  release: 'Compiled - $(appveyor_repo_tag_name)'
+  provider: GitHub
+  artifact: /.*\.zip/
+  draft: false
+  prerelease: false
+  auth_token:
+    secure: Iy3zJbGrOW9X8aiAYoBX+xHl9mlapXwHrLlsHqrlKFGpXapjiv/lQVZZz3npjPTJ
+  on:
+    branch: master
+    appveyor_repo_tag: false
+
+#---------------------------------#
+#         notifications           #
+#---------------------------------#
+notifications:
+  - provider: Email
+    to:
+      - matusnov@gmail.com
+    on_build_success: true
+    on_build_failure: true
+    on_build_status_changed: true
+    

@@ -9,6 +9,7 @@
 namespace ssq {
     /**
     * @brief Squirrel function
+    * @ingroup simplesquirrel
     */
     class SSQ_API Function: public Object {
     public:

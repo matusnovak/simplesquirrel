@@ -218,7 +218,7 @@ namespace ssq {
             checkType(vm, index, OT_BOOL);
             SQBool val;
             if (SQ_FAILED(sq_getbool(vm, index, &val))) throw TypeException("Could not get bool from squirrel stack");
-            return static_cast<bool>(val);
+            return val == 1;
         }
 
 #ifdef SQUNICODE

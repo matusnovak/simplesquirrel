@@ -1,0 +1,184 @@
+compile_gcc: &compile_gcc
+  steps:
+    - checkout
+    - run:
+        name: Init dependencies
+        command: |
+          git config --global user.email "GITHUB_USER_EMAIL"
+          git config --global user.name "GITHUB_USER_NAME"
+          apt-get update
+          apt-get install zip wget -y
+          wget https://cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.tar.gz
+          tar -xvzf cmake-3.10.2-Linux-x86_64.tar.gz
+          chmod +x ./cmake-3.10.2-Linux-x86_64/bin/ccmake
+          chmod +x ./cmake-3.10.2-Linux-x86_64/bin/cmake
+          chmod +x ./cmake-3.10.2-Linux-x86_64/bin/cpack
+          chmod +x ./cmake-3.10.2-Linux-x86_64/bin/ctest
+          DIR=$(pwd)
+          ln -s $DIR/cmake-3.10.2-Linux-x86_64/bin/ccmake /usr/bin/ccmake
+          ln -s $DIR/cmake-3.10.2-Linux-x86_64/bin/cmake /usr/bin/cmake
+          ln -s $DIR/cmake-3.10.2-Linux-x86_64/bin/cpack /usr/bin/cpack
+          ln -s $DIR/cmake-3.10.2-Linux-x86_64/bin/ctest /usr/bin/ctest
+          curl -k -o next_git_tag.sh https://gist.githubusercontent.com/matusnovak/eba81343f5578c38cf0a9bc22b548727/raw/1678041e118a77c3083216cbf55bcf7b46e02e38/next_git_tag.sh
+          chmod +x next_git_tag.sh
+    - run:
+        name: Init submodules
+        command: |
+          git submodule init
+          git submodule update
+    - run:
+        name: Build
+        command: |
+          mkdir build
+          cd build
+          cmake ..  -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_BUILD_TYPE=MinSizeRel
+          make install
+    - run:
+        name: Test
+        command: |
+          cd build
+          ctest --verbose -C MinSizeRel -E "test_gl"
+    - run:
+        name: Package
+        command: |
+          GCC_MACHINE=$(gcc -dumpmachine)
+          GCC_VERSION=$(gcc -dumpversion)
+          cd install && zip -r "../simplesquirrel-$GCC_MACHINE-$GCC_VERSION.zip" * && cd ..
+          mkdir /tmp/install
+          cp *.zip /tmp/install
+          
+    - store_artifacts:
+        path: /tmp/install
+
+    - run:
+        name: Deploy
+        command: |
+          if [ "$CIRCLE_BRANCH" == "master" ]; then
+            wget https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2
+            tar -xvjf linux-amd64-github-release.tar.bz2
+            COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+            GCC_MACHINE=$(gcc -dumpmachine)
+            GCC_VERSION=$(gcc -dumpversion)
+            source ./next_git_tag.sh
+            ./bin/linux/amd64/github-release release --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $GITHUB_RELEASE_TAG --name "Compiled - $GITHUB_RELEASE_TAG" --description "$COMMIT_MESSAGE" || true
+            ./bin/linux/amd64/github-release upload --user $CIRCLE_PROJECT_USERNAME --repo $CIRCLE_PROJECT_REPONAME --tag $GITHUB_RELEASE_TAG --replace --name simplesquirrel-$GCC_MACHINE-$GCC_VERSION.zip --file simplesquirrel-$GCC_MACHINE-$GCC_VERSION.zip
+          fi
+
+version: 2
+jobs:
+  compile_gcc_550:
+    <<: *compile_gcc
+
+    docker:
+      - image: gcc:5.5.0
+        env:
+          - ARCH: 'x86_64'
+          - TOOLSET: 'linux-gnu'
+
+  compile_gcc_640:
+    <<: *compile_gcc
+
+    docker:
+      - image: gcc:6.4.0
+        env:
+          - ARCH: 'x86_64'
+          - TOOLSET: 'linux-gnu'
+  
+  compile_gcc_730:
+    <<: *compile_gcc
+
+    docker:
+      - image: gcc:8.2.0
+        env:
+          - ARCH: 'x86_64'
+          - TOOLSET: 'linux-gnu'
+
+  compile_gcc_820:
+    <<: *compile_gcc
+
+    docker:
+      - image: gcc:8.2.0
+        env:
+          - ARCH: 'x86_64'
+          - TOOLSET: 'linux-gnu'
+
+  build_docs:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          name: Init dependencies
+          command: |
+            sudo apt install doxygen
+            git clone https://github.com/matusnovak/doxybook.git
+            cd doxybook
+            sudo python setup.py install
+
+      - run:
+          name: Build
+          command: |
+            chmod +x ./doxygen/make.sh
+            ./doxygen/make.sh
+            mkdir /tmp/doxygen
+            cp -v ./doxygen/*.md /tmp/doxygen
+      
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - doxygen
+
+  upload_docs:
+    docker:
+      - image: circleci/node:9
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - checkout
+      - run:
+          name: Init dependencies
+          command: |
+            sudo npm install -g vuepress
+            npm install
+
+      - run:
+          name: Build
+          command: |
+            cp -v /tmp/doxygen/*.md ./doxygen
+            vuepress build
+
+      - run:
+          name: Deploy
+          command: |
+            git config --global user.email "GITHUB_USER_EMAIL"
+            git config --global user.name "GITHUB_USER_NAME"
+            npm run publish
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - compile_gcc_550
+      - compile_gcc_640:
+          requires:
+            - compile_gcc_550
+      - compile_gcc_730:
+          requires:
+            - compile_gcc_640
+      - compile_gcc_820:
+          requires:
+            - compile_gcc_730
+      - build_docs:
+          requires:
+            - compile_gcc_820
+          filters:
+            branches:
+              only:
+                - master
+      - upload_docs:
+          requires:
+            - build_docs
+          filters:
+            branches:
+              only:
+                - master
