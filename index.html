@@ -1,1100 +1,408 @@
-
-<!DOCTYPE HTML>
-<html lang="" >
-    <head>
-        <meta charset="UTF-8">
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>Introduction · GitBook</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="">
-        <meta name="generator" content="GitBook 3.2.3">
-        
-        
-        
-    
-    <link rel="stylesheet" href="gitbook/style.css">
-
-    
-            
-                
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-page-toc/page-toc.css">
-                
-            
-                
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
-                
-            
-                
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
-                
-            
-                
-                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
-                
-            
-        
-
-    
-
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
-
-        
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SimpleSquirrel | SimpleSquirrel</title>
+    <meta name="description" content="Simple Squirrel Binding library for C++11">
     
     
-    <meta name="HandheldFriendly" content="true"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
-    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
-
-    
-    <link rel="next" href="docs/ssq.html" />
-    
-    
-
-    </head>
-    <body>
-        
-<div class="book">
-    <div class="book-summary">
-        
-            
-<div id="book-search-input" role="search">
-    <input type="text" placeholder="Type to search" />
-</div>
-
-            
-                <nav role="navigation">
-                
-
-
-<ul class="summary">
-    
-    
-
-    
-
-    
-        
-        
-    
-        <li class="chapter active" data-level="1.1" data-path="./">
-            
-                <a href="./">
-            
-                    
-                    Introduction
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2" data-path="docs/ssq.html">
-            
-                <a href="docs/ssq.html">
-            
-                    
-                    ssq
-            
-                </a>
-            
-
-            
-            <ul class="articles">
-                
-    
-        <li class="chapter " data-level="1.2.1" data-path="docs/ssq_Array.html">
-            
-                <a href="docs/ssq_Array.html">
-            
-                    
-                    Array
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.2" data-path="docs/ssq_Class.html">
-            
-                <a href="docs/ssq_Class.html">
-            
-                    
-                    Class
-            
-                </a>
-            
-
-            
-            <ul class="articles">
-                
-    
-        <li class="chapter " data-level="1.2.2.1" data-path="docs/ssq_Class_Ctor.html">
-            
-                <a href="docs/ssq_Class_Ctor.html">
-            
-                    
-                    Ctor
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.2.2" data-path="docs/ssq_Class_Ctor__T_Args_____.html">
-            
-                <a href="docs/ssq_Class_Ctor__T_Args_____.html">
-            
-                    
-                    Ctor< T(Args...)>
-            
-                </a>
-            
-
-            
-        </li>
-    
-
-            </ul>
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.3" data-path="docs/ssq_CompileException.html">
-            
-                <a href="docs/ssq_CompileException.html">
-            
-                    
-                    CompileException
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.4" data-path="docs/ssq_Enum.html">
-            
-                <a href="docs/ssq_Enum.html">
-            
-                    
-                    Enum
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.5" data-path="docs/ssq_Exception.html">
-            
-                <a href="docs/ssq_Exception.html">
-            
-                    
-                    Exception
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.6" data-path="docs/ssq_Function.html">
-            
-                <a href="docs/ssq_Function.html">
-            
-                    
-                    Function
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.7" data-path="docs/ssq_Instance.html">
-            
-                <a href="docs/ssq_Instance.html">
-            
-                    
-                    Instance
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.8" data-path="docs/ssq_Libs.html">
-            
-                <a href="docs/ssq_Libs.html">
-            
-                    
-                    Libs
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.9" data-path="docs/ssq_NotFoundException.html">
-            
-                <a href="docs/ssq_NotFoundException.html">
-            
-                    
-                    NotFoundException
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.10" data-path="docs/ssq_Object.html">
-            
-                <a href="docs/ssq_Object.html">
-            
-                    
-                    Object
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.11" data-path="docs/ssq_RuntimeException.html">
-            
-                <a href="docs/ssq_RuntimeException.html">
-            
-                    
-                    RuntimeException
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.12" data-path="docs/ssq_Script.html">
-            
-                <a href="docs/ssq_Script.html">
-            
-                    
-                    Script
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.13" data-path="docs/ssq_SqWeakRef.html">
-            
-                <a href="docs/ssq_SqWeakRef.html">
-            
-                    
-                    SqWeakRef
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.14" data-path="docs/ssq_Table.html">
-            
-                <a href="docs/ssq_Table.html">
-            
-                    
-                    Table
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.15" data-path="docs/ssq_TypeException.html">
-            
-                <a href="docs/ssq_TypeException.html">
-            
-                    
-                    TypeException
-            
-                </a>
-            
-
-            
-        </li>
-    
-        <li class="chapter " data-level="1.2.16" data-path="docs/ssq_VM.html">
-            
-                <a href="docs/ssq_VM.html">
-            
-                    
-                    VM
-            
-                </a>
-            
-
-            
-        </li>
-    
-
-            </ul>
-            
-        </li>
-    
-
-    
-
-    <li class="divider"></li>
-
-    <li>
-        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
-            Published with GitBook
-        </a>
-    </li>
-</ul>
-
-
-                </nav>
-            
-        
-    </div>
-
-    <div class="book-body">
-        
-            <div class="body-inner">
-                
-                    
-
-<div class="book-header" role="navigation">
-    
-
-    <!-- Title -->
-    <h1>
-        <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >Introduction</a>
-    </h1>
-</div>
-
-
-
-
-                    <div class="page-wrapper" tabindex="-1" role="main">
-                        <div class="page-inner">
-                            
-<div id="book-search-results">
-    <div class="search-noresults">
-    
-                                <section class="normal markdown-section">
-                                
-                                <h1 id="simplesquirrel">SimpleSquirrel</h1>
-<p>Yet another simple binding in C++11 for <a href="http://www.squirrel-lang.org/" target="_blank">Squirrel scripting language</a></p>
-<p>API Documentation can be found here: <a href="https://matusnovak.github.io/simplesquirrel/docs/ssq.html" target="_blank">https://matusnovak.github.io/simplesquirrel/docs/ssq.html</a></p>
-<h2 id="features">Features</h2>
-<ul>
-<li>MIT licensed</li>
-<li>32 and 64 bit support</li>
-<li>C++11</li>
-<li>Supports multiple virtual machines</li>
-<li>Supports lambdas</li>
-<li>Very easy object manipulation</li>
-<li>Supports binding of C++ classes to multiple instances of Squirrel VM</li>
-<li>Strict type checking on C++ side</li>
-<li>wchar_t support, a.k.a Squirrel Unicode (experimental!) - I highly recommend using UTF8 as chars and not UNICODE as wchar_t</li>
-<li>Works with Visual Studio 2015, Visual Studio 2017, MinGW-w64, Linux GCC, and OSX Clang </li>
-<li>Allows the following:<ul>
-<li>Binding C++ function and calling it from Squirrel</li>
-<li>Looking up Squirrel function and calling it from C++</li>
-<li>Looking up Squirrel classes and creating instances on C++ side</li>
-<li>Binding C++ classes including methods and member variables</li>
-<li>Passing any C++ pointer as either instance or userpointer (depends if your C++ has been exposed to VM)</li>
-<li>Creating enumerations</li>
-<li>Creating and passing tables</li>
-<li>Creating and passing arrays</li>
-</ul>
-</li>
-<li><strong>The following is not yet implemented:</strong><ul>
-<li>Method overloading</li>
-<li>Derivate Squirrel class</li>
-<li><strong>Thread safety</strong></li>
-</ul>
-</li>
-</ul>
-<h2 id="install-squirrel">Install Squirrel</h2>
-<p>First, download and build Squirrel library using cmake. Use the command line instructions below.
-By default the <code>CMAKE_INSTALL_PREFIX</code> will point to <code>C:/Program Files/squirrel</code> on Windows or
-<code>/home/username/squirrel</code> on Linux.</p>
-<p><strong>Linux:</strong></p>
-<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/albertodemichelis/squirrel.git
-<span class="hljs-built_in">cd</span> squirrel
-mkdir build
-<span class="hljs-built_in">cd</span> build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/<span class="hljs-built_in">local</span> -DCMAKE_C_FLAGS=<span class="hljs-string">&quot;-fPIC&quot;</span>
-
-<span class="hljs-comment"># Build and install into the install prefix folder</span>
-sudo make install
-
-<span class="hljs-comment"># Copy header files (This is missing from cmake instructions in squirrel library)</span>
-sudo cp -rfv ../include* /usr/<span class="hljs-built_in">local</span>/include
-find . -name <span class="hljs-string">&quot;/usr/local/include/sq*.h&quot;</span> -exec chmod 644 {} \;
-</code></pre>
-<p><strong>Windows:</strong></p>
-<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/albertodemichelis/squirrel.git
-<span class="hljs-built_in">cd</span> squirrel
-mkdir build
-<span class="hljs-built_in">cd</span> build
-cmake .. -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want
-make install
-</code></pre>
-<h2 id="install-simplqsquirrel">Install SimplqSquirrel</h2>
-<p>To compile and install Squirrel Bind use the command line instructions below. I highly recommend
-using the GUI tool <code>cmake-gui</code> and set it up from there using your favourite IDE as generator.</p>
-<p><strong>Linux:</strong></p>
-<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/matusnovak/simplesquirrel.git
-<span class="hljs-built_in">cd</span> simplesquirrel
-mkdir build
-<span class="hljs-built_in">cd</span> build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr/<span class="hljs-built_in">local</span> -DBUILD_TESTS=OFF
-sudo make install
-</code></pre>
-<p><strong>Windows:</strong></p>
-<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/matusnovak/simplesquirrel.git
-<span class="hljs-built_in">cd</span> simplesquirrel
-mkdir build
-<span class="hljs-built_in">cd</span> build
-cmake .. -G <span class="hljs-string">&quot;Visual Studio 15 2017&quot;</span> -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want -DBUILD_TESTS=OFF
-</code></pre>
-<p>If you get errors that <code>SQSTDLIB_LIBRARIES</code> and <code>SQUIRREL_LIBRARIES</code> was not found, you need to
-point it to the right direction when running cmake command. Either <strong>open GUI version of cmake</strong> and set
-the <code>SQSTDLIB_LIBRARIES</code> and <code>SQUIRREL_LIBRARIES</code> so it points to the correct <code>squirrel.lib</code> and 
-<code>sqstdlib.lib</code>. Don&apos;t forget to set <code>INCLUDE_DIRECTORIES</code> to Squirrel include directory! (the directory
-that contains <code>squirrel.h</code> file)</p>
-<p>If you prefer command line, use the following command:</p>
-<pre><code>cmake .. -G &quot;Visual Studio 15 2017&quot; \
-    -DCMAKE_INSTALL_PREFIX=C:/whatever/folder/you/want \
-    -DINCLUDE_DIRECTORIES=C:/Users/username/Documents/squirrel/include \
-    -DSQUIRREL_LIBRARIES=C:/Users/username/Documents/squirrel/build/squirrel/MinSizeRel/squirrel_static.lib \
-    -DSQSTDLIB_LIBRARIES=C:/Users/username/Documents/squirrel/build/sqstdlib/MinSizeRel/sqstdlib_static.lib \
-    -DBUILD_TESTS=OFF
-</code></pre><h2 id="create-squirrel-vm">Create Squirrel VM</h2>
-<p>Creating VM is done via its constructor. The VM will be destroyed
+    <link rel="preload" href="/simplesquirrel/assets/css/0.styles.0ee256d8.css" as="style"><link rel="preload" href="/simplesquirrel/assets/js/app.499cc5ed.js" as="script"><link rel="preload" href="/simplesquirrel/assets/js/4.cbee91cf.js" as="script"><link rel="prefetch" href="/simplesquirrel/assets/js/10.d62ee96a.js"><link rel="prefetch" href="/simplesquirrel/assets/js/11.d9c6c702.js"><link rel="prefetch" href="/simplesquirrel/assets/js/12.a10337a8.js"><link rel="prefetch" href="/simplesquirrel/assets/js/13.7229a1a6.js"><link rel="prefetch" href="/simplesquirrel/assets/js/14.26e8061d.js"><link rel="prefetch" href="/simplesquirrel/assets/js/15.e8ab4066.js"><link rel="prefetch" href="/simplesquirrel/assets/js/16.2e0dce81.js"><link rel="prefetch" href="/simplesquirrel/assets/js/17.f6b7e3f8.js"><link rel="prefetch" href="/simplesquirrel/assets/js/18.74bc771d.js"><link rel="prefetch" href="/simplesquirrel/assets/js/19.16f5a800.js"><link rel="prefetch" href="/simplesquirrel/assets/js/2.e8574878.js"><link rel="prefetch" href="/simplesquirrel/assets/js/20.89c70610.js"><link rel="prefetch" href="/simplesquirrel/assets/js/21.72067add.js"><link rel="prefetch" href="/simplesquirrel/assets/js/22.69a81dda.js"><link rel="prefetch" href="/simplesquirrel/assets/js/23.531a8ed0.js"><link rel="prefetch" href="/simplesquirrel/assets/js/24.9a31f41a.js"><link rel="prefetch" href="/simplesquirrel/assets/js/25.5c9cae4d.js"><link rel="prefetch" href="/simplesquirrel/assets/js/26.a0fd72c3.js"><link rel="prefetch" href="/simplesquirrel/assets/js/27.4387b1a0.js"><link rel="prefetch" href="/simplesquirrel/assets/js/28.745ae3e7.js"><link rel="prefetch" href="/simplesquirrel/assets/js/29.83406387.js"><link rel="prefetch" href="/simplesquirrel/assets/js/3.85c8fff6.js"><link rel="prefetch" href="/simplesquirrel/assets/js/30.0fa2533e.js"><link rel="prefetch" href="/simplesquirrel/assets/js/31.1db12dad.js"><link rel="prefetch" href="/simplesquirrel/assets/js/32.278bf56f.js"><link rel="prefetch" href="/simplesquirrel/assets/js/33.c53079a2.js"><link rel="prefetch" href="/simplesquirrel/assets/js/34.e0439f2a.js"><link rel="prefetch" href="/simplesquirrel/assets/js/35.5e1d0a28.js"><link rel="prefetch" href="/simplesquirrel/assets/js/36.371b4103.js"><link rel="prefetch" href="/simplesquirrel/assets/js/37.da3c9c24.js"><link rel="prefetch" href="/simplesquirrel/assets/js/38.a6b61391.js"><link rel="prefetch" href="/simplesquirrel/assets/js/39.6325609e.js"><link rel="prefetch" href="/simplesquirrel/assets/js/40.f5ff593c.js"><link rel="prefetch" href="/simplesquirrel/assets/js/41.72e1beb8.js"><link rel="prefetch" href="/simplesquirrel/assets/js/42.9b6c7b14.js"><link rel="prefetch" href="/simplesquirrel/assets/js/43.3da9791f.js"><link rel="prefetch" href="/simplesquirrel/assets/js/44.2cd98bc6.js"><link rel="prefetch" href="/simplesquirrel/assets/js/45.c53ac61d.js"><link rel="prefetch" href="/simplesquirrel/assets/js/46.4508d774.js"><link rel="prefetch" href="/simplesquirrel/assets/js/47.27f5ca2d.js"><link rel="prefetch" href="/simplesquirrel/assets/js/48.fb18ca94.js"><link rel="prefetch" href="/simplesquirrel/assets/js/49.bd3c6513.js"><link rel="prefetch" href="/simplesquirrel/assets/js/5.7dd329cb.js"><link rel="prefetch" href="/simplesquirrel/assets/js/50.2a7cdca0.js"><link rel="prefetch" href="/simplesquirrel/assets/js/51.9401b481.js"><link rel="prefetch" href="/simplesquirrel/assets/js/52.ef2d4882.js"><link rel="prefetch" href="/simplesquirrel/assets/js/53.574f5e1e.js"><link rel="prefetch" href="/simplesquirrel/assets/js/54.83efddd8.js"><link rel="prefetch" href="/simplesquirrel/assets/js/55.be4e7c22.js"><link rel="prefetch" href="/simplesquirrel/assets/js/56.95366a5a.js"><link rel="prefetch" href="/simplesquirrel/assets/js/57.3294929a.js"><link rel="prefetch" href="/simplesquirrel/assets/js/58.45704849.js"><link rel="prefetch" href="/simplesquirrel/assets/js/59.26eeed09.js"><link rel="prefetch" href="/simplesquirrel/assets/js/6.150ce503.js"><link rel="prefetch" href="/simplesquirrel/assets/js/60.a0f618d3.js"><link rel="prefetch" href="/simplesquirrel/assets/js/61.1383c975.js"><link rel="prefetch" href="/simplesquirrel/assets/js/62.ae629840.js"><link rel="prefetch" href="/simplesquirrel/assets/js/63.c4f6e807.js"><link rel="prefetch" href="/simplesquirrel/assets/js/64.0f03e412.js"><link rel="prefetch" href="/simplesquirrel/assets/js/65.a46562db.js"><link rel="prefetch" href="/simplesquirrel/assets/js/7.892465fa.js"><link rel="prefetch" href="/simplesquirrel/assets/js/8.8ed11448.js"><link rel="prefetch" href="/simplesquirrel/assets/js/9.9c29e75c.js">
+    <link rel="stylesheet" href="/simplesquirrel/assets/css/0.styles.0ee256d8.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/simplesquirrel/" class="home-link router-link-exact-active router-link-active"><!----> <span class="site-name">SimpleSquirrel</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/simplesquirrel/" class="nav-link router-link-exact-active router-link-active">Home</a></div><div class="nav-item"><a href="/simplesquirrel/INSTALL.html" class="nav-link">Install</a></div><div class="nav-item"><a href="/simplesquirrel/doxygen/modules.html" class="nav-link">Modules</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">Classes</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/annotated.html" class="nav-link">Class List</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/classes.html" class="nav-link">Class Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/functions.html" class="nav-link">Function Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/variables.html" class="nav-link">Variable Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/enumerations.html" class="nav-link">Enumeration Index</a></li></ul></div></div><div class="nav-item"><a href="/simplesquirrel/doxygen/files.html" class="nav-link">Files</a></div><div class="nav-item"><a href="/simplesquirrel/doxygen/pages.html" class="nav-link">Pages</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/simplesquirrel/" class="nav-link router-link-exact-active router-link-active">Home</a></div><div class="nav-item"><a href="/simplesquirrel/INSTALL.html" class="nav-link">Install</a></div><div class="nav-item"><a href="/simplesquirrel/doxygen/modules.html" class="nav-link">Modules</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">Classes</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/annotated.html" class="nav-link">Class List</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/classes.html" class="nav-link">Class Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/functions.html" class="nav-link">Function Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/variables.html" class="nav-link">Variable Index</a></li><li class="dropdown-item"><!----> <a href="/simplesquirrel/doxygen/enumerations.html" class="nav-link">Enumeration Index</a></li></ul></div></div><div class="nav-item"><a href="/simplesquirrel/doxygen/files.html" class="nav-link">Files</a></div><div class="nav-item"><a href="/simplesquirrel/doxygen/pages.html" class="nav-link">Pages</a></div> <!----></nav>  <ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>SimpleSquirrel</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/simplesquirrel/#features" class="sidebar-link">Features</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#installation" class="sidebar-link">Installation</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#create-squirrel-vm" class="sidebar-link">Create Squirrel VM</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#compile-script" class="sidebar-link">Compile script</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#squirrel-object-manipulation" class="sidebar-link">Squirrel object manipulation</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#binding-c-function" class="sidebar-link">Binding C++ function</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#call-squirrel-global-function" class="sidebar-link">Call Squirrel global function</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#bind-c-class" class="sidebar-link">Bind C++ class</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#class-const-method-ambiguity" class="sidebar-link">Class const method ambiguity</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#find-squirrel-class-and-create-instance" class="sidebar-link">Find Squirrel class and create instance</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#manipulate-squirrel-array" class="sidebar-link">Manipulate Squirrel array</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#manipulate-squirrel-table" class="sidebar-link">Manipulate Squirrel table</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/simplesquirrel/#weak-references-and-callbacks" class="sidebar-link">Weak references and callbacks</a><ul class="sidebar-sub-headers"></ul></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="simplesquirrel"><a href="#simplesquirrel" aria-hidden="true" class="header-anchor">#</a> SimpleSquirrel</h1> <table><thead><tr><th></th> <th>CircleCI</th> <th>TravisCI</th> <th>AppVeyor</th></tr></thead> <tbody><tr><td>master</td> <td><a href="https://circleci.com/gh/matusnovak/simplesquirrel/tree/master" target="_blank" rel="noopener noreferrer"><img src="https://circleci.com/gh/matusnovak/simplesquirrel/tree/master.svg?style=svg" alt="CircleCI"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td> <td><a href="https://travis-ci.org/matusnovak/simplesquirrel" target="_blank" rel="noopener noreferrer"><img src="https://travis-ci.org/matusnovak/simplesquirrel.svg?branch=master" alt="Build Status"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td> <td><a href="https://ci.appveyor.com/project/matusnovak/simplesquirrel/branch/devel" target="_blank" rel="noopener noreferrer"><img src="https://ci.appveyor.com/api/projects/status/hk9m6f62csx8llvy/branch/master?svg=true" alt="Build status"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td></tr> <tr><td>devel</td> <td><a href="https://circleci.com/gh/matusnovak/simplesquirrel/tree/devel" target="_blank" rel="noopener noreferrer"><img src="https://circleci.com/gh/matusnovak/simplesquirrel/tree/devel.svg?style=svg" alt="CircleCI"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td> <td><a href="https://travis-ci.org/matusnovak/simplesquirrel" target="_blank" rel="noopener noreferrer"><img src="https://travis-ci.org/matusnovak/simplesquirrel.svg?branch=devel" alt="Build Status"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td> <td><a href="https://ci.appveyor.com/project/matusnovak/simplesquirrel/branch/devel" target="_blank" rel="noopener noreferrer"><img src="https://ci.appveyor.com/api/projects/status/hk9m6f62csx8llvy/branch/devel?svg=true" alt="Build status"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></td></tr></tbody></table> <p><em>The following compilers are tested in the CI above: Visual Studio 2015, Visual Studio 2015 Win64, Visual Studio 2017, Visual Studio 2017 Win64, MinGW-w64 i686, MinGW-w64 x86_64, Linux GCC 5.5.0, Linux GCC 6.4.0, Linux GCC 7.3.0, Linux GCC 8.2.0, and OSX Clang 3.7</em></p> <p>Yet another simple binding in C++11 for <a href="http://www.squirrel-lang.org/" target="_blank" rel="noopener noreferrer">Squirrel scripting language<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <p>API Documentation can be found here: <a href="https://matusnovak.github.io/simplesquirrel/doxygen/group__simplesquirrel.html" target="_blank" rel="noopener noreferrer">https://matusnovak.github.io/simplesquirrel/doxygen/group__simplesquirrel.html<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="features"><a href="#features" aria-hidden="true" class="header-anchor">#</a> Features</h2> <ul><li>MIT licensed</li> <li>32 and 64 bit support</li> <li>C++11</li> <li>Supports multiple virtual machines</li> <li>Supports lambdas</li> <li>Works on Windows (Visual Studio 2015 or newer) (or MinGW 4.9 or newer)</li> <li>Works on Linux (GCC 4.9 or newer)</li> <li>Works on OSX (Clang 3.7 or newer)</li> <li>Very easy object manipulation</li> <li>Supports binding of C++ classes to multiple instances of Squirrel VM</li> <li>Strict type checking on C++ side</li> <li>wchar_t support, a.k.a Squirrel Unicode (experimental!) - I highly recommend using UTF8 as chars and not UNICODE as wchar_t</li> <li>Works with Visual Studio 2015, Visual Studio 2017, MinGW-w64, Linux GCC, and OSX Clang</li> <li>Allows the following:
+<ul><li>Binding C++ function and calling it from Squirrel</li> <li>Looking up Squirrel function and calling it from C++</li> <li>Looking up Squirrel classes and creating instances on C++ side</li> <li>Binding C++ classes including methods and member variables</li> <li>Passing any C++ pointer as either instance or userpointer (depends if your C++ has been exposed to VM)</li> <li>Creating enumerations</li> <li>Creating and passing tables</li> <li>Creating and passing arrays</li></ul></li> <li><strong>The following is not yet implemented:</strong> <ul><li>Method overloading</li> <li>Derivate Squirrel class</li> <li><strong>Thread safety</strong></li></ul></li></ul> <h2 id="installation"><a href="#installation" aria-hidden="true" class="header-anchor">#</a> Installation</h2> <p>You can <a href="https://github.com/matusnovak/simplesquirrel/releases" target="_blank" rel="noopener noreferrer">use one of the automatically built releases from GitHub Releases<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> or compile it manually by following the <a href="/simplesquirrel/INSTALL.html">Install Guide</a></p> <h2 id="create-squirrel-vm"><a href="#create-squirrel-vm" aria-hidden="true" class="header-anchor">#</a> Create Squirrel VM</h2> <p>Creating VM is done via its constructor. The VM will be destroyed
 once it falls out of scope. Or, if you have created it via <code>new</code> operator,
-it will be destroyed, and all of its resources, once you call <code>delete</code>.</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+it will be destroyed, and all of its resources, once you call <code>delete</code>.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    <span class="hljs-comment">// Create and register Squirrel std libraries</span>
-    <span class="hljs-comment">// More here: http://squirrel-lang.org/squirreldoc/stdlib/index.html</span>
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::STRING | ssq::Libs::IO | ssq::Libs::MATH)</span></span>;
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment">// Create and register Squirrel std libraries</span>
+    <span class="token comment">// More here: http://squirrel-lang.org/squirreldoc/stdlib/index.html</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>STRING <span class="token operator">|</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>IO <span class="token operator">|</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>MATH<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Available flags:</span>
-    <span class="hljs-comment">// NONE</span>
-    <span class="hljs-comment">// IO</span>
-    <span class="hljs-comment">// BLOB</span>
-    <span class="hljs-comment">// MATH</span>
-    <span class="hljs-comment">// SYSTEM</span>
-    <span class="hljs-comment">// STRING</span>
-    <span class="hljs-comment">// ALL</span>
+    <span class="token comment">// Available flags:</span>
+    <span class="token comment">// NONE</span>
+    <span class="token comment">// IO</span>
+    <span class="token comment">// BLOB</span>
+    <span class="token comment">// MATH</span>
+    <span class="token comment">// SYSTEM</span>
+    <span class="token comment">// STRING</span>
+    <span class="token comment">// ALL</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="compile-script">Compile script</h2>
-<p>Compiling script can be done via raw source <code>const char*</code> or via path to source
-file.</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="compile-script"><a href="#compile-script" aria-hidden="true" class="header-anchor">#</a> Compile script</h2> <p>Compiling script can be done via raw source <code>const char*</code> or via path to source
+file.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    ssq::Script scriptA = vm.compileSource(<span class="hljs-comment">/* raw char array here */</span>);
-    ssq::Script scriptB = vm.compileFile(<span class="hljs-comment">/* path to source file */</span>);
+    ssq<span class="token operator">::</span>Script scriptA <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span><span class="token comment">/* raw char array here */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ssq<span class="token operator">::</span>Script scriptB <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileFile</span><span class="token punctuation">(</span><span class="token comment">/* path to source file */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="squirrel-object-manipulation">Squirrel object manipulation</h2>
-<p>All Squirrel objects are dynamic and they can hold any value, no static typing. Since C++
-is statically typed, we need to check the type returned. You can do so by calling <code>ssq::Object::getType()</code> 
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="squirrel-object-manipulation"><a href="#squirrel-object-manipulation" aria-hidden="true" class="header-anchor">#</a> Squirrel object manipulation</h2> <p>All Squirrel objects are dynamic and they can hold any value, no static typing. Since C++
+is statically typed, we need to check the type returned. You can do so by calling <code>ssq::Object::getType()</code>
 which returns <code>ssq::Type</code> enum. The object can be: instance, class, function (closure), integer, float,
 string, boolean, userdata, userpointer, array, table, and null. You can convert the raw object to
-any type using <code>ssq::Object::toXyz();</code> such as: <code>toInt()</code>, <code>toFloat()</code>, <code>toString()</code>, <code>toBool()</code>, 
+any type using <code>ssq::Object::toXyz();</code> such as: <code>toInt()</code>, <code>toFloat()</code>, <code>toString()</code>, <code>toBool()</code>,
 <code>toTable()</code>, <code>toArray()</code>, <code>toClass()</code>, <code>toInstance()</code>, and <code>toFunction()</code>. To check if the object is
 empty use <code>isEmpty()</code> method and to check if the object is null use <code>isNull()</code>. Note that object being
 null is not the same as object being empty! However, it is impossible for Squirrel to use empty objects
-so you will most likely never use <code>isEmpty()</code>, only <code>isNull()</code>.</p>
-<p><strong>Always use std::string when calling Squirrel function or when casting the result of function
-call from ssq::Object to string. Do not use const char* as those two types are different.</strong></p>
-<p>Here are the C++ types and their Squirrel equivalents:</p>
-<table>
-<thead>
-<tr>
-<th>C++</th>
-<th>Squirrel</th>
-<th>Method to convert back</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>signed char</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>unsigned char</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>char</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>short</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>unsigned short</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>int</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>unsigned int</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>long</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>unsigned long</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>long long (64-bit)</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>long long (32-bit)</td>
-<td>userdata</td>
-<td><code>to&lt;long long&gt;()</code></td>
-</tr>
-<tr>
-<td>unsigned long long (64-bit)</td>
-<td>integer</td>
-<td><code>toInt()</code></td>
-</tr>
-<tr>
-<td>unsigned long long (64-bit)</td>
-<td>userdata</td>
-<td><code>to&lt;unsigned long long&gt;()</code></td>
-</tr>
-<tr>
-<td>std::string</td>
-<td>string</td>
-<td><code>toString()</code></td>
-</tr>
-<tr>
-<td>float</td>
-<td>float</td>
-<td><code>toFloat()</code></td>
-</tr>
-<tr>
-<td>double</td>
-<td>float</td>
-<td><code>toFloat()</code></td>
-</tr>
-<tr>
-<td>const char*</td>
-<td>userpointer</td>
-<td><code>to&lt;const char*&gt;()</code></td>
-</tr>
-<tr>
-<td>const char[N]</td>
-<td>N/A</td>
-<td>compiler error</td>
-</tr>
-<tr>
-<td>char*</td>
-<td>userpointer</td>
-<td><code>to&lt;char*&gt;()</code></td>
-</tr>
-<tr>
-<td>ssq::Object</td>
-<td>anything</td>
-<td>You can&apos;t convet ssq::Object to ssq::Object :D</td>
-</tr>
-<tr>
-<td>ssq::Function</td>
-<td>closure/nativeclosure</td>
-<td><code>toFunction()</code></td>
-</tr>
-<tr>
-<td>ssq::Class</td>
-<td>class</td>
-<td><code>toClass()</code></td>
-</tr>
-<tr>
-<td>ssq::Instance</td>
-<td>instance</td>
-<td><code>toInstance()</code></td>
-</tr>
-<tr>
-<td>ssq::Table</td>
-<td>table</td>
-<td><code>toTable()</code></td>
-</tr>
-<tr>
-<td>ssq::Array</td>
-<td>array</td>
-<td><code>toArray()</code></td>
-</tr>
-<tr>
-<td>void*</td>
-<td>userpointer</td>
-<td><code>to&lt;void*&gt;()</code></td>
-</tr>
-<tr>
-<td>any pointer to class <strong>not added to VM via addClass</strong></td>
-<td>userpointer</td>
-<td><code>to&lt;Class_Type*&gt;()</code></td>
-</tr>
-<tr>
-<td>any reference (or copy) to class <strong>not added to VM via addClass</strong></td>
-<td>userdata</td>
-<td><code>to&lt;Class_Type&gt;()</code></td>
-</tr>
-<tr>
-<td>pointer to class</td>
-<td>instance</td>
-<td><code>to&lt;Class_Type*&gt;()</code></td>
-</tr>
-<tr>
-<td>reference or copy to class</td>
-<td>instance</td>
-<td><code>to&lt;Class_Type&gt;()</code></td>
-</tr>
-</tbody>
-</table>
-<p>Some types are divided into 32-bit and 64-bit groups. This is due to the fact how Squirrel handles integers.
+so you will most likely never use <code>isEmpty()</code>, only <code>isNull()</code>.</p> <p><strong>Always use std::string when calling Squirrel function or when casting the result of function
+call from ssq::Object to string. Do not use const char* as those two types are different.</strong></p> <p>Here are the C++ types and their Squirrel equivalents:</p> <table><thead><tr><th>C++</th> <th>Squirrel</th> <th>Method to convert back</th></tr></thead> <tbody><tr><td>signed char</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>unsigned char</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>char</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>short</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>unsigned short</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>int</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>unsigned int</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>long</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>unsigned long</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>long long (64-bit)</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>long long (32-bit)</td> <td>userdata</td> <td><code>to&lt;long long&gt;()</code></td></tr> <tr><td>unsigned long long (64-bit)</td> <td>integer</td> <td><code>toInt()</code></td></tr> <tr><td>unsigned long long (64-bit)</td> <td>userdata</td> <td><code>to&lt;unsigned long long&gt;()</code></td></tr> <tr><td>std::string</td> <td>string</td> <td><code>toString()</code></td></tr> <tr><td>float</td> <td>float</td> <td><code>toFloat()</code></td></tr> <tr><td>double</td> <td>float</td> <td><code>toFloat()</code></td></tr> <tr><td>const char*</td> <td>userpointer</td> <td><code>to&lt;const char*&gt;()</code></td></tr> <tr><td>const char[N]</td> <td>N/A</td> <td>compiler error</td></tr> <tr><td>char*</td> <td>userpointer</td> <td><code>to&lt;char*&gt;()</code></td></tr> <tr><td>ssq::Object</td> <td>anything</td> <td>You can't convet ssq::Object to ssq::Object 😄</td></tr> <tr><td>ssq::Function</td> <td>closure/nativeclosure</td> <td><code>toFunction()</code></td></tr> <tr><td>ssq::Class</td> <td>class</td> <td><code>toClass()</code></td></tr> <tr><td>ssq::Instance</td> <td>instance</td> <td><code>toInstance()</code></td></tr> <tr><td>ssq::Table</td> <td>table</td> <td><code>toTable()</code></td></tr> <tr><td>ssq::Array</td> <td>array</td> <td><code>toArray()</code></td></tr> <tr><td>void*</td> <td>userpointer</td> <td><code>to&lt;void*&gt;()</code></td></tr> <tr><td>any pointer to class <strong>not added to VM via addClass</strong></td> <td>userpointer</td> <td><code>to&lt;Class_Type*&gt;()</code></td></tr> <tr><td>any reference (or copy) to class <strong>not added to VM via addClass</strong></td> <td>userdata</td> <td><code>to&lt;Class_Type&gt;()</code></td></tr> <tr><td>pointer to class</td> <td>instance</td> <td><code>to&lt;Class_Type*&gt;()</code></td></tr> <tr><td>reference or copy to class</td> <td>instance</td> <td><code>to&lt;Class_Type&gt;()</code></td></tr></tbody></table> <p>Some types are divided into 32-bit and 64-bit groups. This is due to the fact how Squirrel handles integers.
 On 64-bit compiler, the integer is stored as <code>long long</code>, on 32-bit compiler, it is stored as <code>long</code>. Therefore
-in order to pass <code>long long</code> into squirrel on 32-bit compiler, it will be converted into userdata. We can&apos;t 
+in order to pass <code>long long</code> into squirrel on 32-bit compiler, it will be converted into userdata. We can't
 store 64-bit integer in 32-integer. Conversion to userdata is done to preserve the information. On 64-bit compiler
 this is simply an integer. Floats are also stored as float on 32-bit compiler and double on 64-bit compiler.
-<strong>Getting double from ssq::Object on 32-bit compiler will result in loss of information!</strong></p>
-<p>Also, unsigned types are converted into signed types. For example, passing 0xFFFFFFFF (the max value of 
+<strong>Getting double from ssq::Object on 32-bit compiler will result in loss of information!</strong></p> <p>Also, unsigned types are converted into signed types. For example, passing 0xFFFFFFFF (the max value of
 unsigned long) will be represented in squirrel as -1. However, when you try to get the -1 from Squirrel
-back to C++ and you convert the function call result (from ssq::Object) to <code>to&lt;unsigned long&gt;()</code> it 
+back to C++ and you convert the function call result (from ssq::Object) to <code>to&lt;unsigned long&gt;()</code> it
 will be exactly the same as previously, the 0xFFFFFFFF. Information is always preserved, nothing is lost.
-Therefore I highly suggest to use signed integers only.</p>
-<p>Passing instance of classes as copy (or reference) will result in copy of the class
-and the life of the instance will be handled by Squirrel. Passing any instance of class as a pointer 
-will <strong>not</strong> create a copy and Squirrel will not handle the life of the instance.</p>
-<p>If you create a C++ method where you create new instance of class and you return it as a pointer,
-(example: <code>return new Foo(123, 456);</code>), the Squirrel will be able to access the methods and manipulate the 
-object. However, it will never be released unless you do it manually from C++ side (by tracking your 
-allocated objects).</p>
-<p>If you return stack allocated object (example: <code>return Foo(123, 456);</code>) the Squirrel will create
-a copy of the object and the life of the given object will be also handled by Squirrel.</p>
-<p>For example, the following code will return copy of the instance inside of Squirrel:</p>
-<pre><code class="lang-cpp">ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
-ssq::Object result = vm.call(mySquirrelFunc, vm, ...);
-Foo copy = result.to&lt;Foo&gt;();
-</code></pre>
-<p>However the following will return pointer to the instance, no copy performed:</p>
-<pre><code class="lang-cpp">ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
-ssq::Object result = vm.call(mySquirrelFunc, vm, ...);
-Foo* copy = result.to&lt;Foo*&gt;();
-</code></pre>
-<p>Here is an example how to handle return value from function call:</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+Therefore I highly suggest to use signed integers only.</p> <p>Passing instance of classes as copy (or reference) will result in copy of the class
+and the life of the instance will be handled by Squirrel. Passing any instance of class as a pointer
+will <strong>not</strong> create a copy and Squirrel will not handle the life of the instance.</p> <p>If you create a C++ method where you create new instance of class and you return it as a pointer,
+(example: <code>return new Foo(123, 456);</code>), the Squirrel will be able to access the methods and manipulate the
+object. However, it will never be released unless you do it manually from C++ side (by tracking your
+allocated objects).</p> <p>If you return stack allocated object (example: <code>return Foo(123, 456);</code>) the Squirrel will create
+a copy of the object and the life of the given object will be also handled by Squirrel.</p> <p>For example, the following code will return copy of the instance inside of Squirrel:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code>ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ssq<span class="token operator">::</span>Object result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Foo copy <span class="token operator">=</span> result<span class="token punctuation">.</span>to<span class="token operator">&lt;</span>Foo<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>However the following will return pointer to the instance, no copy performed:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code>ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ssq<span class="token operator">::</span>Object result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Foo<span class="token operator">*</span> copy <span class="token operator">=</span> result<span class="token punctuation">.</span>to<span class="token operator">&lt;</span>Foo<span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>Here is an example how to handle return value from function call:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
-    ssq::Script script = vm.compileSource(...);
-    vm.run(script);
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
+    ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Get the result of the function call</span>
-    ssq::Object result = vm.call(mySquirrelFunc, vm, <span class="hljs-number">10</span>, <span class="hljs-literal">true</span>, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello World&quot;</span>));
+    <span class="token comment">// Get the result of the function call</span>
+    ssq<span class="token operator">::</span>Object result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">&quot;Hello World&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Check if the object is empty</span>
-    result.isEmpty(); <span class="hljs-comment">// Returns true or false depending on what has been returned</span>
+    <span class="token comment">// Check if the object is empty</span>
+    result<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Returns true or false depending on what has been returned</span>
 
-    <span class="hljs-comment">// Check if object is null</span>
-    result.isNull(); <span class="hljs-comment">// True or false depending on what has been returned</span>
+    <span class="token comment">// Check if object is null</span>
+    result<span class="token punctuation">.</span><span class="token function">isNull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// True or false depending on what has been returned</span>
 
-    <span class="hljs-comment">// Check if object is an integer</span>
-    <span class="hljs-keyword">if</span> (result.getType() == ssq::Type::INTEGER) {
-        <span class="hljs-comment">// Object is integer, we can convert it</span>
-        <span class="hljs-keyword">int</span> myInt = result.toInt();
-        <span class="hljs-comment">// or:</span>
-        <span class="hljs-keyword">long</span> myInt2 = result.to&lt;<span class="hljs-keyword">long</span>&gt;();
-    }
+    <span class="token comment">// Check if object is an integer</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span><span class="token function">getType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> ssq<span class="token operator">::</span>Type<span class="token operator">::</span>INTEGER<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Object is integer, we can convert it</span>
+        <span class="token keyword">int</span> myInt <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">toInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// or:</span>
+        <span class="token keyword">long</span> myInt2 <span class="token operator">=</span> result<span class="token punctuation">.</span>to<span class="token operator">&lt;</span><span class="token keyword">long</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-comment">// Converting to something else than the object contains</span>
-    <span class="hljs-comment">// results in ssq::TypeException thrown</span>
-    <span class="hljs-keyword">try</span> {
-        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> str = result.toString();
-    } <span class="hljs-keyword">catch</span> (ssq::TypeException&amp; e){
-        <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cerr</span> &lt;&lt; e.what() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
-    }
+    <span class="token comment">// Converting to something else than the object contains</span>
+    <span class="token comment">// results in ssq::TypeException thrown</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        std<span class="token operator">::</span>string str <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>ssq<span class="token operator">::</span>TypeException<span class="token operator">&amp;</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        std<span class="token operator">::</span>cerr <span class="token operator">&lt;&lt;</span> e<span class="token punctuation">.</span><span class="token function">what</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="binding-c-function">Binding C++ function</h2>
-<p>Binding C++ functions is simple as described below. The functions will be added 
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="binding-c-function"><a href="#binding-c-function" aria-hidden="true" class="header-anchor">#</a> Binding C++ function</h2> <p>Binding C++ functions is simple as described below. The functions will be added
 into the root table and can be used across all scripts compiled within the VM.
-The function arguments are deduced at compile time. No std::tuple, no std::any, 
-just good old metaprogramming.</p>
-<pre><code class="lang-cpp">#include &lt;simplesquirrel/simplesquirrel.hpp&gt;
+The function arguments are deduced at compile time. No std::tuple, no std::any,
+just good old metaprogramming.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-std::string myCppFunc(int a, int b){
-    return std::to_string(a + b);
-}
+std<span class="token operator">::</span>string <span class="token function">myCppFunc</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-int main(){
-    ssq::VM vm(1024, ssq::Libs::ALL);
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Bind global function
-    vm.addFunc(&quot;myCppFunc&quot;, myCppFunc);
+    <span class="token comment">// Bind global function</span>
+    vm<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;myCppFunc&quot;</span><span class="token punctuation">,</span> myCppFunc<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Bind global function via std::function
-    std::function&lt;std::string(int, int)&gt; func = std::bind(
-        myCppFunc, 
-        std::placeholders::_1, 
-        std::placeholders::_2
-    );
-    vm.addFunc(&quot;myCppFunc2&quot;, func);
+    <span class="token comment">// Bind global function via std::function</span>
+    std<span class="token operator">::</span>function<span class="token operator">&lt;</span>std<span class="token operator">::</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> func <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">bind</span><span class="token punctuation">(</span>
+        myCppFunc<span class="token punctuation">,</span> 
+        std<span class="token operator">::</span>placeholders<span class="token operator">::</span>_1<span class="token punctuation">,</span> 
+        std<span class="token operator">::</span>placeholders<span class="token operator">::</span>_2
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;myCppFunc2&quot;</span><span class="token punctuation">,</span> func<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    // Bind via lambda
-    vm.addFunc(&quot;myCppFuncLambda, [](int a, int b) -&gt; std::string {
-        return std::to_string(a + b);
-    });
+    <span class="token comment">// Bind via lambda</span>
+    vm<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span>&quot;myCppFuncLambda<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> std<span class="token operator">::</span>string <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    return 0;
-}
-</code></pre>
-<h2 id="call-squirrel-global-function">Call Squirrel global function</h2>
-<p>First, you need to find the function you are looking for. This won&apos;t be done unless you
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="call-squirrel-global-function"><a href="#call-squirrel-global-function" aria-hidden="true" class="header-anchor">#</a> Call Squirrel global function</h2> <p>First, you need to find the function you are looking for. This won't be done unless you
 first compile <strong>and run</strong> the script. Squirrel is a dynamic language, therefore the functions
-are evaulated at run time.</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+are evaulated at run time.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">myCppFunc</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a, <span class="hljs-keyword">int</span> b)</span></span>{
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">std</span>::to_string(a + b);
-}
+std<span class="token operator">::</span>string <span class="token function">myCppFunc</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> std<span class="token operator">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> source = 
-    <span class="hljs-string">&quot;function mySquirrelFunc(a, b){\n&quot;</span>
-    <span class="hljs-string">&quot;    return a + b;\n&quot;</span>
-    <span class="hljs-string">&quot;}\n&quot;</span>;
+    <span class="token keyword">static</span> <span class="token keyword">const</span> std<span class="token operator">::</span>string source <span class="token operator">=</span> 
+    <span class="token string">&quot;function mySquirrelFunc(a, b){\n&quot;</span>
+    <span class="token string">&quot;    return a + b;\n&quot;</span>
+    <span class="token string">&quot;}\n&quot;</span><span class="token punctuation">;</span>
 
-    ssq::Script script = vm.compileSource(source.c_str());
-    vm.run(script);
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Now the mySquirrelFunc is ready for us, let&apos;s</span>
-    <span class="hljs-comment">// find it from VM</span>
-    ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
+    <span class="token comment">// Now the mySquirrelFunc is ready for us, let's</span>
+    <span class="token comment">// find it from VM</span>
+    ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// We can get the number of parameters required via:</span>
-    <span class="hljs-comment">// mySquirrelFunc.getNumOfParams()</span>
+    <span class="token comment">// We can get the number of parameters required via:</span>
+    <span class="token comment">// mySquirrelFunc.getNumOfParams()</span>
 
-    <span class="hljs-comment">// Call the function</span>
-    <span class="hljs-comment">// The second parameter is the &quot;this&quot; pointer!</span>
-    <span class="hljs-comment">// If the function was part of class (member function) then</span>
-    <span class="hljs-comment">// the second parameter needs to be an instance object.</span>
-    <span class="hljs-comment">// Since the mySquirrelFunc is global, we will pass the</span>
-    <span class="hljs-comment">// root table -&gt; the VM instance.</span>
-    ssq::Object result = vm.call(mySquirrelFunc, vm, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>);
+    <span class="token comment">// Call the function</span>
+    <span class="token comment">// The second parameter is the &quot;this&quot; pointer!</span>
+    <span class="token comment">// If the function was part of class (member function) then</span>
+    <span class="token comment">// the second parameter needs to be an instance object.</span>
+    <span class="token comment">// Since the mySquirrelFunc is global, we will pass the</span>
+    <span class="token comment">// root table -&gt; the VM instance.</span>
+    ssq<span class="token operator">::</span>Object result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// We have the result and we can check its type via:</span>
-    <span class="hljs-comment">// result.getType() which returns ssq::Type enum</span>
-    <span class="hljs-comment">// Or get the type as const char*</span>
-    <span class="hljs-comment">// result.getTypeStr()</span>
+    <span class="token comment">// We have the result and we can check its type via:</span>
+    <span class="token comment">// result.getType() which returns ssq::Type enum</span>
+    <span class="token comment">// Or get the type as const char*</span>
+    <span class="token comment">// result.getTypeStr()</span>
 
-    <span class="hljs-comment">// Convert the result to integer</span>
-    <span class="hljs-keyword">int</span> myInt = result.toInt();
+    <span class="token comment">// Convert the result to integer</span>
+    <span class="token keyword">int</span> myInt <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">toInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;mySquirrelFunc returned: &quot;</span> &lt;&lt; myInt &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">&quot;mySquirrelFunc returned: &quot;</span> <span class="token operator">&lt;&lt;</span> myInt <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="bind-c-class">Bind C++ class</h2>
-<p>Binding of classes is done via <code>ssq::VM::addClass(...)</code>. You have to expose your class to VM. Otherwise 
-any of your classes will be passed around in squirrel as user data and not as an instance. </p>
-<p>You don&apos;t need to expose your class if you do not wish to use it in Squirrel as an instance. Any
-classes or any types that are not integers, strings, booleans, will be automatically converted into 
-Squirrel user data. User data can be moved around, pushed to Squirrel or returned from. User data 
-cannot be manipulated, has no methods, and is created via copy. For example, you won&apos;t be able 
-to use <code>std::unique_ptr</code> as userdata because it does not allow a copy.</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="bind-c-class"><a href="#bind-c-class" aria-hidden="true" class="header-anchor">#</a> Bind C++ class</h2> <p>Binding of classes is done via <code>ssq::VM::addClass(...)</code>. You have to expose your class to VM. Otherwise
+any of your classes will be passed around in squirrel as user data and not as an instance.</p> <p>You don't need to expose your class if you do not wish to use it in Squirrel as an instance. Any
+classes or any types that are not integers, strings, booleans, will be automatically converted into
+Squirrel user data. User data can be moved around, pushed to Squirrel or returned from. User data
+cannot be manipulated, has no methods, and is created via copy. For example, you won't be able
+to use <code>std::unique_ptr</code> as userdata because it does not allow a copy.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-keyword">class</span> Foo {
-<span class="hljs-keyword">public</span>:
-    Foo(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; msg):msg(msg) {
-    }
+<span class="token keyword">class</span> <span class="token class-name">Foo</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">Foo</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> msg<span class="token punctuation">)</span><span class="token operator">:</span><span class="token function">msg</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span>&amp; <span class="hljs-title">getMsg</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span> </span>{
-        <span class="hljs-keyword">return</span> msg;
-    }
+    <span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> <span class="token function">getMsg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> msg<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setMsg</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&amp; msg)</span> </span>{
-        <span class="hljs-keyword">this</span>-&gt;msg = msg;
-    }
+    <span class="token keyword">void</span> <span class="token function">setMsg</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token operator">-</span><span class="token operator">&gt;</span>msg <span class="token operator">=</span> msg<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">expose</span><span class="hljs-params">(ssq::VM&amp; vm)</span> </span>{
-        ssq::Class cls = vm.addClass(<span class="hljs-string">&quot;Foo&quot;</span>, ssq::Class::Ctor&lt;Foo(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>)&gt;());
+    <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">expose</span><span class="token punctuation">(</span>ssq<span class="token operator">::</span>VM<span class="token operator">&amp;</span> vm<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ssq<span class="token operator">::</span>Class <span class="token class-name">cls</span> <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">addClass</span><span class="token punctuation">(</span><span class="token string">&quot;Foo&quot;</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Class<span class="token operator">::</span>Ctor<span class="token operator">&lt;</span><span class="token function">Foo</span><span class="token punctuation">(</span>std<span class="token operator">::</span>string<span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="hljs-comment">// You can also use lambdas (or std::function) to define constructor</span>
-        <span class="hljs-comment">// The function has to return pointer to the new instance</span>
-        <span class="hljs-comment">//</span>
-        <span class="hljs-comment">// vm.addClass(&quot;Foo&quot;, [](std::string msg) -&gt; Foo* {</span>
-        <span class="hljs-comment">//     return new Foo(msg);</span>
-        <span class="hljs-comment">// });</span>
+        <span class="token comment">// You can also use lambdas (or std::function) to define constructor</span>
+        <span class="token comment">// The function has to return pointer to the new instance</span>
+        <span class="token comment">//</span>
+        <span class="token comment">// vm.addClass(&quot;Foo&quot;, [](std::string msg) -&gt; Foo* {</span>
+        <span class="token comment">//     return new Foo(msg);</span>
+        <span class="token comment">// });</span>
 
-        cls.addFunc(<span class="hljs-string">&quot;getMsg&quot;</span>, &amp;Foo::getMsg);
-        cls.addFunc(<span class="hljs-string">&quot;setMsg&quot;</span>, &amp;Foo::setMsg);
+        cls<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;getMsg&quot;</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>Foo<span class="token operator">::</span>getMsg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        cls<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;setMsg&quot;</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>Foo<span class="token operator">::</span>setMsg<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        cls.addVar(<span class="hljs-string">&quot;msg&quot;</span>, &amp;Foo::msg);
-    }
+        cls<span class="token punctuation">.</span><span class="token function">addVar</span><span class="token punctuation">(</span><span class="token string">&quot;msg&quot;</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>Foo<span class="token operator">::</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="hljs-comment">// For the purpose of this example we will treat msg as public</span>
-    <span class="hljs-comment">// so we can expose it via cls.addVar</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> msg;
-};
+    <span class="token comment">// For the purpose of this example we will treat msg as public</span>
+    <span class="token comment">// so we can expose it via cls.addVar</span>
+    std<span class="token operator">::</span>string msg<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> source = 
-    <span class="hljs-string">&quot;// Create instance\n&quot;</span>
-    <span class="hljs-string">&quot;local foo = Foo(\&quot;Hello World\&quot;);\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>
-    <span class="hljs-string">&quot;// Call C++ methods\n&quot;</span>
-    <span class="hljs-string">&quot;print(\&quot;Foo has message: \&quot; + foo.getMessage());\n&quot;</span>
-    <span class="hljs-string">&quot;foo.setMessage(\&quot;Something else\&quot;);\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>
-    <span class="hljs-string">&quot;// Access the variable directly\n&quot;</span>
-    <span class="hljs-string">&quot;print(\&quot;Foo now has: \&quot; + foo.msg);\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>;
+    <span class="token keyword">static</span> <span class="token keyword">const</span> std<span class="token operator">::</span>string source <span class="token operator">=</span> 
+    <span class="token string">&quot;// Create instance\n&quot;</span>
+    <span class="token string">&quot;local foo = Foo(\&quot;Hello World\&quot;);\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span>
+    <span class="token string">&quot;// Call C++ methods\n&quot;</span>
+    <span class="token string">&quot;print(\&quot;Foo has message: \&quot; + foo.getMessage());\n&quot;</span>
+    <span class="token string">&quot;foo.setMessage(\&quot;Something else\&quot;);\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span>
+    <span class="token string">&quot;// Access the variable directly\n&quot;</span>
+    <span class="token string">&quot;print(\&quot;Foo now has: \&quot; + foo.msg);\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span><span class="token punctuation">;</span>
 
-    ssq::Script script = vm.compileSource(source.c_str());
-    Foo::expose(vm); <span class="hljs-comment">// Bind the class to this VM</span>
-    vm.run(script);
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Foo<span class="token operator">::</span><span class="token function">expose</span><span class="token punctuation">(</span>vm<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Bind the class to this VM</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="class-const-method-ambiguity">Class const method ambiguity</h2>
-<p>Sometimes, it is possible that your class has for example two methods:</p>
-<pre><code class="lang-cpp"><span class="hljs-keyword">class</span> Foo {
-    ...
-    <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span>&amp; <span class="hljs-title">getMessage</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>;
-    <span class="hljs-built_in">std</span>::<span class="hljs-function"><span class="hljs-built_in">string</span>&amp; <span class="hljs-title">getMessage</span><span class="hljs-params">()</span></span>;
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="class-const-method-ambiguity"><a href="#class-const-method-ambiguity" aria-hidden="true" class="header-anchor">#</a> Class const method ambiguity</h2> <p>Sometimes, it is possible that your class has for example two methods:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">Foo</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+    std<span class="token operator">::</span>string<span class="token operator">&amp;</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">static</span> ssq::<span class="hljs-function">Class <span class="hljs-title">expose</span><span class="hljs-params">(ssq::VM&amp; vm)</span></span>;
-};
-</code></pre>
-<p>One gets to be used when you have constant reference (or pointer) and the second one
+    <span class="token keyword">static</span> ssq<span class="token operator">::</span>Class <span class="token class-name">expose</span><span class="token punctuation">(</span>ssq<span class="token operator">::</span>VM<span class="token operator">&amp;</span> vm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>One gets to be used when you have constant reference (or pointer) and the second one
 when you have non-constant reference. Binding these methods to Squirrel class can
 cause compiler ambiguity error. You can solve the problem by explicitly defining the
-template when binding those functions, for example:</p>
-<pre><code>static void Foo::expose(ssq::VM&amp; vm) {
+template when binding those functions, for example:</p> <div class="language- extra-class"><pre class="language-text"><code>static void Foo::expose(ssq::VM&amp; vm) {
     ssq::Class cls = vm.addClass(&quot;Foo&quot;, ssq::Class::Ctor&lt;Foo(.....)&gt;());
 
     // Explicitly define return type to &quot;const std::string&amp;&quot; in order
     // for the compiler to know which overloaded method to use.
     cls.addFunc&lt;const std::string&amp;&gt;(&quot;getMessage&quot;, &amp;Foo::getMessage);
 }
-</code></pre><h2 id="find-squirrel-class-and-create-instance">Find Squirrel class and create instance</h2>
-<p>Finding classes and creating instances is easy as the following code below. 
-It is self explanatory.</p>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+</code></pre></div><h2 id="find-squirrel-class-and-create-instance"><a href="#find-squirrel-class-and-create-instance" aria-hidden="true" class="header-anchor">#</a> Find Squirrel class and create instance</h2> <p>Finding classes and creating instances is easy as the following code below.
+It is self explanatory.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">static</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> source = 
-    <span class="hljs-string">&quot;class Foo {\n&quot;</span>
-    <span class="hljs-string">&quot;    constructor(msg) {\n&quot;</span>
-    <span class="hljs-string">&quot;        value = msg;\n&quot;</span>
-    <span class="hljs-string">&quot;    }\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>
-    <span class="hljs-string">&quot;    function setMsg(msg) {\n&quot;</span>
-    <span class="hljs-string">&quot;        msg = value;\n&quot;</span>
-    <span class="hljs-string">&quot;    }\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>
-    <span class="hljs-string">&quot;    function getMsg() {\n&quot;</span>
-    <span class="hljs-string">&quot;        return msg;\n&quot;</span>
-    <span class="hljs-string">&quot;    }\n&quot;</span>
-    <span class="hljs-string">&quot;\n&quot;</span>
-    <span class="hljs-string">&quot;    value = null;\n&quot;</span>
-    <span class="hljs-string">&quot;}\n&quot;</span>;
+    <span class="token keyword">static</span> <span class="token keyword">const</span> std<span class="token operator">::</span>string source <span class="token operator">=</span> 
+    <span class="token string">&quot;class Foo {\n&quot;</span>
+    <span class="token string">&quot;    constructor(msg) {\n&quot;</span>
+    <span class="token string">&quot;        value = msg;\n&quot;</span>
+    <span class="token string">&quot;    }\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span>
+    <span class="token string">&quot;    function setMsg(msg) {\n&quot;</span>
+    <span class="token string">&quot;        msg = value;\n&quot;</span>
+    <span class="token string">&quot;    }\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span>
+    <span class="token string">&quot;    function getMsg() {\n&quot;</span>
+    <span class="token string">&quot;        return msg;\n&quot;</span>
+    <span class="token string">&quot;    }\n&quot;</span>
+    <span class="token string">&quot;\n&quot;</span>
+    <span class="token string">&quot;    value = null;\n&quot;</span>
+    <span class="token string">&quot;}\n&quot;</span><span class="token punctuation">;</span>
 
-    ssq::Script script = vm.compileSource(source.c_str());
-    vm.run(script);
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Find class</span>
-    ssq::Class cls = vm.findClass(<span class="hljs-string">&quot;Foo&quot;</span>);
+    <span class="token comment">// Find class</span>
+    ssq<span class="token operator">::</span>Class <span class="token class-name">cls</span> <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findClass</span><span class="token punctuation">(</span><span class="token string">&quot;Foo&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Create instance of it.</span>
-    <span class="hljs-comment">// The life of the object is determined by Squirrel.</span>
-    <span class="hljs-comment">// You don&apos;t need to release the object yourself.</span>
-    ssq::Instance clsInstance = vm.newInstance(cls, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello World!&quot;</span>));
+    <span class="token comment">// Create instance of it.</span>
+    <span class="token comment">// The life of the object is determined by Squirrel.</span>
+    <span class="token comment">// You don't need to release the object yourself.</span>
+    ssq<span class="token operator">::</span>Instance clsInstance <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span>cls<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">&quot;Hello World!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Find class methods</span>
-    ssq::Function funcSetMsg = cls.findFunc(<span class="hljs-string">&quot;setMsg&quot;</span>);
-    ssq::Function funcGetMsg = cls.findFunc(<span class="hljs-string">&quot;getMsg&quot;</span>);
+    <span class="token comment">// Find class methods</span>
+    ssq<span class="token operator">::</span>Function funcSetMsg <span class="token operator">=</span> cls<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;setMsg&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ssq<span class="token operator">::</span>Function funcGetMsg <span class="token operator">=</span> cls<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;getMsg&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Call method, set new message</span>
-    vm.callFunc(funcSetMsg, clsInstance, <span class="hljs-string">&quot;Banana&quot;</span>);
+    <span class="token comment">// Call method, set new message</span>
+    vm<span class="token punctuation">.</span><span class="token function">callFunc</span><span class="token punctuation">(</span>funcSetMsg<span class="token punctuation">,</span> clsInstance<span class="token punctuation">,</span> <span class="token string">&quot;Banana&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Get the message back</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> result = vm.callFunc(funcGetMsg, clsInstance).toString();
+    <span class="token comment">// Get the message back</span>
+    std<span class="token operator">::</span>string result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">callFunc</span><span class="token punctuation">(</span>funcGetMsg<span class="token punctuation">,</span> clsInstance<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">&quot;Foo now contains: &quot;</span> &lt;&lt; result &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">&quot;Foo now contains: &quot;</span> <span class="token operator">&lt;&lt;</span> result <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="manipulate-squirrel-array">Manipulate Squirrel array</h2>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="manipulate-squirrel-array"><a href="#manipulate-squirrel-array" aria-hidden="true" class="header-anchor">#</a> Manipulate Squirrel array</h2> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
-    ssq::Script script = vm.compileSource(...);
-    vm.run(script);
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Create new array</span>
-    ssq::Array arr = vm.newArray();
+    <span class="token comment">// Create new array</span>
+    ssq<span class="token operator">::</span>Array arr <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">newArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// To get the size of the array use: arr.size() </span>
+    <span class="token comment">// To get the size of the array use: arr.size() </span>
 
-    <span class="hljs-comment">// Push at the back </span>
-    <span class="hljs-comment">// You can push any object you want. No limits.</span>
-    arr.push(<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello World&quot;</span>));
-    arr.push(<span class="hljs-literal">true</span>);
-    arr.push(<span class="hljs-number">123</span>);
+    <span class="token comment">// Push at the back </span>
+    <span class="token comment">// You can push any object you want. No limits.</span>
+    arr<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>std<span class="token operator">::</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">&quot;Hello World&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    arr<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    arr<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// You can retrieve individual indexes via:</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> first = arr.get&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&gt;(<span class="hljs-number">0</span>);
+    <span class="token comment">// You can retrieve individual indexes via:</span>
+    std<span class="token operator">::</span>string first <span class="token operator">=</span> arr<span class="token punctuation">.</span>get<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// If you want raw object (ssq::Object) do it as:</span>
-    ssq::Object firstRaw = arr.get&lt;ssq::Object&gt;(<span class="hljs-number">0</span>);
+    <span class="token comment">// If you want raw object (ssq::Object) do it as:</span>
+    ssq<span class="token operator">::</span>Object firstRaw <span class="token operator">=</span> arr<span class="token punctuation">.</span>get<span class="token operator">&lt;</span>ssq<span class="token operator">::</span>Object<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Use pop to release last element</span>
-    <span class="hljs-keyword">int</span> arr.popAndGet&lt;<span class="hljs-keyword">int</span>&gt;();
+    <span class="token comment">// Use pop to release last element</span>
+    <span class="token keyword">int</span> arr<span class="token punctuation">.</span>popAndGet<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// If you do not want to get the last element while removing it</span>
-    <span class="hljs-comment">// use the following:</span>
-    arr.pop(); <span class="hljs-comment">// Returns nothing</span>
+    <span class="token comment">// If you do not want to get the last element while removing it</span>
+    <span class="token comment">// use the following:</span>
+    arr<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Returns nothing</span>
 
-    <span class="hljs-comment">// Then, simply pass it into any squirrel function as any other value</span>
-    ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
-    vm.call(mySquirrelFunc, vm, arr);
+    <span class="token comment">// Then, simply pass it into any squirrel function as any other value</span>
+    ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// If you want to retrieve array from squirrel function,</span>
-    <span class="hljs-comment">// you can do it simply by converting the return value to array:</span>
-    ssq::Array result = vm.call(..., vm).toArray();
+    <span class="token comment">// If you want to retrieve array from squirrel function,</span>
+    <span class="token comment">// you can do it simply by converting the return value to array:</span>
+    ssq<span class="token operator">::</span>Array result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> vm<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="manipulate-squirrel-table">Manipulate Squirrel table</h2>
-<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="manipulate-squirrel-table"><a href="#manipulate-squirrel-table" aria-hidden="true" class="header-anchor">#</a> Manipulate Squirrel table</h2> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;simplesquirrel/simplesquirrel.hpp&gt;</span></span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{
-    ssq::<span class="hljs-function">VM <span class="hljs-title">vm</span><span class="hljs-params">(<span class="hljs-number">1024</span>, ssq::Libs::ALL)</span></span>;
-    ssq::Script script = vm.compileSource(...);
-    vm.run(script);
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    ssq<span class="token operator">::</span>VM <span class="token function">vm</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> ssq<span class="token operator">::</span>Libs<span class="token operator">::</span>ALL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ssq<span class="token operator">::</span>Script script <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">compileSource</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Create new table</span>
-    ssq::Table table = vm.newTable();
+    <span class="token comment">// Create new table</span>
+    ssq<span class="token operator">::</span>Table table <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">newTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// To get the size of the table use: table.size() </span>
+    <span class="token comment">// To get the size of the table use: table.size() </span>
 
-    <span class="hljs-comment">// Add new indexes via key-value pairs</span>
-    <span class="hljs-comment">// You can add any object you want. No limits.</span>
-    table.<span class="hljs-built_in">set</span>(<span class="hljs-string">&quot;myString&quot;</span>, <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;Hello World&quot;</span>));
-    table.<span class="hljs-built_in">set</span>(<span class="hljs-string">&quot;myBool&quot;</span>, <span class="hljs-literal">true</span>);
-    table.<span class="hljs-built_in">set</span>(<span class="hljs-string">&quot;myInt&quot;</span>, <span class="hljs-number">123</span>);
+    <span class="token comment">// Add new indexes via key-value pairs</span>
+    <span class="token comment">// You can add any object you want. No limits.</span>
+    table<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">&quot;myString&quot;</span><span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">&quot;Hello World&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    table<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">&quot;myBool&quot;</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    table<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">&quot;myInt&quot;</span><span class="token punctuation">,</span> <span class="token number">123</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// You can retrieve individual indexes via:</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> first = table.get&lt;<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&quot;myString&quot;</span>);
+    <span class="token comment">// You can retrieve individual indexes via:</span>
+    std<span class="token operator">::</span>string first <span class="token operator">=</span> table<span class="token punctuation">.</span>get<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">&quot;myString&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// If you want raw object (ssq::Object) do it as:</span>
-    ssq::Object firstRaw = table.get&lt;ssq::Object&gt;(<span class="hljs-string">&quot;myString&quot;</span>);
+    <span class="token comment">// If you want raw object (ssq::Object) do it as:</span>
+    ssq<span class="token operator">::</span>Object firstRaw <span class="token operator">=</span> table<span class="token punctuation">.</span>get<span class="token operator">&lt;</span>ssq<span class="token operator">::</span>Object<span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="token string">&quot;myString&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// Then, simply pass it into any squirrel function as any other value</span>
-    ssq::Function mySquirrelFunc = vm.findFunc(<span class="hljs-string">&quot;mySquirrelFunc&quot;</span>);
-    vm.call(mySquirrelFunc, vm, table);
+    <span class="token comment">// Then, simply pass it into any squirrel function as any other value</span>
+    ssq<span class="token operator">::</span>Function mySquirrelFunc <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">findFunc</span><span class="token punctuation">(</span><span class="token string">&quot;mySquirrelFunc&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>mySquirrelFunc<span class="token punctuation">,</span> vm<span class="token punctuation">,</span> table<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-comment">// If you want to retrieve table from squirrel function,</span>
-    <span class="hljs-comment">// you can do it simply by converting the return value to table:</span>
-    ssq::Table result = vm.call(..., vm).toTable();
+    <span class="token comment">// If you want to retrieve table from squirrel function,</span>
+    <span class="token comment">// you can do it simply by converting the return value to table:</span>
+    ssq<span class="token operator">::</span>Table result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span> vm<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2 id="weak-references-and-callbacks">Weak references and callbacks</h2>
-<p>There is a problem when you want to register a callback into C++ side. For example,
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="weak-references-and-callbacks"><a href="#weak-references-and-callbacks" aria-hidden="true" class="header-anchor">#</a> Weak references and callbacks</h2> <p>There is a problem when you want to register a callback into C++ side. For example,
 you have a GUI widget that has onClick method. But, the onClick method accepts <code>std::function</code>
-and not Squirrel objects. So, you will probably try to do the following:</p>
-<pre><code class="lang-cpp"><span class="hljs-comment">// This will cause undefined behavior! Most likely SEGFAULT! See another example below...</span>
-fooClass.addFunc(<span class="hljs-string">&quot;setOnClickCallback&quot;</span>, [](Foo* self, ssq::Function func, ssq::Instance inst) -&gt; <span class="hljs-keyword">void</span> {
-    <span class="hljs-comment">// Using ssq::Instance here is OK!</span>
-    doSomethingElse(inst);
+and not Squirrel objects. So, you will probably try to do the following:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token comment">// This will cause undefined behavior! Most likely SEGFAULT! See another example below...</span>
+fooClass<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;setOnClickCallback&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>Foo<span class="token operator">*</span> self<span class="token punctuation">,</span> ssq<span class="token operator">::</span>Function func<span class="token punctuation">,</span> ssq<span class="token operator">::</span>Instance inst<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Using ssq::Instance here is OK!</span>
+    <span class="token function">doSomethingElse</span><span class="token punctuation">(</span>inst<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    self.setOnClick([=](SomeEventData data) {
-        <span class="hljs-comment">// Using ssq::Instance in here nested lambda with [=] capture is bad!</span>
-        vm.callFunc(func, inst, data);
-    });
-});
+    self<span class="token punctuation">.</span><span class="token function">setOnClick</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">=</span><span class="token punctuation">]</span><span class="token punctuation">(</span>SomeEventData data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Using ssq::Instance in here nested lambda with [=] capture is bad!</span>
+        vm<span class="token punctuation">.</span><span class="token function">callFunc</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> inst<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">// On program exit...</span>
+<span class="token comment">// On program exit...</span>
 SEGFAULT
-</code></pre>
-<p>And then inside of Squirrel:</p>
-<pre><code>class Bar extends Foo {
+</code></pre></div><p>And then inside of Squirrel:</p> <div class="language- extra-class"><pre class="language-text"><code>class Bar extends Foo {
     ...
 }
 
@@ -1102,107 +410,24 @@ local bar = Bar(...);
 baz.setOnClickCallback(function(data){
     print(&quot;I got some data!&quot;);
 }, bar);
-</code></pre><p>Why is this bad? Because the inner lambda captures the instance, it will cause to extend the
+</code></pre></div><p>Why is this bad? Because the inner lambda captures the instance, it will cause to extend the
 life of Foo object inside of Squirrel. When you try to destroy your VM, it will most likely cause
 to crash program. Squirrel tracks objects by reference so that when reference counter goes to zero,
 the object is deleted. With the example above the ssq::Instance object will live inside of the lambda
 capture, extending the life of the instance. The reference counter will always be +1. This problem
-only happens when you use lambda capture inside of lambda as above. 
-<strong>How to solve this? Use weak reference!</strong> </p>
-<pre><code class="lang-cpp"><span class="hljs-comment">// This will NOT cause any problems</span>
-fooClass.addFunc(<span class="hljs-string">&quot;setOnClickCallback&quot;</span>, [](Foo* self, ssq::Function func, SqWeakRef ref) -&gt; <span class="hljs-keyword">void</span> {
-    self.setOnClick([=](SomeEventData data) {
-        vm.callFunc(func, ref, data);
-    });
-});
+only happens when you use lambda capture inside of lambda as above.
+<strong>How to solve this? Use weak reference!</strong></p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token comment">// This will NOT cause any problems</span>
+fooClass<span class="token punctuation">.</span><span class="token function">addFunc</span><span class="token punctuation">(</span><span class="token string">&quot;setOnClickCallback&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span>Foo<span class="token operator">*</span> self<span class="token punctuation">,</span> ssq<span class="token operator">::</span>Function func<span class="token punctuation">,</span> SqWeakRef ref<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    self<span class="token punctuation">.</span><span class="token function">setOnClick</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">=</span><span class="token punctuation">]</span><span class="token punctuation">(</span>SomeEventData data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        vm<span class="token punctuation">.</span><span class="token function">callFunc</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> ref<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="hljs-comment">// On program exit...</span>
-<span class="hljs-comment">// All ok... No SEGFAULT</span>
-</code></pre>
-<p>With the weak reference, the life of the instance won&apos;t be extended. The weak reference does
+<span class="token comment">// On program exit...</span>
+<span class="token comment">// All ok... No SEGFAULT</span>
+</code></pre></div><p>With the weak reference, the life of the instance won't be extended. The weak reference does
 not increament the reference counter at all. It does not matter for how long the lambda captured
-variable (the <code>ref</code> parameter) will live, it won&apos;t affect us at all. </p>
-
-                                
-                                </section>
-                            
-    </div>
-    <div class="search-results">
-        <div class="has-results">
-            
-            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
-            <ul class="search-results-list"></ul>
-            
-        </div>
-        <div class="no-results">
-            
-            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
-            
-        </div>
-    </div>
-</div>
-
-                        </div>
-                    </div>
-                
-            </div>
-
-            
-                
-                
-                <a href="docs/ssq.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ssq">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-                
-            
-        
-    </div>
-
-    <script>
-        var gitbook = gitbook || [];
-        gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"next":{"title":"ssq","level":"1.2","depth":1,"path":"docs/ssq.md","ref":"docs/ssq.md","articles":[{"title":"Array","level":"1.2.1","depth":2,"path":"docs/ssq_Array.md","ref":"docs/ssq_Array.md","articles":[]},{"title":"Class","level":"1.2.2","depth":2,"path":"docs/ssq_Class.md","ref":"docs/ssq_Class.md","articles":[{"title":"Ctor","level":"1.2.2.1","depth":3,"path":"docs/ssq_Class_Ctor.md","ref":"docs/ssq_Class_Ctor.md","articles":[]},{"title":"Ctor< T(Args...)>","level":"1.2.2.2","depth":3,"path":"docs/ssq_Class_Ctor__T_Args_____.md","ref":"docs/ssq_Class_Ctor__T_Args_____.md","articles":[]}]},{"title":"CompileException","level":"1.2.3","depth":2,"path":"docs/ssq_CompileException.md","ref":"docs/ssq_CompileException.md","articles":[]},{"title":"Enum","level":"1.2.4","depth":2,"path":"docs/ssq_Enum.md","ref":"docs/ssq_Enum.md","articles":[]},{"title":"Exception","level":"1.2.5","depth":2,"path":"docs/ssq_Exception.md","ref":"docs/ssq_Exception.md","articles":[]},{"title":"Function","level":"1.2.6","depth":2,"path":"docs/ssq_Function.md","ref":"docs/ssq_Function.md","articles":[]},{"title":"Instance","level":"1.2.7","depth":2,"path":"docs/ssq_Instance.md","ref":"docs/ssq_Instance.md","articles":[]},{"title":"Libs","level":"1.2.8","depth":2,"path":"docs/ssq_Libs.md","ref":"docs/ssq_Libs.md","articles":[]},{"title":"NotFoundException","level":"1.2.9","depth":2,"path":"docs/ssq_NotFoundException.md","ref":"docs/ssq_NotFoundException.md","articles":[]},{"title":"Object","level":"1.2.10","depth":2,"path":"docs/ssq_Object.md","ref":"docs/ssq_Object.md","articles":[]},{"title":"RuntimeException","level":"1.2.11","depth":2,"path":"docs/ssq_RuntimeException.md","ref":"docs/ssq_RuntimeException.md","articles":[]},{"title":"Script","level":"1.2.12","depth":2,"path":"docs/ssq_Script.md","ref":"docs/ssq_Script.md","articles":[]},{"title":"SqWeakRef","level":"1.2.13","depth":2,"path":"docs/ssq_SqWeakRef.md","ref":"docs/ssq_SqWeakRef.md","articles":[]},{"title":"Table","level":"1.2.14","depth":2,"path":"docs/ssq_Table.md","ref":"docs/ssq_Table.md","articles":[]},{"title":"TypeException","level":"1.2.15","depth":2,"path":"docs/ssq_TypeException.md","ref":"docs/ssq_TypeException.md","articles":[]},{"title":"VM","level":"1.2.16","depth":2,"path":"docs/ssq_VM.md","ref":"docs/ssq_VM.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["page-toc","highlight"],"pluginsConfig":{"page-toc":{"position":"before-first","selector":".markdown-section h1, .markdown-section h2"},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-02-04T19:53:36.950Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-02-04T19:54:13.865Z"},"basePath":".","book":{"language":""}});
-        });
-    </script>
-</div>
-
-        
-    <script src="gitbook/gitbook.js"></script>
-    <script src="gitbook/theme.js"></script>
-    
-        
-        <script src="gitbook/gitbook-plugin-page-toc/anchor-3.1.1.min.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-page-toc/page-toc.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-search/search.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
-        
-    
-        
-        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
-        
-    
-
-    </body>
+variable (the <code>ref</code> parameter) will live, it won't affect us at all.</p></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/simplesquirrel/assets/js/app.499cc5ed.js" defer></script><script src="/simplesquirrel/assets/js/4.cbee91cf.js" defer></script>
+  </body>
 </html>
-
