@@ -174,8 +174,6 @@ namespace ssq {
         struct func<offet, void, Args...> {
             static SQInteger global(HSQUIRRELVM vm) {
                 try {
-                    static const std::size_t nparams = sizeof...(Args);
-
                     FuncPtr<void(Args...)>* funcPtr;
                     sq_getuserdata(vm, -1, reinterpret_cast<void**>(&funcPtr), nullptr);
 

@@ -466,6 +466,70 @@ int main(){
 }
 ```
 
+## Inherit from C++ class inside of Squirrel
+
+Please note that the inherited C++ class will not be correctly constructed if you forget to call `base.constructor(...)` inside of your derived class constructor! What happens if you do not call base constructor is undefined, most likely a memory corruption. All base class methods are accessible through `base.whatever()`. It is also possible to bind base class properties and access them through `local p = base.property;` inside of your derived class.
+
+```cpp
+class Foo {
+public:
+    Foo(const std::string& msg):msg(msg) {
+    }
+
+    const std::string& getMsg() const {
+        return msg;
+    }
+
+    void setMsg(const std::string& msg) {
+        this->msg = msg;
+    }
+
+    static void expose(ssq::VM& vm) {
+        ssq::Class cls = vm.addClass("Foo", ssq::Class::Ctor<Foo(std::string)>());
+        cls.addFunc("getMsg", &Foo::getMsg);
+        cls.addFunc("setMsg", &Foo::setMsg);
+    }
+private:
+    std::string msg;
+};
+
+int main() {
+    ssq::VM vm(1024, ssq::Libs::ALL);
+
+    static const std::string source = 
+    "class FooDerived extends Foo {\n"
+    "    constructor(msg, value) {\n"
+    "        base.constructor(msg);\n"
+    "        val = value;\n"
+    "    }\n"
+    "\n"
+    "    function getValue() {\n"
+    "        return val;\n"
+    "    }\n"
+    "\n"
+    "    function setValue(value) {\n"
+    "        val = value;\n"
+    "    }\n"
+    "\n"
+    "    function doSomething() {\n"
+    "        local msg = base.getMsg();\n"
+    "        // Now do something wth copy of Foo's std::string\n"
+    "    }\n"
+    "\n"
+    "    val = null;\n"
+    "};\n"
+    "\n"
+    "local derived = FooDerived("Hello", 1234);\n";
+    "derived.doSomething();\n";
+
+    Foo::expose(vm);
+    ssq::Script script = vm.compileSource(source.c_str());
+    vm.run(script);
+
+    return 0;
+}
+```
+
 ## Manipulate Squirrel array
 
 ```cpp

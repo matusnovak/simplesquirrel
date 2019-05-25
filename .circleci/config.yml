@@ -75,29 +75,29 @@ jobs:
           - ARCH: 'x86_64'
           - TOOLSET: 'linux-gnu'
 
-  compile_gcc_640:
+  compile_gcc_650:
     <<: *compile_gcc
 
     docker:
-      - image: gcc:6.4.0
+      - image: gcc:6.5.0
         env:
           - ARCH: 'x86_64'
           - TOOLSET: 'linux-gnu'
   
-  compile_gcc_730:
+  compile_gcc_740:
     <<: *compile_gcc
 
     docker:
-      - image: gcc:8.2.0
+      - image: gcc:7.4.0
         env:
           - ARCH: 'x86_64'
           - TOOLSET: 'linux-gnu'
 
-  compile_gcc_820:
+  compile_gcc_830:
     <<: *compile_gcc
 
     docker:
-      - image: gcc:8.2.0
+      - image: gcc:8.3.0
         env:
           - ARCH: 'x86_64'
           - TOOLSET: 'linux-gnu'
@@ -159,18 +159,18 @@ workflows:
   build_and_test:
     jobs:
       - compile_gcc_550
-      - compile_gcc_640:
+      - compile_gcc_650:
           requires:
             - compile_gcc_550
-      - compile_gcc_730:
+      - compile_gcc_740:
           requires:
-            - compile_gcc_640
-      - compile_gcc_820:
+            - compile_gcc_650
+      - compile_gcc_830:
           requires:
-            - compile_gcc_730
+            - compile_gcc_740
       - build_docs:
           requires:
-            - compile_gcc_820
+            - compile_gcc_830
           filters:
             branches:
               only:
